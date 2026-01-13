@@ -1,10 +1,14 @@
 # CineGen AI Director
 
-> **Industrial AI Motion Comic & Video Workbench**
 
-[![中文](https://img.shields.io/badge/Language-中文-gray.svg)](./README.md)
-[![English](https://img.shields.io/badge/Language-English-blue.svg)](./README_EN.md)
-[![日本語](https://img.shields.io/badge/Language-日本語-gray.svg)](./README_JA.md)
+
+The inspiration comes from the one-stop comic production platform [AniKuku AI Comic Production Platform](https://anikuku.com/?github).
+
+For business inquiries, questions, and communication, please contact me.
+
+> cinegen@ullrai.com
+
+> **Industrial AI Motion Comic & Video Workbench**
 
 **CineGen AI Director** is a professional productivity tool designed for **AI Motion Comics**, **Webtoons**, and **Video Animatics**.
 
