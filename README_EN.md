@@ -4,11 +4,10 @@
 
 The inspiration comes from the one-stop comic production platform [AniKuku AI Comic Production Platform](https://anikuku.com/?github).
 
-For business inquiries, questions, and communication, please contact me.
+> For business inquiries, questions, and communication, please contact me.
 
 > cinegen@ullrai.com
 
-> **Industrial AI Motion Comic & Video Workbench**
 
 **CineGen AI Director** is a professional productivity tool designed for **AI Motion Comics**, **Webtoons**, and **Video Animatics**.
 
