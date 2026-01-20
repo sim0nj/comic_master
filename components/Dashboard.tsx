@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Trash2, Loader2, Folder, ChevronRight, Calendar, AlertTriangle, X } from 'lucide-react';
+import { Plus, Trash2, Loader2, Folder, ChevronRight, Calendar, AlertTriangle, Download, Upload } from 'lucide-react';
 import { ProjectState } from '../types';
-import { getAllProjectsMetadata, createNewProjectState, deleteProjectFromDB } from '../services/storageService';
+import { getAllProjectsMetadata, createNewProjectState, deleteProjectFromDB, exportProjectToFile, importProjectFromFile, saveProjectToDB } from '../services/storageService';
 
 interface Props {
   onOpenProject: (project: ProjectState) => void;
@@ -11,6 +11,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
   const [projects, setProjects] = useState<ProjectState[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
 
   const loadProjects = async () => {
     setIsLoading(true);
@@ -60,6 +61,34 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
     return new Date(ts).toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
   };
 
+  const handleExport = (e: React.MouseEvent, proj: ProjectState) => {
+    e.stopPropagation();
+    exportProjectToFile(proj);
+  };
+
+  const handleImport = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      setImporting(true);
+      const importedProject = await importProjectFromFile();
+      // Generate new ID to avoid conflicts
+      importedProject.id = 'proj_' + Date.now().toString(36);
+      importedProject.createdAt = Date.now();
+      importedProject.lastModified = Date.now();
+      // Save to database
+      await saveProjectToDB(importedProject);
+      // Reload projects list
+      await loadProjects();
+      // Open the imported project
+      onOpenProject(importedProject);
+    } catch (error: any) {
+      console.error('Import failed:', error);
+      alert(error.message || '导入项目失败');
+    } finally {
+      setImporting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-300 p-8 md:p-12 font-sans selection:bg-white/20">
       <div className="max-w-7xl mx-auto">
@@ -71,13 +100,23 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
               <span className="text-zinc-600 text-sm font-mono tracking-widest uppercase">Projects Database</span>
             </h1>
           </div>
-          <button 
-            onClick={handleCreate}
-            className="group flex items-center gap-3 px-6 py-3 bg-white text-black hover:bg-zinc-200 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            <span className="font-bold text-xs tracking-widest uppercase">新建项目</span>
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleImport}
+              disabled={importing}
+              className="group flex items-center gap-3 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Upload className="w-4 h-4" />
+              <span className="font-bold text-xs tracking-widest uppercase">{importing ? '导入中...' : '导入项目'}</span>
+            </button>
+            <button
+              onClick={handleCreate}
+              className="group flex items-center gap-3 px-6 py-3 bg-white text-black hover:bg-zinc-200 transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="font-bold text-xs tracking-widest uppercase">新建项目</span>
+            </button>
+          </div>
         </header>
 
         {isLoading ? (
@@ -137,14 +176,23 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
 
                   {/* Normal Content */}
                   <div className="flex-1 p-6 relative flex flex-col">
+                     {/* Export Button */}
+                     <button
+                        onClick={(e) => handleExport(e, proj)}
+                        className="absolute top-4 right-12 opacity-0 group-hover:opacity-100 p-2 hover:bg-zinc-800 text-zinc-600 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        title="导出项目"
+                     >
+                        <Download className="w-4 h-4" />
+                     </button>
+
                      {/* Delete Button */}
-                     <button 
+                     <button
                         onClick={(e) => requestDelete(e, proj.id)}
                         className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 p-2 hover:bg-zinc-800 text-zinc-600 hover:text-red-400 transition-all rounded-sm z-10"
                         title="删除项目"
-                    >
+                     >
                         <Trash2 className="w-4 h-4" />
-                    </button>
+                     </button>
 
                      <div className="flex-1">
                         <Folder className="w-8 h-8 text-zinc-800 mb-6 group-hover:text-zinc-500 transition-colors" />

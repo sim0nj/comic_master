@@ -12,7 +12,8 @@ const DOUBAO_CONFIG = {
   
   // 视频生成模型（替代 veo-3.1-fast-generate-preview）
   //VIDEO_MODEL: "doubao-seedance-1-5-pro-251215", // 火山引擎的视频生成模型
-  VIDEO_MODEL: "doubao-seedance-1-0-pro-250528", // 火山引擎的视频生成模型
+  //VIDEO_MODEL: "doubao-seedance-1-0-pro-250528", // 火山引擎的视频生成模型
+  VIDEO_MODEL: "doubao-seedance-1-0-lite-i2v-250428", // 火山引擎的视频生成模型
   
   // API 端点
   API_ENDPOINT: "https://ark.cn-beijing.volces.com/api/v3",

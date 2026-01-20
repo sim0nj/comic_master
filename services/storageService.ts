@@ -82,6 +82,7 @@ export const createNewProjectState = (): ProjectState => {
     stage: 'script',
     targetDuration: '60s', // Default duration now 60s
     language: '中文', // Default language
+    visualStyle: '写实',
     rawScript: `标题：示例剧本
 
 场景 1
@@ -95,4 +96,52 @@ export const createNewProjectState = (): ProjectState => {
     shots: [],
     isParsingScript: false,
   };
+};
+
+// Export project to JSON file
+export const exportProjectToFile = (project: ProjectState): void => {
+  const dataStr = JSON.stringify(project, null, 2);
+  const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${project.title}_${project.id}.json`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+// Import project from JSON file
+export const importProjectFromFile = (): Promise<ProjectState> => {
+  return new Promise((resolve, reject) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) {
+        reject(new Error('No file selected'));
+        return;
+      }
+
+      try {
+        const text = await file.text();
+        const projectData = JSON.parse(text) as ProjectState;
+
+        // Validate project data
+        if (!projectData.id || !projectData.title || !projectData.createdAt) {
+          reject(new Error('Invalid project file format'));
+          return;
+        }
+
+        resolve(projectData);
+      } catch (error) {
+        reject(error);
+      }
+    };
+
+    input.click();
+  });
 };
