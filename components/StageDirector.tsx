@@ -1,7 +1,7 @@
+import { AlertCircle, Aperture, ChevronLeft, ChevronRight, Clock, Film, Image as ImageIcon, LayoutGrid, Loader2, MapPin, MessageSquare, Sparkles, Video, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { Play, SkipForward, SkipBack, Loader2, Video, Image as ImageIcon, ArrowRight, LayoutGrid, Maximize2, Sparkles, AlertCircle, MapPin, User, Clock, ChevronLeft, ChevronRight, ArrowLeft, MessageSquare, X, Film, Aperture, Shirt } from 'lucide-react';
-import { ProjectState, Shot, Keyframe } from '../types';
-import { generateImage, generateVideo } from '../services/geminiService';
+import { generateImage, generateVideo } from '../services/doubaoService';
+import { Keyframe, ProjectState, Shot } from '../types';
 
 interface Props {
   project: ProjectState;
@@ -12,6 +12,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
   const [activeShotId, setActiveShotId] = useState<string | null>(null);
   const [processingState, setProcessingState] = useState<{id: string, type: 'kf_start'|'kf_end'|'video'}|null>(null);
   const [batchProgress, setBatchProgress] = useState<{current: number, total: number, message: string} | null>(null);
+  const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
 
   const activeShotIndex = project.shots.findIndex(s => s.id === activeShotId);
   const activeShot = project.shots[activeShotIndex];
@@ -73,7 +74,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
     
     try {
       const referenceImages = getRefImagesForShot(shot);
-      const url = await generateImage(prompt, referenceImages);
+      const url = await generateImage(prompt, referenceImages,false,localStyle);
 
       updateProject({ 
         shots: project.shots.map(s => {
@@ -107,6 +108,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
   };
 
   const handleGenerateVideo = async (shot: Shot) => {
+    console.log("Generating Video for Shot:", shot);
     if (!shot.interval) return;
     
     const sKf = shot.keyframes?.find(k => k.type === 'start');
@@ -122,9 +124,10 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
     
     try {
       const videoUrl = await generateVideo(
-          shot.actionSummary, 
+          shot.actionSummary + shot.dialogue?'对白：'+shot.dialogue:"", 
           sKf.imageUrl, 
-          endImageUrl // Only pass if it exists
+          endImageUrl, // Only pass if it exists
+          shot.interval.duration
       );
 
       updateShot(shot.id, (s) => ({
@@ -178,7 +181,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
              const kfId = existingKf?.id || `kf-${shot.id}-start-${Date.now()}`;
 
              const referenceImages = getRefImagesForShot(shot);
-             const url = await generateImage(prompt, referenceImages);
+             const url = await generateImage(prompt, referenceImages,false,localStyle);
 
              currentShots = currentShots.map(s => {
                 if (s.id !== shot.id) return s;

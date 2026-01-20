@@ -1,7 +1,8 @@
+import { Check, Loader2, MapPin, Plus, RefreshCw, Shirt, Sparkles, User, Users, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { User, MapPin, Check, Sparkles, Loader2, Users, RefreshCw, Shirt, Plus, X, Camera, ChevronRight } from 'lucide-react';
-import { ProjectState, Character, CharacterVariation } from '../types';
-import { generateImage, generateVisualPrompts } from '../services/geminiService';
+import { generateImage, generateVisualPrompts } from '../services/doubaoService';
+import { CharacterVariation, ProjectState } from '../types';
+  
 
 interface Props {
   project: ProjectState;
@@ -12,6 +13,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   const [generatingId, setGeneratingId] = useState<string | null>(null);
   const [batchProgress, setBatchProgress] = useState<{current: number, total: number} | null>(null);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
+  const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
 
   // Variation Form State
   const [newVarName, setNewVarName] = useState("");
@@ -31,7 +33,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       }
 
       // Real API Call
-      const imageUrl = await generateImage(prompt);
+      const imageUrl = await generateImage(prompt,[],type === 'character',localStyle);
 
       // Update state
       if (project.scriptData) {
@@ -116,7 +118,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           // Enhance prompt to emphasize character consistency
           const enhancedPrompt = `Character: ${char.name}. ${variation.visualPrompt}. Keep facial features consistent with reference.`;
           
-          const imageUrl = await generateImage(enhancedPrompt, refImages);
+          const imageUrl = await generateImage(enhancedPrompt, refImages,false,localStyle);
 
           const newData = { ...project.scriptData! };
           const c = newData.characters.find(c => c.id === charId);

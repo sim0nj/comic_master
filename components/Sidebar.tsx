@@ -1,14 +1,15 @@
+import { Aperture, ChevronLeft, Clapperboard, FileText, Film, Settings, Users } from 'lucide-react';
 import React from 'react';
-import { LayoutDashboard, FileText, Users, Clapperboard, Film, Settings, ChevronLeft, Aperture } from 'lucide-react';
 
 interface SidebarProps {
   currentStage: string;
   setStage: (stage: 'script' | 'assets' | 'director' | 'export') => void;
   onExit: () => void;
+  onOpenSettings: () => void;  // 添加这个属性
   projectName?: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, projectName }) => {
+const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpenSettings, projectName }) => {
   const navItems = [
     { id: 'script', label: '剧本与故事', icon: FileText, sub: 'Phase 01' },
     { id: 'assets', label: '角色与场景', icon: Users, sub: 'Phase 02' },
@@ -71,11 +72,15 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, proje
 
       {/* Footer */}
       <div className="p-6 border-t border-zinc-900">
-        <div className="flex items-center justify-between text-zinc-600 hover:text-white cursor-pointer transition-colors">
+        <button 
+          onClick={onOpenSettings}
+          className="flex items-center justify-between text-zinc-600 hover:text-white cursor-pointer transition-colors w-full"
+        >
           <span className="font-mono text-[10px] uppercase tracking-widest">系统设置</span>
           <Settings className="w-4 h-4" />
-        </div>
+        </button>
       </div>
+
     </aside>
   );
 };

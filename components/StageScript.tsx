@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { BrainCircuit, Wand2, ChevronRight, AlertCircle, Users, MapPin, List, TextQuote, Clock, BookOpen, PenTool, ArrowLeft, Languages, Aperture, AlignLeft } from 'lucide-react';
+import { AlertCircle, Aperture, ArrowLeft, BookOpen, BrainCircuit, ChevronRight, Clock, List, MapPin, TextQuote, Users, Wand2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { generateShotList, parseScriptToData } from '../services/doubaoService';
 import { ProjectState } from '../types';
-import { parseScriptToData, generateShotList } from '../services/geminiService';
 
 interface Props {
   project: ProjectState;
@@ -26,6 +26,16 @@ const LANGUAGE_OPTIONS = [
   { label: 'Español (Spanish)', value: 'Spanish' }
 ];
 
+const STYLE_OPTIONS = [
+  { label: '水墨画', value: '水墨画' },
+  { label: '赛博朋克', value: '赛博朋克' },
+  { label: '机甲风', value: '机甲风' },
+  { label: '二次元', value: '二次元' },
+  { label: '写实', value: '写实' },
+  { label: '蜡笔风格', value: '蜡笔风格' },
+  { label: '现代城市风', value: '现代城市风' }
+];
+
 const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [activeTab, setActiveTab] = useState<TabMode>(project.scriptData ? 'script' : 'story');
   
@@ -33,6 +43,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [localTitle, setLocalTitle] = useState(project.title);
   const [localDuration, setLocalDuration] = useState(project.targetDuration || '60s');
   const [localLanguage, setLocalLanguage] = useState(project.language || '中文');
+  const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
   const [customDurationInput, setCustomDurationInput] = useState('');
   
   const [isProcessing, setIsProcessing] = useState(false);
@@ -43,6 +54,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     setLocalTitle(project.title);
     setLocalDuration(project.targetDuration || '60s');
     setLocalLanguage(project.language || '中文');
+    setLocalStyle(project.visualStyle || '写实');
   }, [project.id]);
 
   const handleDurationSelect = (val: string) => {
@@ -76,6 +88,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         rawScript: localScript,
         targetDuration: finalDuration,
         language: localLanguage,
+        visualStyle: localStyle,
         isParsingScript: true
       });
 
@@ -146,6 +159,27 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                   className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {LANGUAGE_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                   <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Visual Style Selection */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                画面风格
+              </label>
+              <div className="relative">
+                <select
+                  value={localStyle}
+                  onChange={(e) => setLocalStyle(e.target.value)}
+                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  {STYLE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                   ))}
                 </select>

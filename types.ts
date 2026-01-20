@@ -77,7 +77,8 @@ export interface ProjectState {
   // Script Phase Data
   rawScript: string;
   targetDuration: string;
-  language: string; 
+  language: string;
+  visualStyle: string; 
   
   scriptData: ScriptData | null;
   shots: Shot[];

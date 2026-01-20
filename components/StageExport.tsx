@@ -1,5 +1,5 @@
+import { BarChart3, CheckCircle, Clock, Download, FileVideo, Film, Layers, Share2 } from 'lucide-react';
 import React from 'react';
-import { Film, Download, Share2, FileVideo, Layers, Clock, CheckCircle, BarChart3 } from 'lucide-react';
 import { ProjectState } from '../types';
 
 interface Props {
