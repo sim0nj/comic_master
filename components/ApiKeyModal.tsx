@@ -112,7 +112,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
 
            <div className="flex items-center justify-center gap-2 text-[12px] text-zinc-700 font-mono">
              <ShieldCheck className="w-3 h-3" />
-             Key is stored locally in your browser
+             密钥仅保存在浏览器本地
            </div>
         </div>
       </div>

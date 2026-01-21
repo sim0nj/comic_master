@@ -175,7 +175,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
               <div className="w-12 h-12 border border-zinc-700 flex items-center justify-center mb-6 group-hover:bg-zinc-800 transition-colors">
                 <Plus className="w-5 h-5 text-zinc-500 group-hover:text-white" />
               </div>
-              <span className="text-zinc-600 font-mono text-[12px] uppercase tracking-widest group-hover:text-zinc-300">Create New Project</span>
+              <span className="text-zinc-600 font-mono text-[12px] uppercase tracking-widest group-hover:text-zinc-300">新建项目</span>
             </div>
 
             {/* Project List */}
