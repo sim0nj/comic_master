@@ -15,6 +15,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
   const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
   const [imageSize, setImageSize] = useState(project.imageSize || '2560x1440');
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   // Variation Form State
   const [newVarName, setNewVarName] = useState("");
@@ -119,7 +120,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           // Enhance prompt to emphasize character consistency
           const enhancedPrompt = `Character: ${char.name}. ${variation.visualPrompt}. Keep facial features consistent with reference.`;
 
-          const imageUrl = await ModelService.generateImage(enhancedPrompt, refImages, false, localStyle, imageSize);
+          const imageUrl = await ModelService.generateImage(enhancedPrompt, refImages, true, localStyle, imageSize);
 
           const newData = { ...project.scriptData! };
           const c = newData.characters.find(c => c.id === charId);
@@ -157,7 +158,17 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
   return (
     <div className="flex flex-col h-full bg-[#0e1229] relative overflow-hidden">
-      
+
+      {/* Image Preview Modal */}
+      {previewImage && (
+        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setPreviewImage(null)}>
+          <button onClick={() => setPreviewImage(null)} className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors">
+            <X className="w-6 h-6 text-white" />
+          </button>
+          <img src={previewImage} alt="Preview" className="max-w-[90vw] max-h-[90vh] object-contain" />
+        </div>
+      )}
+
       {/* Global Progress Overlay */}
       {batchProgress && (
         <div className="absolute inset-0 z-50 bg-black/80 flex flex-col items-center justify-center backdrop-blur-md animate-in fade-in">
@@ -199,13 +210,18 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                   <User className="w-4 h-4" /> 基础形象
                               </h4>
                               <div className="bg-[#0e0e28] p-4 rounded-xl border border-slate-800">
-                                  <div className="aspect-[3/4] bg-slate-900 rounded-lg overflow-hidden mb-4 relative">
+                                  <div className="aspect-[3/4] bg-slate-900 rounded-lg overflow-hidden mb-4 relative cursor-pointer" onClick={() => setPreviewImage(selectedChar.referenceImage)}>
                                       {selectedChar.referenceImage ? (
-                                          <img src={selectedChar.referenceImage} className="w-full h-full object-cover" />
+                                          <img src={selectedChar.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
                                       ) : (
                                           <div className="flex items-center justify-center h-full text-slate-700">无图像</div>
                                       )}
                                       <div className="absolute top-2 left-2 px-2 py-1 bg-black/60 backdrop-blur rounded text-[12px] text-white font-bold uppercase border border-white/10">默认</div>
+                                      {selectedChar.referenceImage && (
+                                          <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
+                                              <span className="text-white/80 text-xs font-bold uppercase tracking-wider">点击预览</span>
+                                          </div>
+                                      )}
                                   </div>
                                   <p className="text-xs text-slate-500 leading-relaxed font-mono">{selectedChar.visualPrompt}</p>
                               </div>
@@ -223,12 +239,17 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                   {/* List */}
                                   {(selectedChar.variations || []).map((variation) => (
                                       <div key={variation.id} className="flex gap-4 p-4 bg-[#0e0e28] border border-slate-800 rounded-xl group hover:border-slate-700 transition-colors">
-                                          <div className="w-20 h-24 bg-slate-900 rounded-lg flex-shrink-0 overflow-hidden relative border border-slate-800">
+                                          <div className={`w-20 h-24 bg-slate-900 rounded-lg flex-shrink-0 overflow-hidden relative border border-slate-800 ${variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? 'cursor-pointer' : ''}`} onClick={variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? () => setPreviewImage(variation.referenceImage) : undefined}>
                                               {variation.referenceImage ? (
-                                                  <img src={variation.referenceImage} className="w-full h-full object-cover" />
+                                                  <img src={variation.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
                                               ) : (
                                                   <div className="w-full h-full flex items-center justify-center">
                                                       <Shirt className="w-6 h-6 text-slate-800" />
+                                                  </div>
+                                              )}
+                                              {variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) && (
+                                                  <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 hover:opacity-100 pointer-events-none">
+                                                      <span className="text-white/80 text-[10px] font-bold uppercase tracking-wider">预览</span>
                                                   </div>
                                               )}
                                               {processingState?.type === 'character' && processingState?.id === variation.id && (
@@ -474,6 +495,27 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           </div>
         </section>
       </div>
+
+      {/* Fullscreen Image Preview Modal */}
+      {previewImage && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center"
+          onClick={() => setPreviewImage(null)}
+        >
+          <img
+            src={previewImage}
+            alt="Full screen preview"
+            className="max-w-[95vw] max-h-[95vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={() => setPreviewImage(null)}
+            className="absolute top-6 right-6 p-3 bg-slate-900/80 hover:bg-slate-800 text-white rounded-full transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+      )}
 
     </div>
   );

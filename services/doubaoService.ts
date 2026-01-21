@@ -442,7 +442,7 @@ export const generateImage = async (
   const requestBody: any = {
     model: DOUBAO_CONFIG.IMAGE_MODEL,
     prompt:  "请使用 "+localStyle+" 风格创作图画，内容为" + prompt + (imageCount > 1 ? " 生成 "+imagex+" 宫格，包含 "+imageCount+" 张风格统一的图片，每张长宽比 "+image_rate+"，间距 2px，白色背景，铺满整张图。" : ""),
-    size: ischaracter?"1440x2560":imageSize,
+    size: ischaracter?"1728x2304":imageSize,
     //sequential_image_generation: ischaracter?"disabled":"auto",
     watermark: false
   };
