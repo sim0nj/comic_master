@@ -10,17 +10,18 @@ interface Props {
 }
 
 const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
-  const [generatingId, setGeneratingId] = useState<string | null>(null);
+  const [processingState, setProcessingState] = useState<{id: string, type: 'character'|'scene'}|null>(null);
   const [batchProgress, setBatchProgress] = useState<{current: number, total: number} | null>(null);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
   const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
+  const [imageSize, setImageSize] = useState(project.imageSize || '2560x1440');
 
   // Variation Form State
   const [newVarName, setNewVarName] = useState("");
   const [newVarPrompt, setNewVarPrompt] = useState("");
 
   const handleGenerateAsset = async (type: 'character' | 'scene', id: string) => {
-    setGeneratingId(id);
+    setProcessingState({ id, type });
     try {
       // Find the item
       let prompt = "";
@@ -33,7 +34,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       }
 
       // Real API Call
-      const imageUrl = await generateImage(prompt,[],type === 'character',localStyle);
+      const imageUrl = await generateImage(prompt,[],type === 'character',localStyle,imageSize);
 
       // Update state
       if (project.scriptData) {
@@ -51,7 +52,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
     } catch (e) {
       console.error(e);
     } finally {
-      setGeneratingId(null);
+      setProcessingState(null);
     }
   };
 
@@ -111,14 +112,14 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       const variation = char?.variations?.find(v => v.id === varId);
       if (!char || !variation) return;
 
-      setGeneratingId(varId);
+      setProcessingState({ id: varId, type: 'character' });
       try {
           // IMPORTANT: Use Base Look as reference to maintain facial consistency
           const refImages = char.referenceImage ? [char.referenceImage] : [];
           // Enhance prompt to emphasize character consistency
           const enhancedPrompt = `Character: ${char.name}. ${variation.visualPrompt}. Keep facial features consistent with reference.`;
-          
-          const imageUrl = await generateImage(enhancedPrompt, refImages,false,localStyle);
+
+          const imageUrl = await generateImage(enhancedPrompt, refImages,false,localStyle,imageSize);
 
           const newData = { ...project.scriptData! };
           const c = newData.characters.find(c => c.id === charId);
@@ -130,7 +131,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           console.error(e);
           alert("Variation generation failed");
       } finally {
-          setGeneratingId(null);
+          setProcessingState(null);
       }
   };
   
@@ -230,7 +231,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                                       <Shirt className="w-6 h-6 text-zinc-800" />
                                                   </div>
                                               )}
-                                              {generatingId === variation.id && (
+                                              {processingState?.type === 'character' && processingState?.id === variation.id && (
                                                   <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
                                                       <Loader2 className="w-4 h-4 text-white animate-spin" />
                                                   </div>
@@ -242,13 +243,13 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                                   <button onClick={() => handleDeleteVariation(selectedChar.id, variation.id)} className="text-zinc-600 hover:text-red-500"><X className="w-3 h-3"/></button>
                                               </div>
                                               <p className="text-[10px] text-zinc-500 line-clamp-2 mb-3 font-mono">{variation.visualPrompt}</p>
-                                              <button 
+                                              <button
                                                   onClick={() => handleGenerateVariation(selectedChar.id, variation.id)}
-                                                  disabled={generatingId === variation.id}
-                                                  className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 hover:text-white flex items-center gap-1 transition-colors"
+                                                  disabled={!!processingState || !!batchProgress}
+                                                  className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 hover:text-white flex items-center gap-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                               >
-                                                  <RefreshCw className={`w-3 h-3 ${generatingId === variation.id ? 'animate-spin' : ''}`} />
-                                                  {variation.referenceImage ? 'Regenerate' : 'Generate Look'}
+                                                  <RefreshCw className={`w-3 h-3 ${processingState?.type === 'character' && processingState?.id === variation.id ? 'animate-spin' : ''}`} />
+                                                  {processingState?.type === 'character' && processingState?.id === variation.id ? '生成中...' : variation.referenceImage ? '重新生成' : '生成造型'}
                                               </button>
                                           </div>
                                       </div>
@@ -259,13 +260,13 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                       <div className="space-y-3">
                                           <input 
                                               type="text" 
-                                              placeholder="Variation Name (e.g. Tactical Gear)" 
+                                              placeholder="造型名称（示例：穿校服）" 
                                               value={newVarName}
                                               onChange={e => setNewVarName(e.target.value)}
                                               className="w-full bg-[#141414] border border-zinc-800 rounded px-3 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600"
                                           />
                                           <textarea 
-                                              placeholder="Visual description of outfit/state..."
+                                              placeholder="服饰 / 状态的视觉描述……"
                                               value={newVarPrompt}
                                               onChange={e => setNewVarPrompt(e.target.value)}
                                               className="w-full bg-[#141414] border border-zinc-800 rounded px-3 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 resize-none h-16"
@@ -275,7 +276,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                               disabled={!newVarName || !newVarPrompt}
                                               className="w-full py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
                                           >
-                                              <Plus className="w-3 h-3" /> Add Variation
+                                              <Plus className="w-3 h-3" /> Add 造型
                                           </button>
                                       </div>
                                   </div>
@@ -340,14 +341,21 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                   {char.referenceImage ? (
                     <>
                       <img src={char.referenceImage} alt={char.name} className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm">
-                         <button 
-                           onClick={() => handleGenerateAsset('character', char.id)}
-                           className="px-3 py-1.5 bg-black/50 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur"
-                         >
-                           重新生成
-                         </button>
-                      </div>
+                      {processingState?.type === 'character' && processingState?.id === char.id ? (
+                        <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                          <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        </div>
+                      ) : (
+                        <div className={`absolute inset-0 bg-black/60 opacity-0 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm ${batchProgress || processingState ? 'pointer-events-none opacity-50' : 'group-hover:opacity-100'}`}>
+                          <button
+                            onClick={() => handleGenerateAsset('character', char.id)}
+                            disabled={!!batchProgress || !!processingState}
+                            className="px-3 py-1.5 bg-black/50 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            重新生成
+                          </button>
+                        </div>
+                      )}
                       <div className="absolute top-2 right-2 p-1 bg-indigo-500 text-white rounded shadow-lg backdrop-blur">
                         <Check className="w-3 h-3" />
                       </div>
@@ -357,11 +365,11 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                        <User className="w-10 h-10 mb-3 opacity-10" />
                        <button
                           onClick={() => handleGenerateAsset('character', char.id)}
-                          disabled={generatingId === char.id}
-                          className="px-4 py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 rounded text-xs font-bold transition-all border border-zinc-700 flex items-center gap-2"
+                          disabled={processingState?.type === 'character' && processingState?.id === char.id || !!batchProgress || !!processingState}
+                          className="px-4 py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 rounded text-xs font-bold transition-all border border-zinc-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                        >
-                         {generatingId === char.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-                         生成
+                         {processingState?.type === 'character' && processingState?.id === char.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                         {processingState?.type === 'character' && processingState?.id === char.id ? '生成中...' : '生成'}
                        </button>
                      </div>
                   )}
@@ -421,14 +429,21 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                   {scene.referenceImage ? (
                     <>
                       <img src={scene.referenceImage} alt={scene.location} className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm">
-                         <button 
-                           onClick={() => handleGenerateAsset('scene', scene.id)}
-                           className="px-3 py-1.5 bg-black/50 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur"
-                         >
-                           重新生成
-                         </button>
-                      </div>
+                      {processingState?.type === 'scene' && processingState?.id === scene.id ? (
+                        <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
+                          <Loader2 className="w-8 h-8 text-white animate-spin" />
+                        </div>
+                      ) : (
+                        <div className={`absolute inset-0 bg-black/60 opacity-0 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm ${batchProgress || processingState ? 'pointer-events-none opacity-50' : 'group-hover:opacity-100'}`}>
+                          <button
+                            onClick={() => handleGenerateAsset('scene', scene.id)}
+                            disabled={!!batchProgress || !!processingState}
+                            className="px-3 py-1.5 bg-black/50 text-white text-[10px] font-bold uppercase tracking-wider rounded border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            重新生成
+                          </button>
+                        </div>
+                      )}
                       <div className="absolute top-2 right-2 p-1 bg-indigo-500 text-white rounded shadow-lg backdrop-blur">
                         <Check className="w-3 h-3" />
                       </div>
@@ -438,11 +453,11 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                        <MapPin className="w-10 h-10 mb-3 opacity-10" />
                        <button
                           onClick={() => handleGenerateAsset('scene', scene.id)}
-                          disabled={generatingId === scene.id}
-                          className="px-4 py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 rounded text-xs font-bold transition-all border border-zinc-700 flex items-center gap-2"
+                          disabled={processingState?.type === 'scene' && processingState?.id === scene.id || !!batchProgress || !!processingState}
+                          className="px-4 py-2 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 rounded text-xs font-bold transition-all border border-zinc-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                        >
-                          {generatingId === scene.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-                          生成
+                          {processingState?.type === 'scene' && processingState?.id === scene.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                          {processingState?.type === 'scene' && processingState?.id === scene.id ? '生成中...' : '生成'}
                        </button>
                      </div>
                   )}

@@ -1,4 +1,4 @@
-import { BarChart3, CheckCircle, Clock, Download, Film, Layers, Share2, Loader2 } from 'lucide-react';
+import { BarChart3, CheckCircle, Clock, Download, Film, Layers, Loader2, Share2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { mergeVideos } from '../services/cozeService';
 import { ProjectState } from '../types';
@@ -92,7 +92,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
              <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 relative z-10 gap-6">
                <div>
                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">{project.scriptData?.title || '未命名项目'}</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">{project?.title || '未命名项目'}</h3>
                     <span className="px-2 py-0.5 bg-zinc-900 border border-zinc-700 text-zinc-400 text-[10px] rounded uppercase font-mono tracking-wider">Master Sequence</span>
                  </div>
                  <div className="flex items-center gap-6 mt-3">

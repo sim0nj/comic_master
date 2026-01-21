@@ -326,6 +326,58 @@ export const generateShotList = async (
 };
 
 /**
+ * Agent 0: Script Generation from simple prompt
+ * 根据简单提示词生成完整剧本
+ */
+export const generateScript = async (
+  prompt: string,
+  genre: string = "剧情片",
+  targetDuration: string = "60s",
+  language: string = "中文"
+): Promise<string> => {
+  const endpoint = `${DOUBAO_CONFIG.API_ENDPOINT}/chat/completions`;
+
+  const generationPrompt = `
+    你是一名专业的编剧。请根据以下提示词创作一个完整的影视剧本。
+
+    创作要求：
+    1. 目标时长：${targetDuration}
+    2. 题材类型：${genre}
+    3. 输出语言：${language}
+    4. 剧本结构清晰，包含场景标题、时间、地点、人物、动作描述、对白
+    5. 情节紧凑，画面感强
+    6. 人物性格鲜明，对话自然
+
+    用户提示词：
+    "${prompt}"
+
+    请以Markdown格式输出剧本结构，不要使用 JSON 格式，直接输出可阅读的剧本文本。
+  `;
+
+  const response = await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify({
+      model: DOUBAO_CONFIG.TEXT_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: "你是一名专业的编剧，擅长创作各种类型的影视剧本。"
+        },
+        {
+          role: "user",
+          content: generationPrompt,
+        },
+      ],
+      temperature: 0.8,
+      max_tokens: 8192,
+    }),
+  });
+
+  const content = response.choices?.[0]?.message?.content || "";
+  return content.trim();
+};
+
+/**
  * Agent 3: Visual Design (Prompt Generation)
  */
 export const generateVisualPrompts = async (
@@ -364,14 +416,15 @@ export const generateImage = async (
   prompt: string,
   referenceImages: string[] = [],
   ischaracter: boolean = false,
-  localStyle: string = "写实"
+  localStyle: string = "写实",
+  imageSize: string = "2560x1440"
 ): Promise<string> => {
   const endpoint = `${DOUBAO_CONFIG.API_ENDPOINT}/images/generations`;
 
   const requestBody: any = {
     model: DOUBAO_CONFIG.IMAGE_MODEL,
     prompt:  "绘画风格"+localStyle+"：" + prompt,
-    size: ischaracter?"1440x2560":"2560x1440",
+    size: ischaracter?"1440x2560":imageSize,
     sequential_image_generation: ischaracter?"disabled":"auto",
   };
 
@@ -380,7 +433,7 @@ export const generateImage = async (
   if (referenceImages.length > 0) {
     // 这里需要根据实际 API 调整
     // 可能需要使用 image_url 参数或其他方式
-    requestBody.image_url = referenceImages[0];
+    requestBody.image = referenceImages;
   }
 
   const response = await fetchWithRetry(endpoint, {

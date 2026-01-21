@@ -1,6 +1,6 @@
-import { AlertCircle, Aperture, ArrowLeft, BookOpen, BrainCircuit, ChevronRight, Clock, List, MapPin, TextQuote, Users, Wand2 } from 'lucide-react';
+import { AlertCircle, Aperture, ArrowLeft, BookOpen, BrainCircuit, ChevronRight, Clock, List, MapPin, Settings, TextQuote, Users, Wand2, Sparkles } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { generateShotList, parseScriptToData } from '../services/doubaoService';
+import { generateShotList, parseScriptToData, generateScript } from '../services/doubaoService';
 import { ProjectState } from '../types';
 
 interface Props {
@@ -36,6 +36,11 @@ const STYLE_OPTIONS = [
   { label: '现代城市风', value: '现代城市风' }
 ];
 
+const IMAGE_SIZE_OPTIONS = [
+  { label: '竖屏 9:16 (1440x2560)', value: '1440x2560' },
+  { label: '横屏 16:9 (2560x1440)', value: '2560x1440' }
+];
+
 const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [activeTab, setActiveTab] = useState<TabMode>(project.scriptData ? 'script' : 'story');
   
@@ -44,10 +49,20 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [localDuration, setLocalDuration] = useState(project.targetDuration || '60s');
   const [localLanguage, setLocalLanguage] = useState(project.language || '中文');
   const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
+  const [localImageSize, setLocalImageSize] = useState(project.imageSize || '1440x2560');
   const [customDurationInput, setCustomDurationInput] = useState('');
   
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
+  const [scriptPrompt, setScriptPrompt] = useState('');
+  const [isGeneratingScript, setIsGeneratingScript] = useState(false);
+  const [settingTitle, setSettingTitle] = useState('');
+  const [settingDuration, setSettingDuration] = useState('');
+  const [settingLanguage, setSettingLanguage] = useState('');
+  const [settingStyle, setSettingStyle] = useState('');
+  const [settingImageSize, setSettingImageSize] = useState('');
+  const [settingCustomDuration, setSettingCustomDuration] = useState('');
 
   useEffect(() => {
     setLocalScript(project.rawScript);
@@ -55,6 +70,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     setLocalDuration(project.targetDuration || '60s');
     setLocalLanguage(project.language || '中文');
     setLocalStyle(project.visualStyle || '写实');
+    setLocalImageSize(project.imageSize || '1440x2560');
   }, [project.id]);
 
   const handleDurationSelect = (val: string) => {
@@ -66,6 +82,52 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
   const getFinalDuration = () => {
     return localDuration === 'custom' ? customDurationInput : localDuration;
+  };
+
+  const openSettings = () => {
+    setSettingTitle(project.title);
+    setSettingDuration(project.targetDuration || '60s');
+    setSettingLanguage(project.language || '中文');
+    setSettingStyle(project.visualStyle || '写实');
+    setSettingImageSize(project.imageSize || '1440x2560');
+    setSettingCustomDuration(project.targetDuration === 'custom' ? project.targetDuration : '');
+    setShowSettings(true);
+  };
+
+  const saveSettings = () => {
+    const finalDuration = settingDuration === 'custom' ? settingCustomDuration : settingDuration;
+    updateProject({
+      title: settingTitle,
+      targetDuration: finalDuration,
+      language: settingLanguage,
+      visualStyle: settingStyle,
+      imageSize: settingImageSize
+    });
+    setShowSettings(false);
+  };
+
+  const handleGenerateScript = async () => {
+    if (!scriptPrompt.trim()) {
+      setError("请输入剧本提示词。");
+      return;
+    }
+
+    setIsGeneratingScript(true);
+    setError(null);
+    try {
+      const generatedScript = await generateScript(
+        scriptPrompt,
+        project.scriptData?.genre || '剧情片',
+        getFinalDuration(),
+        localLanguage
+      );
+      setLocalScript(generatedScript);
+    } catch (err: any) {
+      console.error(err);
+      setError(`剧本生成失败: ${err.message || "AI 连接失败"}`);
+    } finally {
+      setIsGeneratingScript(false);
+    }
   };
 
   const handleAnalyze = async () => {
@@ -89,6 +151,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         targetDuration: finalDuration,
         language: localLanguage,
         visualStyle: localStyle,
+        imageSize: localImageSize,
         isParsingScript: true
       });
 
@@ -189,6 +252,27 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
               </div>
             </div>
 
+            {/* Image Size Selection */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                图片尺寸
+              </label>
+              <div className="relative">
+                <select
+                  value={localImageSize}
+                  onChange={(e) => setLocalImageSize(e.target.value)}
+                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  {IMAGE_SIZE_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                   <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
             {/* Duration Selection */}
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
@@ -264,7 +348,40 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
            </div>
            <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">MARKDOWN SUPPORTED</span>
         </div>
-        
+
+        {/* AI Script Generation Input */}
+        <div className="border-b border-zinc-800/50 bg-[#0A0A0A] p-4">
+           <div className="max-w-3xl mx-auto">
+              <div className="flex gap-3">
+                 <input
+                    type="text"
+                    value={scriptPrompt}
+                    onChange={(e) => setScriptPrompt(e.target.value)}
+                    className="flex-1 bg-[#141414] border border-zinc-800 text-white px-4 py-2.5 text-sm rounded-lg focus:border-indigo-500 focus:outline-none transition-all placeholder:text-zinc-600"
+                    placeholder="输入简单提示词（如：一个关于青春校园的励志故事）..."
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleGenerateScript();
+                      }
+                    }}
+                 />
+                 <button
+                    onClick={handleGenerateScript}
+                    disabled={isGeneratingScript || !scriptPrompt.trim()}
+                    className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shrink-0 ${
+                      isGeneratingScript
+                        ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
+                        : 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20'
+                    } ${!scriptPrompt.trim() ? 'opacity-50' : ''}`}
+                 >
+                    <Sparkles className={`w-3.5 h-3.5 ${isGeneratingScript ? 'animate-spin' : ''}`} />
+                    {isGeneratingScript ? '生成中...' : 'AI 生成剧本'}
+                 </button>
+              </div>
+           </div>
+        </div>
+
         <div className="flex-1 overflow-y-auto">
            <div className="max-w-3xl mx-auto h-full flex flex-col py-12 px-8">
               <textarea
@@ -325,14 +442,23 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                   </div>
               </div>
            </div>
-           
-           <button 
-             onClick={() => setActiveTab('story')}
-             className="text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-zinc-800 rounded-lg transition-all"
-           >
-             <ArrowLeft className="w-3 h-3" />
-             返回编辑
-           </button>
+
+           <div className="flex gap-2">
+             <button
+               onClick={openSettings}
+               className="text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-zinc-800 rounded-lg transition-all"
+             >
+               <Settings className="w-3 h-3" />
+               项目设置
+             </button>
+             <button
+               onClick={() => setActiveTab('story')}
+               className="text-xs font-bold text-zinc-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-zinc-800 rounded-lg transition-all"
+             >
+               <ArrowLeft className="w-3 h-3" />
+               返回编辑
+             </button>
+           </div>
         </div>
   
         {/* Content Split View */}
@@ -473,9 +599,153 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     );
   };
 
+  const renderSettingsModal = () => (
+    showSettings && (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) setShowSettings(false);
+        }}
+      >
+        <div className="bg-[#0A0A0A] border border-zinc-800 rounded-lg w-[480px] max-w-[90vw] max-h-[85vh] overflow-y-auto shadow-2xl">
+          <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
+              <Settings className="w-4 h-4 text-zinc-400" />
+              项目设置
+            </h3>
+            <button
+              onClick={() => setShowSettings(false)}
+              className="text-zinc-500 hover:text-white transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="p-6 space-y-5">
+            {/* Title Input */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">项目标题</label>
+              <input
+                type="text"
+                value={settingTitle}
+                onChange={(e) => setSettingTitle(e.target.value)}
+                className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none transition-all"
+                placeholder="输入项目名称..."
+              />
+            </div>
+
+            {/* Language Selection */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">输出语言</label>
+              <div className="relative">
+                <select
+                  value={settingLanguage}
+                  onChange={(e) => setSettingLanguage(e.target.value)}
+                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  {LANGUAGE_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                  <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Visual Style Selection */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">画面风格</label>
+              <div className="relative">
+                <select
+                  value={settingStyle}
+                  onChange={(e) => setSettingStyle(e.target.value)}
+                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  {STYLE_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                  <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Image Size Selection */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">图片尺寸</label>
+              <div className="relative">
+                <select
+                  value={settingImageSize}
+                  onChange={(e) => setSettingImageSize(e.target.value)}
+                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  {IMAGE_SIZE_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                  <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Duration Selection */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">目标时长</label>
+              <div className="grid grid-cols-2 gap-2">
+                {DURATION_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setSettingDuration(opt.value)}
+                    className={`px-2 py-2.5 text-[11px] font-medium rounded-md transition-all text-center border ${
+                      settingDuration === opt.value
+                        ? 'bg-zinc-100 text-black border-zinc-100 shadow-sm'
+                        : 'bg-transparent border-zinc-800 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200'
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              {settingDuration === 'custom' && (
+                <div className="pt-1">
+                  <input
+                    type="text"
+                    value={settingCustomDuration}
+                    onChange={(e) => setSettingCustomDuration(e.target.value)}
+                    className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none font-mono placeholder:text-zinc-700"
+                    placeholder="输入时长 (如: 90s, 3m)"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="p-6 border-t border-zinc-800 flex gap-3">
+            <button
+              onClick={() => setShowSettings(false)}
+              className="flex-1 py-3 bg-zinc-900 text-zinc-400 hover:text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors"
+            >
+              取消
+            </button>
+            <button
+              onClick={saveSettings}
+              className="flex-1 py-3 bg-white text-black hover:bg-zinc-200 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors"
+            >
+              保存设置
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  );
+
   return (
     <div className="h-full bg-[#050505]">
       {activeTab === 'story' ? renderStoryInput() : renderScriptBreakdown()}
+      {renderSettingsModal()}
     </div>
   );
 };

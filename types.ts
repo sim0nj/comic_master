@@ -79,6 +79,7 @@ export interface ProjectState {
   targetDuration: string;
   language: string;
   visualStyle: string;
+  imageSize: string;
 
   scriptData: ScriptData | null;
   shots: Shot[];

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Trash2, Loader2, Folder, ChevronRight, Calendar, AlertTriangle, Download, Upload } from 'lucide-react';
+import { Plus, Trash2, Loader2, Folder, ChevronRight, Calendar, AlertTriangle, Download, Upload, Edit, Check } from 'lucide-react';
 import { ProjectState } from '../types';
 import { getAllProjectsMetadata, createNewProjectState, deleteProjectFromDB, exportProjectToFile, importProjectFromFile, saveProjectToDB } from '../services/storageService';
 
@@ -12,6 +12,8 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
+  const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
+  const [editingTitle, setEditingTitle] = useState('');
 
   const loadProjects = async () => {
     setIsLoading(true);
@@ -86,6 +88,45 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
       alert(error.message || '导入项目失败');
     } finally {
       setImporting(false);
+    }
+  };
+
+  const startEditing = (e: React.MouseEvent, proj: ProjectState) => {
+    e.stopPropagation();
+    setEditingProjectId(proj.id);
+    setEditingTitle(proj.title);
+  };
+
+  const cancelEditing = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingProjectId(null);
+    setEditingTitle('');
+  };
+
+  const saveTitle = async (e: React.MouseEvent | React.KeyboardEvent, proj: ProjectState) => {
+    e.stopPropagation();
+    if (!editingTitle.trim()) {
+      cancelEditing(e as React.MouseEvent);
+      return;
+    }
+    try {
+      const updatedProject = { ...proj, title: editingTitle.trim() };
+      await saveProjectToDB(updatedProject);
+      await loadProjects();
+    } catch (error) {
+      console.error('Failed to update title:', error);
+      alert('更新项目名失败');
+    } finally {
+      setEditingProjectId(null);
+      setEditingTitle('');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, proj: ProjectState) => {
+    if (e.key === 'Enter') {
+      saveTitle(e, proj);
+    } else if (e.key === 'Escape') {
+      cancelEditing(e as any);
     }
   };
 
@@ -179,11 +220,22 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
                      {/* Export Button */}
                      <button
                         onClick={(e) => handleExport(e, proj)}
-                        className="absolute top-4 right-12 opacity-0 group-hover:opacity-100 p-2 hover:bg-zinc-800 text-zinc-600 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-16 opacity-0 group-hover:opacity-100 p-2 hover:bg-zinc-800 text-zinc-600 hover:text-indigo-400 transition-all rounded-sm z-10"
                         title="导出项目"
                      >
                         <Download className="w-4 h-4" />
                      </button>
+
+                     {/* Edit Button */}
+                     {editingProjectId !== proj.id ? (
+                     <button
+                        onClick={(e) => startEditing(e, proj)}
+                        className="absolute top-4 right-10 opacity-0 group-hover:opacity-100 p-2 hover:bg-zinc-800 text-zinc-600 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        title="编辑项目名"
+                     >
+                        <Edit className="w-4 h-4" />
+                     </button>
+                     ) : null}
 
                      {/* Delete Button */}
                      <button
@@ -196,10 +248,31 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
 
                      <div className="flex-1">
                         <Folder className="w-8 h-8 text-zinc-800 mb-6 group-hover:text-zinc-500 transition-colors" />
-                        <h3 className="text-sm font-bold text-white mb-2 line-clamp-1 tracking-wide">{proj.title}</h3>
+                        {editingProjectId === proj.id ? (
+                          <div className="mb-2 flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={editingTitle}
+                              onChange={(e) => setEditingTitle(e.target.value)}
+                              onKeyDown={(e) => handleKeyDown(e, proj)}
+                              onClick={(e) => e.stopPropagation()}
+                              className="flex-1 bg-zinc-900 border border-zinc-700 text-white text-sm px-2 py-1 focus:outline-none focus:border-indigo-500"
+                              autoFocus
+                            />
+                            <button
+                              onClick={(e) => saveTitle(e, proj)}
+                              className="p-1.5 hover:bg-zinc-800 text-zinc-500 hover:text-green-400 transition-all rounded-sm"
+                              title="保存"
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ) : (
+                          <h3 className="text-sm font-bold text-white mb-2 line-clamp-1 tracking-wide">{proj.title}</h3>
+                        )}
                         <div className="flex flex-wrap gap-2 mb-4">
                             <span className="text-[9px] font-mono text-zinc-500 border border-zinc-800 px-1.5 py-0.5 uppercase tracking-wider">
-                              {proj.stage === 'script' ? '剧本阶段' : 
+                              {proj.stage === 'script' ? '剧本阶段' :
                                proj.stage === 'assets' ? '资产生成' :
                                proj.stage === 'director' ? '导演工作台' : '导出阶段'}
                             </span>

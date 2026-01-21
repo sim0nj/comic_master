@@ -13,6 +13,8 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
   const [processingState, setProcessingState] = useState<{id: string, type: 'kf_start'|'kf_end'|'video'}|null>(null);
   const [batchProgress, setBatchProgress] = useState<{current: number, total: number, message: string} | null>(null);
   const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
+  const [imageSize, setImageSize] = useState(project.imageSize || '2560x1440');
+  
 
   const activeShotIndex = project.shots.findIndex(s => s.id === activeShotId);
   const activeShot = project.shots[activeShotIndex];
@@ -41,7 +43,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
         // 2. Character References (Appearance)
         if (shot.characters) {
           shot.characters.forEach(charId => {
-            const char = project.scriptData?.characters.find(c => String(c.id) === String(charId));
+            const char = project.scriptData?.characters.find(c => String(c.name) === String(charId));
             if (!char) return;
 
             // Check if a specific variation is selected for this shot
@@ -74,7 +76,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
     
     try {
       const referenceImages = getRefImagesForShot(shot);
-      const url = await generateImage(prompt, referenceImages,false,localStyle);
+      const url = await generateImage(prompt, referenceImages,false,localStyle,imageSize);
 
       updateProject({ 
         shots: project.shots.map(s => {
@@ -181,7 +183,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
              const kfId = existingKf?.id || `kf-${shot.id}-start-${Date.now()}`;
 
              const referenceImages = getRefImagesForShot(shot);
-             const url = await generateImage(prompt, referenceImages,false,localStyle);
+             const url = await generateImage(prompt, referenceImages,false,localStyle,imageSize);
 
              currentShots = currentShots.map(s => {
                 if (s.id !== shot.id) return s;
@@ -238,7 +240,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       if (!activeShot || !project.scriptData) return null;
       // String comparison for safety
       const scene = project.scriptData.scenes.find(s => String(s.id) === String(activeShot.sceneId));
-      const activeCharacters = project.scriptData.characters.filter(c => activeShot.characters.includes(c.id));
+      const activeCharacters = project.scriptData.characters.filter(c => activeShot.characters.includes(c.name));
 
       return (
           <div className="bg-[#141414] p-5 rounded-xl border border-zinc-800 mb-6 space-y-4">
@@ -286,7 +288,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                             onChange={(e) => handleVariationChange(activeShot.id, char.id, e.target.value)}
                                             className="bg-black text-[10px] text-zinc-400 border border-zinc-700 rounded px-1.5 py-0.5 max-w-[100px] outline-none focus:border-indigo-500"
                                          >
-                                             <option value="">Default Look</option>
+                                             <option value="">默认造型</option>
                                              {char.variations.map(v => (
                                                  <option key={v.id} value={v.id}>{v.name}</option>
                                              ))}
@@ -486,16 +488,21 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                <div className="space-y-2">
                                    <div className="flex justify-between items-center">
                                        <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">起始帧 (Start)</span>
-                                       <button 
+                                       <button
                                            onClick={() => handleGenerateKeyframe(activeShot, 'start')}
-                                           className="text-[10px] text-indigo-400 hover:text-white transition-colors"
+                                           disabled={!!processingState || !!batchProgress}
+                                           className="text-[10px] text-indigo-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                        >
-                                           {startKf?.imageUrl ? '重新生成' : '生成'}
+                                           {processingState?.type === 'kf_start' && (processingState?.id === startKf?.id || (!startKf && processingState?.type === 'kf_start')) ? '生成中...' : startKf?.imageUrl ? '重新生成' : '生成'}
                                        </button>
                                    </div>
                                    <div className="aspect-video bg-black rounded-lg border border-zinc-800 overflow-hidden relative group">
                                        {startKf?.imageUrl ? (
-                                           <img src={startKf.imageUrl} className="w-full h-full object-contain cursor-pointer" onClick={() => window.open(startKf.imageUrl, '_blank')} />
+                                           <img
+                                             src={startKf.imageUrl}
+                                             className={`w-full h-full object-contain ${!processingState || processingState?.type !== 'kf_start' || processingState?.id !== startKf.id ? 'cursor-pointer' : ''}`}
+                                             onClick={() => (!processingState || processingState?.type !== 'kf_start' || processingState?.id !== startKf.id) && window.open(startKf.imageUrl, '_blank')}
+                                           />
                                        ) : (
                                            <div className="absolute inset-0 flex items-center justify-center">
                                                <div className="w-2 h-2 rounded-full bg-zinc-800"></div>
@@ -514,16 +521,21 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                <div className="space-y-2">
                                    <div className="flex justify-between items-center">
                                        <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">结束帧 (End)</span>
-                                       <button 
+                                       <button
                                            onClick={() => handleGenerateKeyframe(activeShot, 'end')}
-                                           className="text-[10px] text-indigo-400 hover:text-white transition-colors"
+                                           disabled={!!processingState || !!batchProgress}
+                                           className="text-[10px] text-indigo-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                        >
-                                           {endKf?.imageUrl ? '重新生成' : '生成'}
+                                           {processingState?.type === 'kf_end' && (processingState?.id === endKf?.id || (!endKf && processingState?.type === 'kf_end')) ? '生成中...' : endKf?.imageUrl ? '重新生成' : '生成'}
                                        </button>
                                    </div>
                                    <div className="aspect-video bg-black rounded-lg border border-zinc-800 overflow-hidden relative group">
                                        {endKf?.imageUrl ? (
-                                           <img src={endKf.imageUrl} className="w-full h-full object-contain cursor-pointer" onClick={() => window.open(endKf.imageUrl, '_blank')} />
+                                           <img
+                                             src={endKf.imageUrl}
+                                             className={`w-full h-full object-contain ${!processingState || processingState?.type !== 'kf_end' || processingState?.id !== endKf.id ? 'cursor-pointer' : ''}`}
+                                             onClick={() => (!processingState || processingState?.type !== 'kf_end' || processingState?.id !== endKf.id) && window.open(endKf.imageUrl, '_blank')}
+                                           />
                                        ) : (
                                            <div className="absolute inset-0 flex items-center justify-center">
                                                <span className="text-[9px] text-zinc-700 uppercase">Optional</span>
@@ -562,12 +574,12 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
                            <button
                              onClick={() => handleGenerateVideo(activeShot)}
-                             disabled={!startKf?.imageUrl || processingState?.type === 'video'}
+                             disabled={!startKf?.imageUrl || !!processingState || !!batchProgress}
                              className={`w-full py-3 rounded-lg font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
-                               activeShot.interval?.videoUrl 
+                               activeShot.interval?.videoUrl
                                  ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
                                  : 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20'
-                             } ${(!startKf?.imageUrl) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                             } ${(!startKf?.imageUrl || !!processingState || !!batchProgress) ? 'opacity-50 cursor-not-allowed' : ''}`}
                            >
                              {processingState?.type === 'video' ? (
                                 <>

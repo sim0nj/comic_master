@@ -83,6 +83,7 @@ export const createNewProjectState = (): ProjectState => {
     targetDuration: '60s', // Default duration now 60s
     language: '中文', // Default language
     visualStyle: '写实',
+    imageSize: '1440x2560', // Default image size (vertical)
     rawScript: `标题：示例剧本
 
 场景 1
