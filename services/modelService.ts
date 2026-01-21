@@ -2,14 +2,14 @@
 // 模型调用包装类，根据启用的配置动态选择模型提供商
 
 import { ScriptData, Shot } from "../types";
-import { getEnabledConfigByType, getAllModelConfigs } from "./modelConfigService";
+import { getAllModelConfigs, getEnabledConfigByType } from "./modelConfigService";
 
 // DeepSeek 方法
 import {
-  parseScriptToDataDeepseek,
-  generateShotListDeepseek,
   generateScriptDeepseek,
+  generateShotListDeepseek,
   generateVisualPromptsDeepseek,
+  parseScriptToDataDeepseek,
   setDeepseekApiKey,
   setDeepseekApiUrl
 } from "./deepseekService";
@@ -22,12 +22,12 @@ import {
 
 // Doubao 方法
 import {
-  parseScriptToData as parseScriptToDataDoubao,
-  generateShotList as generateShotListDoubao,
-  generateScript as generateScriptDoubao,
-  generateVisualPrompts as generateVisualPromptsDoubao,
   generateImage as generateImageDoubao,
+  generateScript as generateScriptDoubao,
+  generateShotList as generateShotListDoubao,
   generateVideo as generateVideoDoubao,
+  generateVisualPrompts as generateVisualPromptsDoubao,
+  parseScriptToData as parseScriptToDataDoubao,
   setGlobalApiKey as setDoubaoApiKey,
   setDoubaoApiUrl
 } from "./doubaoService";
@@ -313,21 +313,22 @@ export class ModelService {
     referenceImages: string[] = [],
     isCharacter: boolean = false,
     localStyle: string = "写实",
-    imageSize: string = "2560x1440"
+    imageSize: string = "2560x1440",
+    imageCount: number = 1
   ): Promise<string> {
     const provider = await this.getEnabledImageProvider();
     console.log(`使用 ${provider} 生成图片`);
 
     switch (provider) {
       case 'doubao':
-        return await generateImageDoubao(prompt, referenceImages, isCharacter, localStyle, imageSize);
+        return await generateImageDoubao(prompt, referenceImages, isCharacter, localStyle, imageSize,imageCount);
       case 'gemini':
         return await generateImageGemini(prompt, referenceImages);
       case 'openai':
         // TODO: 实现 OpenAI 文生图
         throw new Error(`暂不支持 ${provider} 提供商的文生图`);
       default:
-        return await generateImageDoubao(prompt, referenceImages, isCharacter, localStyle, imageSize);
+        return await generateImageDoubao(prompt, referenceImages, isCharacter, localStyle, imageSize,imageCount);
     }
   }
 

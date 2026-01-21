@@ -43,6 +43,18 @@ const IMAGE_SIZE_OPTIONS = [
   { label: '横屏 16:9 (2560x1440)', value: '2560x1440' }
 ];
 
+const IMAGE_COUNT_OPTIONS = [
+  { label: '1 张', value: 1 },
+  { label: '2 张', value: 2 },
+  { label: '3 张', value: 3 },
+  { label: '4 张', value: 4 },
+  { label: '5 张', value: 5 },
+  { label: '6 张', value: 6 },
+  { label: '7 张', value: 7 },
+  { label: '8 张', value: 8 },
+  { label: '9 张', value: 9 }
+];
+
 const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [activeTab, setActiveTab] = useState<TabMode>(project.scriptData ? 'script' : 'story');
   
@@ -52,8 +64,9 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [localLanguage, setLocalLanguage] = useState(project.language || '中文');
   const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
   const [localImageSize, setLocalImageSize] = useState(project.imageSize || '1440x2560');
+  const [localImageCount, setLocalImageCount] = useState(project.imageCount || 1);
   const [customDurationInput, setCustomDurationInput] = useState('');
-  
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
@@ -64,6 +77,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [settingLanguage, setSettingLanguage] = useState('');
   const [settingStyle, setSettingStyle] = useState('');
   const [settingImageSize, setSettingImageSize] = useState('');
+  const [settingImageCount, setSettingImageCount] = useState(1);
   const [settingCustomDuration, setSettingCustomDuration] = useState('');
 
   // Editing states
@@ -83,6 +97,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     setLocalLanguage(project.language || '中文');
     setLocalStyle(project.visualStyle || '写实');
     setLocalImageSize(project.imageSize || '1440x2560');
+    setLocalImageCount(project.imageCount || 1);
 
     // 初始化模型服务
     ModelService.initialize();
@@ -105,6 +120,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     setSettingLanguage(project.language || '中文');
     setSettingStyle(project.visualStyle || '写实');
     setSettingImageSize(project.imageSize || '1440x2560');
+    setSettingImageCount(project.imageCount || 1);
     setSettingCustomDuration(project.targetDuration === 'custom' ? project.targetDuration : '');
     setShowSettings(true);
   };
@@ -116,7 +132,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
       targetDuration: finalDuration,
       language: settingLanguage,
       visualStyle: settingStyle,
-      imageSize: settingImageSize
+      imageSize: settingImageSize,
+      imageCount: settingImageCount
     });
     setShowSettings(false);
   };
@@ -288,6 +305,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         language: localLanguage,
         visualStyle: localStyle,
         imageSize: localImageSize,
+        imageCount: localImageCount,
         isParsingScript: true
       });
 
@@ -400,6 +418,27 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                   className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {IMAGE_SIZE_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                   <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Image Count Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                组图数量
+              </label>
+              <div className="relative">
+                <select
+                  value={localImageCount}
+                  onChange={(e) => setLocalImageCount(Number(e.target.value))}
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  {IMAGE_COUNT_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
                   ))}
                 </select>
@@ -989,6 +1028,47 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 </select>
                 <div className="absolute right-3 top-3 pointer-events-none">
                   <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Image Count Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-zinc-500 uppercase tracking-widest">组图数量</label>
+              <div className="relative">
+                <select
+                  value={settingImageCount}
+                  onChange={(e) => setSettingImageCount(Number(e.target.value))}
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  {IMAGE_COUNT_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                  <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                </div>
+              </div>
+              <p className="text-[10px] text-zinc-600">文生图模型一次生成的画面数</p>
+            </div>
+
+            {/* Image Count Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                组图数量
+              </label>
+              <div className="relative">
+                <select
+                  value={localImageCount}
+                  onChange={(e) => setLocalImageCount(Number(e.target.value))}
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  {IMAGE_COUNT_OPTIONS.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                   <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
                 </div>
               </div>
             </div>

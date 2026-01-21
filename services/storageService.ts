@@ -84,6 +84,7 @@ export const createNewProjectState = (): ProjectState => {
     language: '中文', // Default language
     visualStyle: '写实',
     imageSize: '1440x2560', // Default image size (vertical)
+    imageCount: 1, // Default image count (1 image per generation)
     rawScript: `标题：示例剧本
 
 场景 1

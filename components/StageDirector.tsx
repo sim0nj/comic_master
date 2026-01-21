@@ -14,6 +14,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
   const [batchProgress, setBatchProgress] = useState<{current: number, total: number, message: string} | null>(null);
   const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
   const [imageSize, setImageSize] = useState(project.imageSize || '2560x1440');
+  const [imageCount, setImageCount] = useState(project.imageCount || 0);
   
 
   const activeShotIndex = project.shots.findIndex(s => s.id === activeShotId);
@@ -73,10 +74,10 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
     const prompt = existingKf?.visualPrompt || shot.actionSummary;
     
     setProcessingState({ id: kfId, type: type === 'start' ? 'kf_start' : 'kf_end' });
-    
+
     try {
       const referenceImages = getRefImagesForShot(shot);
-      const url = await ModelService.generateImage(prompt, referenceImages, false, localStyle, imageSize);
+      const url = await ModelService.generateImage(prompt, referenceImages, false, localStyle, imageSize,imageCount);
 
       updateProject({ 
         shots: project.shots.map(s => {

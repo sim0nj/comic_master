@@ -423,17 +423,24 @@ export const generateImage = async (
   referenceImages: string[] = [],
   ischaracter: boolean = false,
   localStyle: string = "写实",
-  imageSize: string = "2560x1440"
+  imageSize: string = "2560x1440",
+  imageCount: number = 1
 ): Promise<string> => {
   const endpoint = `${runtimeApiUrl}/images/generations`;
 
   const requestBody: any = {
     model: DOUBAO_CONFIG.IMAGE_MODEL,
-    prompt:  "绘画风格"+localStyle+"：" + prompt,
+    prompt:  "请使用 "+localStyle+" 风格创作图画，内容为" + prompt + (imageCount > 1 ? " 需要在图片中包含" + imageCount + "张子图，子图长宽比例和原图一致" : ""),
     size: ischaracter?"1440x2560":imageSize,
     sequential_image_generation: ischaracter?"disabled":"auto",
+    watermark: false
   };
 
+  if (imageCount > 1) {
+    requestBody.sequential_image_generation_options = {
+      max_images: imageCount
+    };
+  }
   // 如果有参考图片，火山引擎可能需要不同的处理方式
   // 具体实现需要参考火山引擎的图片生成 API 文档
   if (referenceImages.length > 0) {

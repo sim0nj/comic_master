@@ -1,4 +1,4 @@
-import { Check, ChevronRight, Globe, Key, Plus, Sparkles, Trash2, X } from 'lucide-react';
+import { Check, ChevronRight, Globe, Key, Plus, Settings, Sparkles, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createDefaultModelConfigs, deleteModelConfig, getAllModelConfigs, saveModelConfig, toggleConfigEnabled } from '../services/modelConfigService';
 import { AIModelConfig } from '../types';
@@ -26,6 +26,7 @@ const MODEL_TYPE_OPTIONS = [
 const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
   const [configs, setConfigs] = useState<AIModelConfig[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showProjectSettings, setShowProjectSettings] = useState(false);
   const [editingConfig, setEditingConfig] = useState<Partial<AIModelConfig> | null>(null);
   const [formData, setFormData] = useState({
     provider: 'doubao' as AIModelConfig['provider'],
@@ -34,6 +35,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     apiUrl: '',
     enabled: true
   });
+  const [projectImageCount, setProjectImageCount] = useState(1);
 
   const loadConfigs = async () => {
     try {
@@ -151,7 +153,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
       onClick={(e) => {
-        if (e.target === e.currentTarget && !showAddModal) onClose();
+        if (e.target === e.currentTarget && !showAddModal && !showProjectSettings) onClose();
       }}
     >
       <div className="bg-[#0A0A0A] border border-zinc-800 rounded-lg w-[800px] max-w-[90vw] max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
@@ -171,7 +173,56 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Content */}
-        {showAddModal ? (
+        {showProjectSettings ? (
+          <div className="flex-1 overflow-y-auto p-6">
+            <div className="space-y-6">
+              <div className="text-center mb-6">
+                <h4 className="text-sm font-bold text-white mb-2">项目配置</h4>
+                <p className="text-xs text-zinc-500">配置项目的默认参数</p>
+              </div>
+
+              {/* Image Count Selection */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">组图数量</label>
+                <div className="relative">
+                  <select
+                    value={projectImageCount}
+                    onChange={(e) => setProjectImageCount(Number(e.target.value))}
+                    className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                  >
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                      <option key={num} value={num}>{num} 张</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-3 pointer-events-none">
+                    <ChevronRight className="w-4 h-4 text-zinc-600 rotate-90" />
+                  </div>
+                </div>
+                <p className="text-[10px] text-zinc-600">文生图模型一次生成的画面数 (1-9张)</p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => setShowProjectSettings(false)}
+                  className="flex-1 py-3 bg-zinc-900 text-zinc-400 hover:text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors"
+                >
+                  取消
+                </button>
+                <button
+                  onClick={() => {
+                    // 保存组图数量到全局或localStorage
+                    localStorage.setItem('projectImageCount', projectImageCount.toString());
+                    setShowProjectSettings(false);
+                  }}
+                  className="flex-1 py-3 bg-indigo-600 text-white hover:bg-indigo-500 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-indigo-600/20"
+                >
+                  保存配置
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : showAddModal ? (
           <div className="flex-1 overflow-y-auto p-6">
             <div className="space-y-6">
               <div className="text-center mb-6">
@@ -368,14 +419,21 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
         )}
 
         {/* Footer */}
-        {!showAddModal && (
-          <div className="p-6 border-t border-zinc-800">
+        {!showAddModal && !showProjectSettings && (
+          <div className="p-6 border-t border-zinc-800 flex gap-3">
+            <button
+              onClick={() => setShowProjectSettings(true)}
+              className="flex-1 py-3 bg-zinc-900 text-zinc-400 hover:text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+            >
+              <Settings className="w-4 h-4" />
+              项目配置
+            </button>
             <button
               onClick={() => setShowAddModal(true)}
-              className="w-full py-3 bg-white text-black hover:bg-zinc-200 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-white/5 flex items-center justify-center gap-2"
+              className="flex-1 py-3 bg-white text-black hover:bg-zinc-200 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-white/5 flex items-center justify-center gap-2"
             >
               <Plus className="w-4 h-4" />
-              添加新配置
+              添加模型配置
             </button>
           </div>
         )}

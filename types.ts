@@ -80,6 +80,7 @@ export interface ProjectState {
   language: string;
   visualStyle: string;
   imageSize: string;
+  imageCount: number; // 组图数量：文生图一次生成的画面数 (0-9)
 
   scriptData: ScriptData | null;
   shots: Shot[];
