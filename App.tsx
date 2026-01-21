@@ -109,12 +109,12 @@ function App() {
   // API Key Entry Screen (Industrial Design)
   if (!apiKey) {
     return (
-      <div className="h-screen bg-[#050505] flex flex-col items-center justify-center p-8 relative overflow-hidden">
+      <div className="h-screen bg-[#201F3E] flex flex-col items-center justify-center p-8 relative overflow-hidden">
         {/* Background Accents */}
         <div className="absolute top-0 right-0 p-64 bg-indigo-900/5 blur-[150px] rounded-full pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 p-48 bg-zinc-900/10 blur-[120px] rounded-full pointer-events-none"></div>
 
-        <div className="w-full max-w-md bg-[#0A0A0A] border border-zinc-800 p-8 rounded-xl shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-300">
+        <div className="w-full max-w-md bg-[#0e0e28] border border-zinc-800 p-8 rounded-xl shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-300">
 
           <div className="flex items-center gap-3 mb-8 border-b border-zinc-900 pb-6">
              <div className="w-10 h-10 bg-white text-black flex items-center justify-center">
@@ -136,7 +136,7 @@ function App() {
                  value={inputKey}
                  onChange={(e) => setInputKey(e.target.value)}
                  placeholder="Enter your API Key..."
-                 className="w-full bg-[#141414] border border-zinc-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-zinc-700"
+                 className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-zinc-700"
                />
                <p className="mt-3 text-[12px] text-zinc-600 leading-relaxed">
                  本应用需要火山引擎的 API 访问权限。请确保您的 API Key 已开通相应的服务权限。
@@ -176,7 +176,7 @@ function App() {
 
   // Workspace View
   return (
-    <div className="flex h-screen bg-[#121212] font-sans text-gray-100 selection:bg-indigo-500/30">
+    <div className="flex h-screen bg-[#0e1229] font-sans text-gray-100 selection:bg-indigo-500/30">
       <Sidebar 
         currentStage={project.stage} 
         setStage={setStage} 

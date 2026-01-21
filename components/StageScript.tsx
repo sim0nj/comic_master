@@ -316,10 +316,10 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   };
 
   const renderStoryInput = () => (
-    <div className="flex h-full bg-[#050505] text-zinc-300">
+    <div className="flex h-full bg-[#201F3E] text-zinc-300">
       
       {/* Middle Column: Config Panel - Adjusted Width to w-96 */}
-      <div className="w-96 border-r border-zinc-800 flex flex-col bg-[#0A0A0A]">
+      <div className="w-96 border-r border-zinc-800 flex flex-col bg-[#0e0e28]">
         {/* Header - Fixed Height 56px */}
         <div className="h-14 px-5 border-b border-zinc-800 flex items-center justify-between shrink-0">
             <h2 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
@@ -336,7 +336,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 type="text"
                 value={localTitle}
                 onChange={(e) => setLocalTitle(e.target.value)}
-                className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-700 transition-all placeholder:text-zinc-700"
+                className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none focus:ring-1 focus:ring-zinc-700 transition-all placeholder:text-zinc-700"
                 placeholder="输入项目名称..."
               />
             </div>
@@ -350,7 +350,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 <select
                   value={localLanguage}
                   onChange={(e) => setLocalLanguage(e.target.value)}
-                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {LANGUAGE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -371,7 +371,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 <select
                   value={localStyle}
                   onChange={(e) => setLocalStyle(e.target.value)}
-                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {STYLE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -392,7 +392,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 <select
                   value={localImageSize}
                   onChange={(e) => setLocalImageSize(e.target.value)}
-                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {IMAGE_SIZE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -430,7 +430,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                     type="text"
                     value={customDurationInput}
                     onChange={(e) => setCustomDurationInput(e.target.value)}
-                    className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none font-mono placeholder:text-zinc-700"
+                    className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none font-mono placeholder:text-zinc-700"
                     placeholder="输入时长 (如: 90s, 3m)"
                   />
                 </div>
@@ -439,7 +439,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         </div>
 
         {/* Footer Action */}
-        <div className="p-6 border-t border-zinc-800 bg-[#0A0A0A]">
+        <div className="p-6 border-t border-zinc-800 bg-[#0e0e28]">
            <button
               onClick={handleAnalyze}
               disabled={isProcessing}
@@ -471,8 +471,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
       </div>
 
       {/* Right: Text Editor - Optimized */}
-      <div className="flex-1 flex flex-col bg-[#050505] relative">
-        <div className="h-14 border-b border-zinc-800 flex items-center justify-between px-8 bg-[#050505] shrink-0">
+      <div className="flex-1 flex flex-col bg-[#201F3E] relative">
+        <div className="h-14 border-b border-zinc-800 flex items-center justify-between px-8 bg-[#201F3E] shrink-0">
            <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 rounded-full bg-zinc-700"></div>
               <span className="text-xs font-bold text-zinc-400">剧本编辑器</span>
@@ -481,14 +481,14 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         </div>
 
         {/* AI Script Generation Input */}
-        <div className="border-b border-zinc-800/50 bg-[#0A0A0A] p-4">
+        <div className="border-b border-zinc-800/50 bg-[#0e0e28] p-4">
            <div className="max-w-3xl mx-auto">
               <div className="flex gap-3">
                  <input
                     type="text"
                     value={scriptPrompt}
                     onChange={(e) => setScriptPrompt(e.target.value)}
-                    className="flex-1 bg-[#141414] border border-zinc-800 text-white px-4 py-2.5 text-sm rounded-lg focus:border-indigo-500 focus:outline-none transition-all placeholder:text-zinc-600"
+                    className="flex-1 bg-[#0c0c2d] border border-zinc-800 text-white px-4 py-2.5 text-sm rounded-lg focus:border-indigo-500 focus:outline-none transition-all placeholder:text-zinc-600"
                     placeholder="输入简单提示词（如：一个关于青春校园的励志故事）..."
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -526,7 +526,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         </div>
 
         {/* Editor Status Footer */}
-        <div className="h-8 border-t border-zinc-900 bg-[#050505] px-4 flex items-center justify-end gap-4 text-[12px] text-zinc-600 font-mono select-none">
+        <div className="h-8 border-t border-zinc-900 bg-[#201F3E] px-4 flex items-center justify-end gap-4 text-[12px] text-zinc-600 font-mono select-none">
            <span>{localScript.length} 字符</span>
            <span>{localScript.split('\n').length} 行</span>
            <div className="flex items-center gap-1.5">
@@ -551,9 +551,9 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     });
 
     return (
-      <div className="flex flex-col h-full bg-[#050505] animate-in fade-in duration-500">
+      <div className="flex flex-col h-full bg-[#201F3E] animate-in fade-in duration-500">
         {/* Header */}
-        <div className="h-16 px-6 border-b border-zinc-800 bg-[#080808] flex items-center justify-between shrink-0 z-20">
+        <div className="h-16 px-6 border-b border-zinc-800 bg-[#090923] flex items-center justify-between shrink-0 z-20">
            <div className="flex items-center gap-6">
               <h2 className="text-lg font-light text-white tracking-tight flex items-center gap-3">
                  <List className="w-5 h-5 text-zinc-400" />
@@ -596,7 +596,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         <div className="flex-1 overflow-hidden flex">
            
            {/* Sidebar: Index */}
-           <div className="w-72 border-r border-zinc-800 bg-[#0A0A0A] flex flex-col hidden lg:flex">
+           <div className="w-72 border-r border-zinc-800 bg-[#0e0e28] flex flex-col hidden lg:flex">
               <div className="p-6 border-b border-zinc-900">
                  <div className="flex items-center justify-between mb-4">
                    <h3 className="text-[12px] font-bold text-zinc-600 uppercase tracking-widest flex items-center gap-2">
@@ -613,7 +613,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                      <textarea
                        value={tempLogline}
                        onChange={(e) => setTempLogline(e.target.value)}
-                       className="w-full bg-[#141414] border border-zinc-800 text-zinc-300 text-xs rounded p-2 focus:border-zinc-600 focus:outline-none resize-none"
+                       className="w-full bg-[#0c0c2d] border border-zinc-800 text-zinc-300 text-xs rounded p-2 focus:border-zinc-600 focus:outline-none resize-none"
                        rows={3}
                      />
                      <div className="flex gap-2">
@@ -646,13 +646,13 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                                   type="text"
                                   value={tempCharacter.name || ''}
                                   onChange={(e) => setTempCharacter({ ...tempCharacter, name: e.target.value })}
-                                  className="w-full bg-[#141414] border border-zinc-800 text-white text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                                   placeholder="角色名"
                                 />
                                 <select
                                   value={tempCharacter.gender || '男'}
                                   onChange={(e) => setTempCharacter({ ...tempCharacter, gender: e.target.value })}
-                                  className="w-full bg-[#141414] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                                 >
                                   <option value="男">男</option>
                                   <option value="女">女</option>
@@ -662,7 +662,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                                   type="text"
                                   value={tempCharacter.age || ''}
                                   onChange={(e) => setTempCharacter({ ...tempCharacter, age: e.target.value })}
-                                  className="w-full bg-[#141414] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                                   placeholder="年龄"
                                 />
                                 <div className="flex gap-1">
@@ -683,18 +683,18 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                          </div>
                        ))}
                        {showAddCharacter && (
-                         <div className="space-y-2 p-2 bg-[#141414] rounded border border-zinc-800">
+                         <div className="space-y-2 p-2 bg-[#0c0c2d] rounded border border-zinc-800">
                            <input
                              type="text"
                              value={tempCharacter.name || ''}
                              onChange={(e) => setTempCharacter({ ...tempCharacter, name: e.target.value })}
-                             className="w-full bg-[#0A0A0A] border border-zinc-800 text-white text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                             className="w-full bg-[#0e0e28] border border-zinc-800 text-white text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                              placeholder="角色名"
                            />
                            <select
                              value={tempCharacter.gender || '男'}
                              onChange={(e) => setTempCharacter({ ...tempCharacter, gender: e.target.value })}
-                             className="w-full bg-[#0A0A0A] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                             className="w-full bg-[#0e0e28] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                            >
                              <option value="男">男</option>
                              <option value="女">女</option>
@@ -704,7 +704,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                              type="text"
                              value={tempCharacter.age || ''}
                              onChange={(e) => setTempCharacter({ ...tempCharacter, age: e.target.value })}
-                             className="w-full bg-[#0A0A0A] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                             className="w-full bg-[#0e0e28] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                              placeholder="年龄"
                            />
                            <div className="flex gap-1">
@@ -735,21 +735,21 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                                  type="text"
                                  value={tempScene.location || ''}
                                  onChange={(e) => setTempScene({ ...tempScene, location: e.target.value })}
-                                 className="w-full bg-[#141414] border border-zinc-800 text-white text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                                 className="w-full bg-[#0c0c2d] border border-zinc-800 text-white text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                                  placeholder="场景名称"
                                />
                                <input
                                  type="text"
                                  value={tempScene.time || ''}
                                  onChange={(e) => setTempScene({ ...tempScene, time: e.target.value })}
-                                 className="w-full bg-[#141414] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                                 className="w-full bg-[#0c0c2d] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                                  placeholder="时间"
                                />
                                <input
                                  type="text"
                                  value={tempScene.atmosphere || ''}
                                  onChange={(e) => setTempScene({ ...tempScene, atmosphere: e.target.value })}
-                                 className="w-full bg-[#141414] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                                 className="w-full bg-[#0c0c2d] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                                  placeholder="氛围"
                                />
                                <div className="flex gap-1">
@@ -770,26 +770,26 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                          </div>
                        ))}
                        {showAddScene && (
-                         <div className="space-y-2 p-2 bg-[#141414] rounded border border-zinc-800">
+                         <div className="space-y-2 p-2 bg-[#0c0c2d] rounded border border-zinc-800">
                            <input
                              type="text"
                              value={tempScene.location || ''}
                              onChange={(e) => setTempScene({ ...tempScene, location: e.target.value })}
-                             className="w-full bg-[#0A0A0A] border border-zinc-800 text-white text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                             className="w-full bg-[#0e0e28] border border-zinc-800 text-white text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                              placeholder="场景名称"
                            />
                            <input
                              type="text"
                              value={tempScene.time || ''}
                              onChange={(e) => setTempScene({ ...tempScene, time: e.target.value })}
-                             className="w-full bg-[#0A0A0A] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                             className="w-full bg-[#0e0e28] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                              placeholder="时间 (如: 日间/夜间)"
                            />
                            <input
                              type="text"
                              value={tempScene.atmosphere || ''}
                              onChange={(e) => setTempScene({ ...tempScene, atmosphere: e.target.value })}
-                             className="w-full bg-[#0A0A0A] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
+                             className="w-full bg-[#0e0e28] border border-zinc-800 text-zinc-300 text-xs rounded px-2 py-1 focus:border-zinc-600 focus:outline-none"
                              placeholder="氛围"
                            />
                            <div className="flex gap-1">
@@ -804,7 +804,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
            </div>
   
            {/* Main: Script & Shots */}
-           <div className="flex-1 overflow-y-auto bg-[#050505] p-0">
+           <div className="flex-1 overflow-y-auto bg-[#201F3E] p-0">
               <div className="max-w-5xl mx-auto pb-20">
                  {project.scriptData?.scenes.map((scene, index) => {
                    const sceneShots = project.shots.filter(s => s.sceneId === scene.id);
@@ -813,7 +813,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                    return (
                      <div key={scene.id} className="border-b border-zinc-800">
                         {/* Scene Header strip */}
-                        <div className="sticky top-0 z-10 bg-[#080808]/95 backdrop-blur border-y border-zinc-800 px-8 py-5 flex items-center justify-between shadow-lg shadow-black/20">
+                        <div className="sticky top-0 z-10 bg-[#090923]/95 backdrop-blur border-y border-zinc-800 px-8 py-5 flex items-center justify-between shadow-lg shadow-black/20">
                            <div className="flex items-baseline gap-4">
                               <span className="text-3xl font-bold text-white/10 font-mono">{(index + 1).toString().padStart(2, '0')}</span>
                               <h3 className="text-lg font-bold text-white uppercase tracking-wider">
@@ -830,7 +830,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                         {/* Shot Rows */}
                         <div className="divide-y divide-zinc-800/50">
                            {sceneShots.map((shot, sIdx) => (
-                             <div key={shot.id} className="group bg-[#050505] hover:bg-[#0A0A0A] transition-colors p-8 flex gap-8">
+                             <div key={shot.id} className="group bg-[#201F3E] hover:bg-[#0e0e28] transition-colors p-8 flex gap-8">
                                 
                                 {/* Shot ID & Tech Data */}
                                 <div className="w-32 flex-shrink-0 flex flex-col gap-4">
@@ -904,7 +904,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
           if (e.target === e.currentTarget) setShowSettings(false);
         }}
       >
-        <div className="bg-[#0A0A0A] border border-zinc-800 rounded-lg w-[480px] max-w-[90vw] max-h-[85vh] overflow-y-auto shadow-2xl">
+        <div className="bg-[#0e0e28] border border-zinc-800 rounded-lg w-[480px] max-w-[90vw] max-h-[85vh] overflow-y-auto shadow-2xl">
           <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
             <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
               <Settings className="w-4 h-4 text-zinc-400" />
@@ -926,7 +926,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 type="text"
                 value={settingTitle}
                 onChange={(e) => setSettingTitle(e.target.value)}
-                className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none transition-all"
+                className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none transition-all"
                 placeholder="输入项目名称..."
               />
             </div>
@@ -938,7 +938,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 <select
                   value={settingLanguage}
                   onChange={(e) => setSettingLanguage(e.target.value)}
-                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {LANGUAGE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -957,7 +957,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 <select
                   value={settingStyle}
                   onChange={(e) => setSettingStyle(e.target.value)}
-                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {STYLE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -976,7 +976,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                 <select
                   value={settingImageSize}
                   onChange={(e) => setSettingImageSize(e.target.value)}
-                  className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-zinc-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {IMAGE_SIZE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -1012,7 +1012,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                     type="text"
                     value={settingCustomDuration}
                     onChange={(e) => setSettingCustomDuration(e.target.value)}
-                    className="w-full bg-[#141414] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none font-mono placeholder:text-zinc-700"
+                    className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-zinc-600 focus:outline-none font-mono placeholder:text-zinc-700"
                     placeholder="输入时长 (如: 90s, 3m)"
                   />
                 </div>
@@ -1040,7 +1040,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   );
 
   return (
-    <div className="h-full bg-[#050505]">
+    <div className="h-full bg-[#201F3E]">
       {activeTab === 'story' ? renderStoryInput() : renderScriptBreakdown()}
       {renderSettingsModal()}
     </div>

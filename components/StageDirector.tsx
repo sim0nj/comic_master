@@ -243,7 +243,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       const activeCharacters = project.scriptData.characters.filter(c => activeShot.characters.includes(c.name));
 
       return (
-          <div className="bg-[#141414] p-5 rounded-xl border border-zinc-800 mb-6 space-y-4">
+          <div className="bg-[#0c0c2d] p-5 rounded-xl border border-zinc-800 mb-6 space-y-4">
               <div className="flex items-center gap-2 mb-2">
                  <MapPin className="w-4 h-4 text-zinc-500" />
                  <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-widest">场景环境 (Scene Context)</h4>
@@ -305,14 +305,14 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
   };
 
   if (!project.shots.length) return (
-      <div className="flex flex-col items-center justify-center h-full text-zinc-500 bg-[#121212]">
+      <div className="flex flex-col items-center justify-center h-full text-zinc-500 bg-[#0e1229]">
           <AlertCircle className="w-12 h-12 mb-4 opacity-50"/>
           <p>暂无镜头数据，请先返回阶段 1 生成分镜表。</p>
       </div>
   );
 
   return (
-    <div className="flex flex-col h-full bg-[#121212] relative overflow-hidden">
+    <div className="flex flex-col h-full bg-[#0e1229] relative overflow-hidden">
       
       {/* Batch Progress Overlay */}
       {batchProgress && (
@@ -327,7 +327,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       )}
 
       {/* Toolbar */}
-      <div className="h-16 border-b border-zinc-800 bg-[#1A1A1A] px-6 flex items-center justify-between shrink-0">
+      <div className="h-16 border-b border-zinc-800 bg-[#171429] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
                   <LayoutGrid className="w-5 h-5 text-indigo-500" />
@@ -345,7 +345,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                   disabled={!!batchProgress}
                   className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                       allStartFramesGenerated
-                        ? 'bg-[#141414] text-zinc-400 border border-zinc-700 hover:text-white hover:border-zinc-500'
+                        ? 'bg-[#0c0c2d] text-zinc-400 border border-zinc-700 hover:text-white hover:border-zinc-500'
                         : 'bg-white text-black hover:bg-zinc-200 shadow-lg shadow-white/5'
                   }`}
               >
@@ -372,12 +372,12 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                               key={shot.id}
                               onClick={() => setActiveShotId(shot.id)}
                               className={`
-                                  group relative flex flex-col bg-[#1A1A1A] border rounded-xl overflow-hidden cursor-pointer transition-all duration-200
+                                  group relative flex flex-col bg-[#171429] border rounded-xl overflow-hidden cursor-pointer transition-all duration-200
                                   ${isActive ? 'border-indigo-500 ring-1 ring-indigo-500/50 shadow-xl scale-[0.98]' : 'border-zinc-800 hover:border-zinc-600 hover:shadow-lg'}
                               `}
                           >
                               {/* Header */}
-                              <div className="px-3 py-2 bg-[#151515] border-b border-zinc-800 flex justify-between items-center">
+                              <div className="px-3 py-2 bg-[#060624] border-b border-zinc-800 flex justify-between items-center">
                                   <span className={`font-mono text-[12px] font-bold ${isActive ? 'text-indigo-400' : 'text-zinc-500'}`}>SHOT {String(idx + 1).padStart(2, '0')}</span>
                                   <span className="text-[11px] px-1.5 py-0.5 bg-zinc-800 text-zinc-400 rounded uppercase">{shot.cameraMovement}</span>
                               </div>
@@ -418,10 +418,10 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
           {/* Right Workbench - Optimized Interaction */}
           {activeShotId && activeShot && (
-              <div className="w-[480px] bg-[#0F0F0F] flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20">
+              <div className="w-[480px] bg-[#0f1225] flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20">
                   
                   {/* Workbench Header */}
-                  <div className="h-16 px-6 border-b border-zinc-800 flex items-center justify-between bg-[#141414] shrink-0">
+                  <div className="h-16 px-6 border-b border-zinc-800 flex items-center justify-between bg-[#0c0c2d] shrink-0">
                        <div className="flex items-center gap-3">
                            <span className="w-8 h-8 bg-indigo-900/30 text-indigo-400 rounded-lg flex items-center justify-center font-bold font-mono text-sm border border-indigo-500/20">
                               {String(activeShotIndex + 1).padStart(2, '0')}
@@ -460,12 +460,12 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                            </div>
                            
                            <div className="space-y-3">
-                               <div className="bg-[#141414] p-4 rounded-lg border border-zinc-800">
+                               <div className="bg-[#0c0c2d] p-4 rounded-lg border border-zinc-800">
                                    <p className="text-zinc-200 text-sm leading-relaxed">{activeShot.actionSummary}</p>
                                </div>
                                
                                {activeShot.dialogue && (
-                                  <div className="bg-[#141414] p-4 rounded-lg border border-zinc-800 flex gap-3">
+                                  <div className="bg-[#0c0c2d] p-4 rounded-lg border border-zinc-800 flex gap-3">
                                       <MessageSquare className="w-4 h-4 text-zinc-600 mt-0.5" />
                                       <div>
                                           <p className="text-xs text-zinc-500 uppercase tracking-wider mb-1">对白</p>
@@ -553,7 +553,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                        </div>
 
                        {/* Section 4: Video Generation */}
-                       <div className="bg-[#141414] rounded-xl p-5 border border-zinc-800 space-y-4">
+                       <div className="bg-[#0c0c2d] rounded-xl p-5 border border-zinc-800 space-y-4">
                            <div className="flex items-center justify-between">
                                <h4 className="text-xs font-bold text-white uppercase tracking-widest flex items-center gap-2">
                                   <Video className="w-3 h-3 text-indigo-500" />

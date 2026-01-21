@@ -45,7 +45,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
       />
 
       {/* Modal */}
-      <div className="w-full max-w-md bg-[#0A0A0A] border border-zinc-800 p-8 rounded-xl shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-300">
+      <div className="w-full max-w-md bg-[#0e0e28] border border-zinc-800 p-8 rounded-xl shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-300">
         
         {/* Close Button */}
         <button
@@ -77,7 +77,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputKey}
                onChange={(e) => setInputKey(e.target.value)}
                placeholder="Enter your API Key..."
-               className="w-full bg-[#141414] border border-zinc-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-zinc-700"
+               className="w-full bg-[#0c0c2d] border border-zinc-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-zinc-700"
              />
              <p className="mt-3 text-[12px] text-zinc-600 leading-relaxed">
                {providerDescription}

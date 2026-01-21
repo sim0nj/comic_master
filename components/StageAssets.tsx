@@ -146,7 +146,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   };
 
   if (!project.scriptData) return (
-      <div className="h-full flex flex-col items-center justify-center bg-[#121212] text-zinc-500">
+      <div className="h-full flex flex-col items-center justify-center bg-[#0e1229] text-zinc-500">
          <p>请先完成 Phase 01 剧本分析</p>
       </div>
   );
@@ -156,7 +156,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   const selectedChar = project.scriptData.characters.find(c => c.id === selectedCharId);
 
   return (
-    <div className="flex flex-col h-full bg-[#121212] relative overflow-hidden">
+    <div className="flex flex-col h-full bg-[#0e1229] relative overflow-hidden">
       
       {/* Global Progress Overlay */}
       {batchProgress && (
@@ -173,9 +173,9 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       {/* Wardrobe Modal */}
       {selectedChar && (
           <div className="absolute inset-0 z-40 bg-black/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
-              <div className="bg-[#141414] border border-zinc-800 w-full max-w-4xl max-h-[90vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
+              <div className="bg-[#0c0c2d] border border-zinc-800 w-full max-w-4xl max-h-[90vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
                   {/* Modal Header */}
-                  <div className="h-16 px-8 border-b border-zinc-800 flex items-center justify-between shrink-0 bg-[#1A1A1A]">
+                  <div className="h-16 px-8 border-b border-zinc-800 flex items-center justify-between shrink-0 bg-[#171429]">
                       <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-full bg-zinc-800 overflow-hidden border border-zinc-700">
                               {selectedChar.referenceImage && <img src={selectedChar.referenceImage} className="w-full h-full object-cover"/>}
@@ -198,7 +198,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                               <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                                   <User className="w-4 h-4" /> Base Appearance
                               </h4>
-                              <div className="bg-[#0A0A0A] p-4 rounded-xl border border-zinc-800">
+                              <div className="bg-[#0e0e28] p-4 rounded-xl border border-zinc-800">
                                   <div className="aspect-[3/4] bg-zinc-900 rounded-lg overflow-hidden mb-4 relative">
                                       {selectedChar.referenceImage ? (
                                           <img src={selectedChar.referenceImage} className="w-full h-full object-cover" />
@@ -222,7 +222,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                               <div className="space-y-4">
                                   {/* List */}
                                   {(selectedChar.variations || []).map((variation) => (
-                                      <div key={variation.id} className="flex gap-4 p-4 bg-[#0A0A0A] border border-zinc-800 rounded-xl group hover:border-zinc-700 transition-colors">
+                                      <div key={variation.id} className="flex gap-4 p-4 bg-[#0e0e28] border border-zinc-800 rounded-xl group hover:border-zinc-700 transition-colors">
                                           <div className="w-20 h-24 bg-zinc-900 rounded-lg flex-shrink-0 overflow-hidden relative border border-zinc-800">
                                               {variation.referenceImage ? (
                                                   <img src={variation.referenceImage} className="w-full h-full object-cover" />
@@ -256,20 +256,20 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                   ))}
 
                                   {/* Add New */}
-                                  <div className="p-4 border border-dashed border-zinc-800 rounded-xl bg-[#0A0A0A]/50">
+                                  <div className="p-4 border border-dashed border-zinc-800 rounded-xl bg-[#0e0e28]/50">
                                       <div className="space-y-3">
                                           <input 
                                               type="text" 
                                               placeholder="造型名称（示例：穿校服）" 
                                               value={newVarName}
                                               onChange={e => setNewVarName(e.target.value)}
-                                              className="w-full bg-[#141414] border border-zinc-800 rounded px-3 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600"
+                                              className="w-full bg-[#0c0c2d] border border-zinc-800 rounded px-3 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600"
                                           />
                                           <textarea 
                                               placeholder="服饰 / 状态的视觉描述……"
                                               value={newVarPrompt}
                                               onChange={e => setNewVarPrompt(e.target.value)}
-                                              className="w-full bg-[#141414] border border-zinc-800 rounded px-3 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 resize-none h-16"
+                                              className="w-full bg-[#0c0c2d] border border-zinc-800 rounded px-3 py-2 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:border-zinc-600 resize-none h-16"
                                           />
                                           <button 
                                               onClick={() => handleAddVariation(selectedChar.id)}
@@ -289,7 +289,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       )}
 
       {/* Header - Consistent with Director */}
-      <div className="h-16 border-b border-zinc-800 bg-[#1A1A1A] px-6 flex items-center justify-between shrink-0">
+      <div className="h-16 border-b border-zinc-800 bg-[#171429] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
                   <Users className="w-5 h-5 text-indigo-500" />
@@ -325,7 +325,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allCharactersReady
-                    ? 'bg-[#141414] text-zinc-400 border border-zinc-700 hover:text-white hover:border-zinc-500'
+                    ? 'bg-[#0c0c2d] text-zinc-400 border border-zinc-700 hover:text-white hover:border-zinc-500'
                     : 'bg-white text-black hover:bg-zinc-200 shadow-lg shadow-white/5'
               }`}
             >
@@ -336,7 +336,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
             {project.scriptData.characters.map((char) => (
-              <div key={char.id} className="bg-[#141414] border border-zinc-800 rounded-xl overflow-hidden flex flex-col group hover:border-zinc-600 transition-all hover:shadow-lg">
+              <div key={char.id} className="bg-[#0c0c2d] border border-zinc-800 rounded-xl overflow-hidden flex flex-col group hover:border-zinc-600 transition-all hover:shadow-lg">
                 <div className="aspect-[3/4] bg-zinc-900 relative">
                   {char.referenceImage ? (
                     <>
@@ -382,7 +382,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       <Shirt className="w-3 h-3" />
                   </button>
                 </div>
-                <div className="p-3 border-t border-zinc-800 bg-[#111]">
+                <div className="p-3 border-t border-zinc-800 bg-[#0e1229]">
                   <h3 className="font-bold text-zinc-200 truncate text-sm">{char.name}</h3>
                   <div className="flex items-center justify-between mt-1">
                      <span className="text-[12px] text-zinc-500 font-mono uppercase bg-zinc-900 px-1.5 py-0.5 rounded">{char.gender}</span>
@@ -413,7 +413,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allScenesReady
-                    ? 'bg-[#141414] text-zinc-400 border border-zinc-700 hover:text-white hover:border-zinc-500'
+                    ? 'bg-[#0c0c2d] text-zinc-400 border border-zinc-700 hover:text-white hover:border-zinc-500'
                     : 'bg-white text-black hover:bg-zinc-200 shadow-lg shadow-white/5'
               }`}
             >
@@ -424,7 +424,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {project.scriptData.scenes.map((scene) => (
-              <div key={scene.id} className="bg-[#141414] border border-zinc-800 rounded-xl overflow-hidden flex flex-col group hover:border-zinc-600 transition-all hover:shadow-lg">
+              <div key={scene.id} className="bg-[#0c0c2d] border border-zinc-800 rounded-xl overflow-hidden flex flex-col group hover:border-zinc-600 transition-all hover:shadow-lg">
                 <div className="aspect-video bg-zinc-900 relative">
                   {scene.referenceImage ? (
                     <>
@@ -462,7 +462,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                      </div>
                   )}
                 </div>
-                <div className="p-3 border-t border-zinc-800 bg-[#111]">
+                <div className="p-3 border-t border-zinc-800 bg-[#0e1229]">
                   <div className="flex justify-between items-center mb-1">
                      <h3 className="font-bold text-zinc-200 text-sm truncate">{scene.location}</h3>
                      <span className="px-1.5 py-0.5 bg-zinc-900 text-zinc-500 text-[11px] rounded border border-zinc-800 uppercase font-mono">{scene.time}</span>

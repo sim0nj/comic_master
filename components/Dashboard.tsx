@@ -131,7 +131,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-zinc-300 p-8 md:p-12 font-sans selection:bg-white/20">
+    <div className="min-h-screen bg-[#201F3E] text-zinc-300 p-8 md:p-12 font-sans selection:bg-white/20">
       <div className="max-w-7xl mx-auto">
         <header className="mb-16 border-b border-zinc-900 pb-8 flex items-end justify-between">
           <div>
@@ -170,7 +170,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
             {/* Create New Card */}
             <div 
               onClick={handleCreate}
-              className="group cursor-pointer border border-zinc-800 hover:border-zinc-500 bg-[#0A0A0A] flex flex-col items-center justify-center min-h-[240px] transition-all"
+              className="group cursor-pointer border border-zinc-800 hover:border-zinc-500 bg-[#0e0e28] flex flex-col items-center justify-center min-h-[240px] transition-all"
             >
               <div className="w-12 h-12 border border-zinc-700 flex items-center justify-center mb-6 group-hover:bg-zinc-800 transition-colors">
                 <Plus className="w-5 h-5 text-zinc-500 group-hover:text-white" />
@@ -183,12 +183,12 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
               <div 
                 key={proj.id}
                 onClick={() => onOpenProject(proj)}
-                className="group bg-[#0A0A0A] border border-zinc-800 hover:border-zinc-600 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[240px]"
+                className="group bg-[#0e0e28] border border-zinc-800 hover:border-zinc-600 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[240px]"
               >
                   {/* Delete Confirmation Overlay */}
                   {deleteConfirmId === proj.id && (
                     <div 
-                        className="absolute inset-0 z-20 bg-[#0A0A0A] flex flex-col items-center justify-center p-6 space-y-4 animate-in fade-in duration-200"
+                        className="absolute inset-0 z-20 bg-[#0e0e28] flex flex-col items-center justify-center p-6 space-y-4 animate-in fade-in duration-200"
                         onClick={(e) => e.stopPropagation()} 
                     >
                         <div className="w-10 h-10 bg-red-900/20 flex items-center justify-center rounded-full">
@@ -301,7 +301,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
                      </div>
                   </div>
 
-                  <div className="px-6 py-3 border-t border-zinc-900 flex items-center justify-between bg-[#080808]">
+                  <div className="px-6 py-3 border-t border-zinc-900 flex items-center justify-between bg-[#090923]">
                     <div className="flex items-center gap-2 text-[11px] text-zinc-600 font-mono uppercase tracking-widest">
                         <Calendar className="w-3 h-3" />
                         {formatDate(proj.lastModified)}

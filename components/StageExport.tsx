@@ -62,10 +62,10 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#121212] overflow-hidden">
+    <div className="flex flex-col h-full bg-[#0e1229] overflow-hidden">
       
       {/* Header - Consistent with Director */}
-      <div className="h-16 border-b border-zinc-800 bg-[#1A1A1A] px-6 flex items-center justify-between shrink-0">
+      <div className="h-16 border-b border-zinc-800 bg-[#171429] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
                   <Film className="w-5 h-5 text-indigo-500" />
@@ -84,7 +84,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
         <div className="max-w-6xl mx-auto space-y-8">
           
           {/* Main Status Panel */}
-          <div className="bg-[#141414] border border-zinc-800 rounded-xl p-8 shadow-2xl relative overflow-hidden group">
+          <div className="bg-[#0c0c2d] border border-zinc-800 rounded-xl p-8 shadow-2xl relative overflow-hidden group">
              {/* Background Decoration */}
              <div className="absolute top-0 right-0 p-48 bg-indigo-900/5 blur-[120px] rounded-full pointer-events-none"></div>
              <div className="absolute bottom-0 left-0 p-32 bg-emerald-900/5 blur-[100px] rounded-full pointer-events-none"></div>
@@ -131,7 +131,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                     <span>Sequence Map</span>
                     <span>TC 00:00:00:00</span>
                 </div>
-                <div className="h-20 bg-[#080808] rounded-lg border border-zinc-800 flex items-center px-2 gap-1 overflow-x-auto custom-scrollbar relative shadow-inner">
+                <div className="h-20 bg-[#090923] rounded-lg border border-zinc-800 flex items-center px-2 gap-1 overflow-x-auto custom-scrollbar relative shadow-inner">
                    {project.shots.length === 0 ? (
                       <div className="w-full flex items-center justify-center text-zinc-800 text-xs font-mono uppercase tracking-widest">
                           <Film className="w-4 h-4 mr-2" />
@@ -197,7 +197,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                <button
                   onClick={handleDownload}
                   disabled={!project.mergedVideoUrl}
-                  className={`h-12 bg-[#1A1A1A] hover:bg-zinc-800 text-zinc-300 border border-zinc-700 hover:border-zinc-500 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${
+                  className={`h-12 bg-[#171429] hover:bg-zinc-800 text-zinc-300 border border-zinc-700 hover:border-zinc-500 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${
                     !project.mergedVideoUrl ? 'cursor-not-allowed opacity-50' : ''
                   }`}>
                  <Download className="w-4 h-4" />
@@ -235,21 +235,21 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
 
           {/* Secondary Options */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-5 bg-[#141414] border border-zinc-800 rounded-xl hover:border-zinc-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
+              <div className="p-5 bg-[#0c0c2d] border border-zinc-800 rounded-xl hover:border-zinc-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
                   <Layers className="w-5 h-5 text-zinc-600 group-hover:text-indigo-400 mb-4 transition-colors" />
                   <div>
                     <h4 className="text-sm font-bold text-white mb-1">Source Assets</h4>
                     <p className="text-[12px] text-zinc-500">Download all generated images and raw video clips.</p>
                   </div>
               </div>
-              <div className="p-5 bg-[#141414] border border-zinc-800 rounded-xl hover:border-zinc-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
+              <div className="p-5 bg-[#0c0c2d] border border-zinc-800 rounded-xl hover:border-zinc-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
                   <Share2 className="w-5 h-5 text-zinc-600 group-hover:text-indigo-400 mb-4 transition-colors" />
                   <div>
                     <h4 className="text-sm font-bold text-white mb-1">Share Project</h4>
                     <p className="text-[12px] text-zinc-500">Create a view-only link for client review.</p>
                   </div>
               </div>
-              <div className="p-5 bg-[#141414] border border-zinc-800 rounded-xl hover:border-zinc-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
+              <div className="p-5 bg-[#0c0c2d] border border-zinc-800 rounded-xl hover:border-zinc-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
                   <Clock className="w-5 h-5 text-zinc-600 group-hover:text-indigo-400 mb-4 transition-colors" />
                   <div>
                     <h4 className="text-sm font-bold text-white mb-1">Render Logs</h4>
