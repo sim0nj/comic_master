@@ -74,9 +74,20 @@ export const createDefaultModelConfigs = async (): Promise<void> => {
 
   const defaultConfigs: AIModelConfig[] = [
     {
+      id: 'deepseek-llm',
+      provider: 'deepseek',
+      modelType: 'llm',
+      model: 'deepseek-chat',
+      apiKey: '',
+      apiUrl: 'https://api.deepseek.com/v1',
+      enabled: false,
+      description: 'DeepSeek LLM'
+    },
+    {
       id: 'doubao-llm',
       provider: 'doubao',
       modelType: 'llm',
+      model: 'doubao-1-5-pro-32k-250115',
       apiKey: '',
       apiUrl: 'https://ark.cn-beijing.volces.com/api/v3',
       enabled: true,
@@ -86,6 +97,7 @@ export const createDefaultModelConfigs = async (): Promise<void> => {
       id: 'doubao-image',
       provider: 'doubao',
       modelType: 'text2image',
+      model: 'doubao-seedream-4-5-251128',
       apiKey: '',
       apiUrl: 'https://ark.cn-beijing.volces.com/api/v3',
       enabled: true,
@@ -95,6 +107,7 @@ export const createDefaultModelConfigs = async (): Promise<void> => {
       id: 'doubao-video',
       provider: 'doubao',
       modelType: 'image2video',
+      model: 'doubao-seedance-1-0-lite-i2v-250428',
       apiKey: '',
       apiUrl: 'https://ark.cn-beijing.volces.com/api/v3',
       enabled: true,

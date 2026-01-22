@@ -14,6 +14,7 @@ const DEEPSEEK_CONFIG = {
 // Module-level variable to store key at runtime
 let runtimeApiKey: string = "";
 let runtimeApiUrl: string = DEEPSEEK_CONFIG.API_ENDPOINT;
+let runtimeTextModel: string = DEEPSEEK_CONFIG.TEXT_MODEL;
 
 export const setDeepseekApiKey = (key: string) => {
   runtimeApiKey = key;
@@ -23,6 +24,10 @@ export const setDeepseekApiUrl = (url: string) => {
   runtimeApiUrl = url || DEEPSEEK_CONFIG.API_ENDPOINT;
 };
 
+export const setDeepseekModel = (modelName: string) => {
+  runtimeTextModel = modelName || DEEPSEEK_CONFIG.TEXT_MODEL;
+};
+
 // 从配置服务加载启用的配置
 export const initializeDeepseekConfig = async () => {
   try {
@@ -30,6 +35,10 @@ export const initializeDeepseekConfig = async () => {
     if (enabledConfig && enabledConfig.provider === 'deepseek') {
       runtimeApiKey = enabledConfig.apiKey;
       runtimeApiUrl = enabledConfig.apiUrl || DEEPSEEK_CONFIG.API_ENDPOINT;
+      if (enabledConfig.model) {
+        runtimeTextModel = enabledConfig.model;
+        console.log('DeepSeek 模型已加载:', runtimeTextModel);
+      }
       console.log('DeepSeek 配置已加载');
     }
   } catch (error) {
@@ -139,7 +148,7 @@ export const parseScriptToDataDeepseek = async (
     return await fetchWithRetry(endpoint, {
       method: "POST",
       body: JSON.stringify({
-        model: DEEPSEEK_CONFIG.TEXT_MODEL,
+        model: runtimeTextModel,
         messages: [
           {
             role: "system",
@@ -272,7 +281,7 @@ export const generateShotListDeepseekForScene = async (
     const response = await fetchWithRetry(endpoint, {
       method: "POST",
       body: JSON.stringify({
-        model: DEEPSEEK_CONFIG.TEXT_MODEL,
+        model: runtimeTextModel,
         messages: [
           {
             role: "system",
@@ -371,7 +380,7 @@ export const generateScriptDeepseek = async (
   const response = await fetchWithRetry(endpoint, {
     method: "POST",
     body: JSON.stringify({
-      model: DEEPSEEK_CONFIG.TEXT_MODEL,
+      model: runtimeTextModel,
       messages: [
         {
           role: "system",
@@ -408,7 +417,7 @@ export const generateVisualPromptsDeepseek = async (
   const response = await fetchWithRetry(endpoint, {
     method: "POST",
     body: JSON.stringify({
-      model: DEEPSEEK_CONFIG.TEXT_MODEL,
+      model: runtimeTextModel,
       messages: [
         {
           role: "user",

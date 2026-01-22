@@ -226,6 +226,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                       >
                         <option value="start">起始帧</option>
                         <option value="end">结束帧</option>
+                        <option value="full">连环画</option>
                       </select>
                     </div>
                     <button

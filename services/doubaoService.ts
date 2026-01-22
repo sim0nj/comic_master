@@ -1,6 +1,7 @@
 // services/doubaoService.ts
 
 import { Character, Scene, ScriptData, Shot } from "../types";
+import { getEnabledConfigByType } from "./modelConfigService";
 
 // 火山引擎配置
 const DOUBAO_CONFIG = {
@@ -24,6 +25,11 @@ let runtimeApiKey: string = process.env.VOLCENGINE_API_KEY || "";
 let runtimeApiUrl: string = DOUBAO_CONFIG.API_ENDPOINT;
 let region: string = process.env.VOLCENGINE_REGION || "cn-beijing";
 
+// Runtime model names (can be overridden by config)
+let runtimeTextModel: string = DOUBAO_CONFIG.TEXT_MODEL;
+let runtimeImageModel: string = DOUBAO_CONFIG.IMAGE_MODEL;
+let runtimeVideoModel: string = DOUBAO_CONFIG.VIDEO_MODEL;
+
 export const setGlobalApiKey = (key: string) => {
   runtimeApiKey = key?key : process.env.VOLCENGINE_API_KEY;
 };
@@ -34,6 +40,48 @@ export const setRegion = (r: string) => {
 
 export const setDoubaoApiUrl = (url: string) => {
   runtimeApiUrl = url || DOUBAO_CONFIG.API_ENDPOINT;
+};
+
+export const setDoubaoModel = (modelType: 'text' | 'image' | 'video', modelName: string) => {
+  switch (modelType) {
+    case 'text':
+      runtimeTextModel = modelName || DOUBAO_CONFIG.TEXT_MODEL;
+      break;
+    case 'image':
+      runtimeImageModel = modelName || DOUBAO_CONFIG.IMAGE_MODEL;
+      break;
+    case 'video':
+      runtimeVideoModel = modelName || DOUBAO_CONFIG.VIDEO_MODEL;
+      break;
+  }
+};
+
+// 从配置服务加载启用的配置
+export const initializeDoubaoConfig = async () => {
+  try {
+    // 加载 LLM 配置
+    const llmConfig = await getEnabledConfigByType('llm');
+    if (llmConfig && llmConfig.provider === 'doubao' && llmConfig.model) {
+      runtimeTextModel = llmConfig.model;
+      console.log('Doubao LLM 模型已加载:', runtimeTextModel);
+    }
+
+    // 加载图片生成配置
+    const imageConfig = await getEnabledConfigByType('text2image');
+    if (imageConfig && imageConfig.provider === 'doubao' && imageConfig.model) {
+      runtimeImageModel = imageConfig.model;
+      console.log('Doubao Image 模型已加载:', runtimeImageModel);
+    }
+
+    // 加载视频生成配置
+    const videoConfig = await getEnabledConfigByType('image2video');
+    if (videoConfig && videoConfig.provider === 'doubao' && videoConfig.model) {
+      runtimeVideoModel = videoConfig.model;
+      console.log('Doubao Video 模型已加载:', runtimeVideoModel);
+    }
+  } catch (error) {
+    console.error('加载 Doubao 配置失败:', error);
+  }
 };
 
 // Helper for authentication headers
@@ -138,7 +186,7 @@ export const parseScriptToData = async (
     return await fetchWithRetry(endpoint, {
       method: "POST",
       body: JSON.stringify({
-        model: DOUBAO_CONFIG.TEXT_MODEL,
+        model: runtimeTextModel,
         messages: [
           {
             role: "system",
@@ -270,7 +318,7 @@ export const generateShotListDoubaoForScene = async (
     const response = await fetchWithRetry(endpoint, {
       method: "POST",
       body: JSON.stringify({
-        model: DOUBAO_CONFIG.TEXT_MODEL,
+        model: runtimeTextModel,
         messages: [
           {
             role: "system",
@@ -434,7 +482,7 @@ export const generateImage = async (
 ): Promise<string> => {
   const endpoint = `${runtimeApiUrl}/images/generations`;
   const requestBody: any = {
-    model: DOUBAO_CONFIG.IMAGE_MODEL,
+    model: runtimeImageModel,
     prompt:  prompt,
     size: ischaracter?"1728x2304":imageSize,
     //sequential_image_generation: ischaracter?"disabled":"auto",
@@ -493,7 +541,7 @@ export const joinImage = async (
     return referenceImages[0];
   }
   const requestBody: any = {
-    model: DOUBAO_CONFIG.IMAGE_MODEL,
+    model: runtimeImageModel,
     prompt:  "请将这些图片拼成一张"+imageCount+"宫格图片，图片直接留有1个像素的间隔，最终图片大小为" + imageSize + "。" ,
     size: imageSize,
     watermark: false
@@ -534,8 +582,7 @@ export const generateVideo = async (
   const endpoint = `${runtimeApiUrl}/contents/generations/tasks`;
 
   const requestBody: any = {
-    model: DOUBAO_CONFIG.VIDEO_MODEL,
-    //generate_audio:true,
+    model: runtimeVideoModel,
     duration: duration,
     watermark: false,
     content: [{
@@ -544,6 +591,9 @@ export const generateVideo = async (
     }]
   };
 
+  if(runtimeVideoModel.indexOf("1-5")>0){
+    requestBody.generate_audio = true;
+  }
   // 处理起始图片
   if (startImageBase64) {
     requestBody.content.push({

@@ -12,7 +12,8 @@ import {
   generateVisualPromptsDeepseek,
   parseScriptToDataDeepseek,
   setDeepseekApiKey,
-  setDeepseekApiUrl
+  setDeepseekApiUrl,
+  setDeepseekModel
 } from "./deepseekService";
 
 // Gemini 方法
@@ -31,7 +32,9 @@ import {
   generateVisualPrompts as generateVisualPromptsDoubao,
   parseScriptToData as parseScriptToDataDoubao,
   setGlobalApiKey as setDoubaoApiKey,
-  setDoubaoApiUrl
+  setDoubaoApiUrl,
+  setDoubaoModel,
+  initializeDoubaoConfig
 } from "./doubaoService";
 
 const IMAGE_X = [
@@ -78,6 +81,9 @@ export class ModelService {
           if (config.apiUrl) {
             setDeepseekApiUrl(config.apiUrl);
           }
+          if (config.model) {
+            setDeepseekModel(config.model);
+          }
           console.log(`已更新 DeepSeek ${config.modelType} 配置`);
           break;
 
@@ -85,6 +91,19 @@ export class ModelService {
           setDoubaoApiKey(config.apiKey);
           if (config.apiUrl) {
             setDoubaoApiUrl(config.apiUrl);
+          }
+          if (config.model) {
+            switch (config.modelType) {
+              case 'llm':
+                setDoubaoModel('text', config.model);
+                break;
+              case 'text2image':
+                setDoubaoModel('image', config.model);
+                break;
+              case 'image2video':
+                setDoubaoModel('video', config.model);
+                break;
+            }
           }
           console.log(`已更新 Doubao ${config.modelType} 配置`);
           break;

@@ -3,14 +3,45 @@
 // Coze API 配置
 const COZE_CONFIG = {
   API_ENDPOINT: "https://api.coze.cn/v1/workflow/run",
-  WORKFLOW_ID: "7597429093042929707",
-  API_KEY: "pat_UyN3EKu0my3NDq9O2tXxLVoznCgABYRdrUtEkb4X83NUU24gmDCh4h5ZTpzkiqQX",
+  WORKFLOW_ID: "",
+  API_KEY: "",
+};
+
+// Module-level variables to store config at runtime
+let runtimeWorkflowId: string = COZE_CONFIG.WORKFLOW_ID;
+let runtimeApiKey: string = COZE_CONFIG.API_KEY;
+
+export const setCozeWorkflowId = (workflowId: string) => {
+  runtimeWorkflowId = workflowId || COZE_CONFIG.WORKFLOW_ID;
+};
+
+export const setCozeApiKey = (apiKey: string) => {
+  runtimeApiKey = apiKey || COZE_CONFIG.API_KEY;
+};
+
+// 从配置服务加载启用的配置
+export const initializeCozeConfig = async () => {
+  try {
+    const storedWorkflowId = localStorage.getItem('cinegen_coze_workflow_id');
+    const storedApiKey = localStorage.getItem('cinegen_coze_api_key');
+
+    if (storedWorkflowId) {
+      runtimeWorkflowId = storedWorkflowId;
+      console.log('Coze 工作流 ID 已加载');
+    }
+    if (storedApiKey) {
+      runtimeApiKey = storedApiKey;
+      console.log('Coze API Key 已加载');
+    }
+  } catch (error) {
+    console.error('加载 Coze 配置失败:', error);
+  }
 };
 
 // Helper for authentication headers
 const getAuthHeaders = () => {
   return {
-    "Authorization": `Bearer ${COZE_CONFIG.API_KEY}`,
+    "Authorization": `Bearer ${runtimeApiKey}`,
     "Content-Type": "application/json",
   };
 };
@@ -98,7 +129,7 @@ export const mergeVideos = async (videoUrls: string[]): Promise<string> => {
   const endpoint = COZE_CONFIG.API_ENDPOINT;
 
   const requestBody = {
-    workflow_id: COZE_CONFIG.WORKFLOW_ID,
+    workflow_id: runtimeWorkflowId,
     parameters: {
       video_url: videoUrls
     },

@@ -5,8 +5,10 @@ import React from 'react';
 interface ApiKeyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (key: string) => void;
+  onSave: (key: string, cozeWorkflowId?: string, cozeApiKey?: string) => void;
   currentKey: string;
+  cozeWorkflowId?: string;
+  cozeApiKey?: string;
   providerName: string;
   providerDescription: string;
   documentationUrl: string;
@@ -17,21 +19,27 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
   onClose,
   onSave,
   currentKey,
+  cozeWorkflowId = '',
+  cozeApiKey = '',
   providerName,
   providerDescription,
   documentationUrl
 }) => {
   const [inputKey, setInputKey] = React.useState(currentKey);
+  const [inputCozeWorkflowId, setInputCozeWorkflowId] = React.useState(cozeWorkflowId);
+  const [inputCozeApiKey, setInputCozeApiKey] = React.useState(cozeApiKey);
 
   React.useEffect(() => {
     setInputKey(currentKey);
-  }, [currentKey, isOpen]);
+    setInputCozeWorkflowId(cozeWorkflowId);
+    setInputCozeApiKey(cozeApiKey);
+  }, [currentKey, cozeWorkflowId, cozeApiKey, isOpen]);
 
   if (!isOpen) return null;
 
   const handleSave = () => {
     if (inputKey.trim()) {
-      onSave(inputKey.trim());
+      onSave(inputKey.trim(), inputCozeWorkflowId.trim(), inputCozeApiKey.trim());
       onClose();
     }
   };
@@ -72,8 +80,8 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
              <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
                {providerName} API Key
              </label>
-             <input 
-               type="password" 
+             <input
+               type="password"
                value={inputKey}
                onChange={(e) => setInputKey(e.target.value)}
                placeholder="Enter your API Key..."
@@ -81,10 +89,50 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
              />
              <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
                {providerDescription}
-               <a 
-                 href={documentationUrl} 
-                 target="_blank" 
-                 rel="noreferrer" 
+               <a
+                 href={documentationUrl}
+                 target="_blank"
+                 rel="noreferrer"
+                 className="text-indigo-400 hover:underline ml-1"
+               >
+                 查看文档
+               </a>
+             </p>
+           </div>
+
+           <div>
+             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+               Coze 工作流 ID
+             </label>
+             <input
+               type="text"
+               value={inputCozeWorkflowId}
+               onChange={(e) => setInputCozeWorkflowId(e.target.value)}
+               placeholder="Enter Coze Workflow ID..."
+               className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+             />
+             <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+               配置 Coze 工作流 ID 用于智能剧本分析等功能。
+             </p>
+           </div>
+
+           <div>
+             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+               Coze API Key
+             </label>
+             <input
+               type="password"
+               value={inputCozeApiKey}
+               onChange={(e) => setInputCozeApiKey(e.target.value)}
+               placeholder="Enter Coze API Key..."
+               className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+             />
+             <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+               本应用需要 Coze 的 API 访问权限。
+               <a
+                 href="https://www.coze.cn/docs"
+                 target="_blank"
+                 rel="noreferrer"
                  className="text-indigo-400 hover:underline ml-1"
                >
                  查看文档
@@ -102,7 +150,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
              </div>
            )}
 
-           <button 
+           <button
              onClick={handleSave}
              disabled={!inputKey.trim()}
              className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"

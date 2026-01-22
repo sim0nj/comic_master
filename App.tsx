@@ -9,6 +9,7 @@ import StageExport from './components/StageExport';
 import StageScript from './components/StageScript';
 
 import { setGlobalApiKey } from './services/doubaoService';
+import { initializeCozeConfig } from './services/cozeService';
 import { saveProjectToDB } from './services/storageService';
 import { ProjectState } from './types';
 
@@ -16,6 +17,8 @@ function App() {
   const [project, setProject] = useState<ProjectState | null>(null);
   const [apiKey, setApiKey] = useState<string>('');
   const [inputKey, setInputKey] = useState('');
+  const [cozeWorkflowId, setCozeWorkflowId] = useState('');
+  const [cozeApiKey, setCozeApiKey] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
   
@@ -29,6 +32,16 @@ function App() {
       setApiKey(storedKey);
       setGlobalApiKey(storedKey);
     }
+    const storedCozeWorkflowId = localStorage.getItem('cinegen_coze_workflow_id');
+    if (storedCozeWorkflowId) {
+      setCozeWorkflowId(storedCozeWorkflowId);
+    }
+    const storedCozeApiKey = localStorage.getItem('cinegen_coze_api_key');
+    if (storedCozeApiKey) {
+      setCozeApiKey(storedCozeApiKey);
+    }
+    // Initialize Coze service config
+    initializeCozeConfig();
   }, []);
 
   // Auto-save logic
@@ -53,11 +66,23 @@ function App() {
     };
   }, [project]);
 
-  const handleSaveKey = (newKey: string) => {
+  const handleSaveKey = (newKey: string, newCozeWorkflowId?: string, newCozeApiKey?: string) => {
     if (!newKey.trim()) return;
     setApiKey(newKey);
     setGlobalApiKey(newKey);
     localStorage.setItem('cinegen_api_key', newKey);
+    if (newCozeWorkflowId !== undefined) {
+      setCozeWorkflowId(newCozeWorkflowId);
+      localStorage.setItem('cinegen_coze_workflow_id', newCozeWorkflowId);
+    }
+    if (newCozeApiKey !== undefined) {
+      setCozeApiKey(newCozeApiKey);
+      localStorage.setItem('cinegen_coze_api_key', newCozeApiKey);
+    }
+  };
+  const handleSaveCozeConfig = () => {
+    localStorage.setItem('cinegen_coze_workflow_id', cozeWorkflowId);
+    localStorage.setItem('cinegen_coze_api_key', cozeApiKey);
   };
   const handleSaveKeyWrapper = () => {
     handleSaveKey(inputKey);
@@ -144,8 +169,44 @@ function App() {
                </p>
              </div>
 
+             <div>
+               <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+                 Coze 工作流 ID
+               </label>
+               <input
+                 type="text"
+                 value={cozeWorkflowId}
+                 onChange={(e) => setCozeWorkflowId(e.target.value)}
+                 placeholder="Enter Coze Workflow ID..."
+                 className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+               />
+               <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+                 配置 Coze 工作流 ID 用于智能剧本分析等功能。
+               </p>
+             </div>
+
+             <div>
+               <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+                 Coze API Key
+               </label>
+               <input
+                 type="password"
+                 value={cozeApiKey}
+                 onChange={(e) => setCozeApiKey(e.target.value)}
+                 placeholder="Enter Coze API Key..."
+                 className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+               />
+               <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+                 本应用需要 Coze 的 API 访问权限。
+                 <a href="https://www.coze.cn/docs" target="_blank" rel="noreferrer" className="text-indigo-400 hover:underline ml-1">查看文档</a>
+               </p>
+             </div>
+
              <button
-               onClick={handleSaveKeyWrapper}
+               onClick={() => {
+                 handleSaveKeyWrapper();
+                 handleSaveCozeConfig();
+               }}
                disabled={!inputKey.trim()}
                className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
              >
@@ -193,6 +254,8 @@ function App() {
     onClose={() => setShowSettings(false)}
     onSave={handleSaveKey}
     currentKey={apiKey}
+    cozeWorkflowId={cozeWorkflowId}
+    cozeApiKey={cozeApiKey}
     providerName="火山引擎 / 豆包"
     providerDescription="本应用需要火山引擎的 API 访问权限。请确保您的 API Key 已开通相应的服务权限。"
     documentationUrl="https://www.volcengine.com/docs/82379"

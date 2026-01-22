@@ -127,12 +127,12 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
     if (!shot.interval) return;
     
     let sKf = shot.keyframes?.find(k => k.type === 'start');
-    let prompt = shot.actionSummary + (shot.dialogue?"对白："+shot.dialogue:"");
+    let prompt = "镜头运动："+shot.cameraMovement+"； 取景："+shot.shotSize+"； 情节概述："+shot.actionSummary+" 人物："+shot.characters + (shot.dialogue?"; 对白："+shot.dialogue:"");
     console.log("Generating Video for Shot:", shot, "with Prompt:", prompt);
     if(imageCount > 1){
         sKf = shot.keyframes?.find(k => k.type === 'full');
         if (!sKf?.imageUrl) return alert("请先生成连续图！");
-        prompt = "图片包含"+imageCount+"个连续的子图，请结合下面描述生成完整视频。"+prompt;
+        prompt = "参考图片包含"+imageCount+"个连续的子图，请结合下面描述生成完整视频。"+prompt+sKf.visualPrompt;
     }else{
         if (!sKf?.imageUrl) return alert("请先生成起始帧！");
     }
@@ -648,7 +648,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                              )}
                            </button>
                            
-                           {!endKf?.imageUrl && !startKf?.imageUrl && (
+                           {!endKf?.imageUrl && !startKf?.imageUrl && imageCount > 1 && (
                                <div className="text-[11px] text-slate-500 text-center font-mono">
                                   * 将使用连续图生成模式
                                </div>

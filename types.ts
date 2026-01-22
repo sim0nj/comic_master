@@ -94,6 +94,7 @@ export interface AIModelConfig {
   id: string;
   provider: 'doubao' | 'deepseek' | 'openai' | 'gemini';
   modelType: 'llm' | 'text2image' | 'image2video' | 'tts' | 'stt';
+  model: string;
   apiKey: string;
   apiUrl: string;
   enabled: boolean;

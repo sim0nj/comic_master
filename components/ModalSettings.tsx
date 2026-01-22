@@ -30,6 +30,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     provider: 'doubao' as AIModelConfig['provider'],
     modelType: 'llm' as AIModelConfig['modelType'],
+    model: '',
     apiKey: '',
     apiUrl: '',
     enabled: true,
@@ -62,6 +63,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       id: `${formData.provider}-${formData.modelType}-${Date.now()}`,
       provider: formData.provider,
       modelType: formData.modelType,
+      model: formData.model,
       apiKey: formData.apiKey,
       apiUrl: formData.apiUrl || '',
       enabled: formData.enabled,
@@ -84,6 +86,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     setFormData({
       provider: config.provider,
       modelType: config.modelType,
+      model: config.model,
       apiKey: config.apiKey,
       apiUrl: config.apiUrl,
       enabled: config.enabled,
@@ -103,6 +106,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       id: editingConfig.id,
       provider: formData.provider,
       modelType: formData.modelType,
+      model: formData.model,
       apiKey: formData.apiKey,
       apiUrl: formData.apiUrl || '',
       enabled: formData.enabled,
@@ -137,6 +141,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     setFormData({
       provider: 'doubao',
       modelType: 'llm',
+      model: '',
       apiKey: '',
       apiUrl: '',
       enabled: true,
@@ -225,6 +230,21 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                     <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
                   </div>
                 </div>
+              </div>
+
+              {/* Model Name */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                  <Sparkles className="w-3 h-3" />
+                  模型名称
+                </label>
+                <input
+                  type="text"
+                  value={formData.model}
+                  onChange={(e) => setFormData({ ...formData, model: e.target.value })}
+                  className="w-full bg-[#141414] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none transition-all font-mono placeholder:text-slate-700"
+                  placeholder="输入具体的模型名称（如：gpt-4、claude-3-sonnet）"
+                />
               </div>
 
               {/* API Key */}
@@ -338,22 +358,27 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                           <div>
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-sm font-bold text-white">{providerOption?.label || config.provider}</span>
-                              <span className="text-[10px] text-slate-600 bg-slate-900 px-1.5 py-0.5 rounded font-mono">
-                                  {config.description}
-                              </span>
-                              <span className="text-[10px] text-slate-600 bg-slate-900 px-1.5 py-0.5 rounded font-mono">
+                              <span className="text-[12px] text-green-600 bg-green-900 px-1.5 py-0.5 rounded font-mono">
                                 {modelTypeOption?.label || config.modelType}
                               </span>
+                              <span className="text-[12px] text-green-600 bg-slate-900 border border-green-500/30 px-1.5 py-0.5 rounded font-mono">
+                                  {config.description}
+                              </span>
                               {config.enabled && (
-                                <span className="text-[9px] text-green-500 bg-green-900/20 border border-green-500/30 px-1.5 py-0.5 rounded-full font-mono uppercase tracking-wider flex items-center gap-1">
+                                <span className="text-[12px] text-green-500 bg-green-900/20 border border-green-500/30 px-1.5 py-0.5 rounded-full font-mono uppercase tracking-wider flex items-center gap-1">
                                   <Check className="w-2.5 h-2.5" />
                                   已启用
                                 </span>
                               )}
                             </div>
-                            <div className="text-[10px] text-slate-600 font-mono flex items-center gap-2">
+                            <div className="text-[12px] text-slate-600 font-mono flex items-center gap-2">
                               {config.apiKey && (
                                 <span className="text-green-500">● 已配置</span>
+                              )}
+                              {config.model && (
+                                <span className="text-[10px] text-green-400 bg-indigo-900/20 border border-green-500/30 px-1.5 py-0.5 rounded font-mono">
+                                  {config.model}
+                                </span>
                               )}
                               <span className="truncate max-w-[300px]">
                                 {config.apiUrl}
