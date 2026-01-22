@@ -1,4 +1,4 @@
-import { Check, ChevronRight, Film, Globe, Image, Key, Music, Plus, Sparkles, Trash2, X } from 'lucide-react';
+import { Check, ChevronRight, Edit, Film, Globe, Image, Key, Music, Plus, Sparkles, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createDefaultModelConfigs, deleteModelConfig, getAllModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
 import { AIModelConfig } from '../types';
@@ -419,7 +419,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                             className="p-2 hover:bg-slate-800 text-slate-600 hover:text-white transition-colors rounded-lg"
                             title="编辑"
                           >
-                            <Music className="w-4 h-4" />
+                            <Edit className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(config.id)}

@@ -223,6 +223,100 @@ export const parseScriptToData = async (
 };
 
 /**
+ * Agent 8: Video Generation
+ * 使用云雾API生成视频
+ * 支持图生视频和首尾帧视频
+ */
+export const generateVideo = async (
+  prompt: string,
+  startImageBase64?: string,
+  endImageBase64?: string,
+  duration: number = 5
+): Promise<string> => {
+  const endpoint = `${runtimeApiUrl}/v1/video/create`;
+
+  // 构建请求体
+  const requestBody: any = {
+    model: runtimeVideoModel || "veo3-fast-frames",
+    prompt: prompt,
+    enhance_prompt: true,
+      enable_upsample: true,
+      aspect_ratio: "16:9"
+  };
+
+  // 处理起始图片
+  if (startImageBase64) {
+    const images: any[] = [];
+    images.push(startImageBase64);
+    requestBody.images = images;
+  }
+
+  // 处理结束图片（云雾API支持首尾帧）
+  if (endImageBase64 && startImageBase64) {
+    const images: any[] = [];
+    images.push(startImageBase64);
+    images.push(endImageBase64);
+    requestBody.images = images;
+  }
+
+  const response = await retryOperation(async () => {
+    return await fetchWithRetry(endpoint, {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+    });
+  });
+
+  // 获取任务ID
+  const taskId = response.id;
+  if (!taskId) {
+    throw new Error("视频生成失败 (No task ID returned)");
+  }
+
+  console.log(`视频任务已创建: ${taskId}, 状态: ${response.status}`);
+
+  // 轮询任务状态直到完成
+  const videoUrl = await pollVideoTask(taskId);
+  return videoUrl;
+};
+
+/**
+ * 轮询视频生成任务
+ * @param taskId - 任务ID
+ * @returns - 视频URL
+ */
+const pollVideoTask = async (taskId: string): Promise<string> => {
+  const endpoint = `${runtimeApiUrl}/v1/video/query`;
+  const maxAttempts = 240; // 最多轮询10分钟（每5秒一次）
+  const pollInterval = 5000; // 5秒
+
+  for (let i = 0; i < maxAttempts; i++) {
+    await new Promise((resolve) => setTimeout(resolve, pollInterval));
+
+    const response = await retryOperation(async () => {
+      return await fetchWithRetry(`${endpoint}?id=${taskId}`, {
+        method: "GET",
+      });
+    });
+
+    const status = response.status;
+
+    if (status === "completed" || status === "succeeded") {
+      console.log(`视频生成完成: ${taskId}`);
+      return response.video_url || response.content?.video_url || "";
+    } else if (status === "failed") {
+      throw new Error(`视频生成失败: ${response.error || "未知错误"}`);
+    } else if (status === "pending" || status === "processing") {
+      console.log(`视频生成中... (${i + 1}/${maxAttempts})`);
+      continue;
+    } else {
+      throw new Error(`未知任务状态: ${status}`);
+    }
+  }
+
+  throw new Error("视频生成超时");
+};
+
+/**
  * Agent 0: Script Generation from simple prompt
  * 根据简单提示词生成完整剧本
  */

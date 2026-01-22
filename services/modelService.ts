@@ -28,6 +28,7 @@ import {
   generateScript as generateScriptYunwu,
   generateShotList as generateShotListYunwu,
   generateShotListForScene as generateShotListForSceneYunwu,
+  generateVideo as generateVideoYunwu,
   generateVisualPrompts as generateVisualPromptsYunwu,
   parseScriptToData as parseScriptToDataYunwu,
   setGlobalApiKey as setYunwuApiKey,
@@ -482,8 +483,7 @@ export class ModelService {
       case 'gemini':
         return await generateVideoGemini(prompt, startImageBase64, endImageBase64);
       case 'yunwu':
-        // TODO: 实现 Yunwu 图生视频
-        throw new Error(`暂不支持 ${provider} 提供商的图生视频`);
+        return await generateVideoYunwu(prompt, startImageBase64, endImageBase64, duration);
       case 'openai':
         // TODO: 实现 OpenAI 图生视频
         throw new Error(`暂不支持 ${provider} 提供商的图生视频`);
