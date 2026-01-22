@@ -50,7 +50,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
             if (!char) return;
 
             // Check if a specific variation is selected for this shot
-            const varId = shot.characterVariations?.[charId];
+            const varId = shot.characterVariations?.[char.id];
             if (varId) {
                 const variation = char.variations?.find(v => v.id === varId);
                 if (variation?.referenceImage) {
@@ -67,6 +67,42 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
         }
       }
       return referenceImages;
+  };
+  const getRefImagesDescForShot = (shot: Shot) => {
+      const referenceImages: string[] = [];
+      if (project.scriptData) {
+        // 1. Scene Reference (Environment / Atmosphere) - PRIORITY
+        const scene = project.scriptData.scenes.find(s => String(s.id) === String(shot.sceneId));
+        if (scene?.referenceImage) {
+          referenceImages.push("第1张图是故事场景布置。");
+        }
+        let imagecount = 2;
+        // 2. Character References (Appearance)
+        if (shot.characters) {
+          shot.characters.forEach(charId => {
+            const char = project.scriptData?.characters.find(c => String(c.name) === String(charId));
+            if (!char) return;
+
+            // Check if a specific variation is selected for this shot
+            const varId = shot.characterVariations?.[char.id];
+            if (varId) {
+                const variation = char.variations?.find(v => v.id === varId);
+                if (variation?.referenceImage) {
+                    referenceImages.push("第"+imagecount+"张图是角色"+char.name);
+                    imagecount++;
+                    return; // Use variation image instead of base
+                }
+            }
+
+            // Fallback to base image
+            if (char.referenceImage) {
+                referenceImages.push("第"+imagecount+"张图是角色"+char.name);
+            }
+            imagecount++;
+          });
+        }
+      }
+      return referenceImages.join("\n");
   };
 
   const handleGenerateKeyframe = async (shot: Shot, type: 'start' | 'end' | 'full') => {
@@ -89,6 +125,10 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
     try {
       const referenceImages = getRefImagesForShot(shot);
+      const referencePrompt = getRefImagesDescForShot(shot);
+      if(referencePrompt){
+        prompt = `${prompt} 参考图说明：${referencePrompt}`;
+      }
       const url = await ModelService.generateImage(prompt, referenceImages, false, localStyle, imageSize,type === 'full'?imageCount:1);
 
       updateProject({ 
@@ -168,7 +208,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       
       let shotsToProcess = [];
       if (isRegenerate) {
-          if (!window.confirm("确定要重新生成所有镜头的首帧吗？这将覆盖现有图片。")) return;
+          if (!window.confirm("确定要重新生成所有镜头的帧图片吗？这将覆盖现有图片。")) return;
           shotsToProcess = [...project.shots];
       } else {
           // Process shots that don't have a start image URL (handles missing keyframe objects too)
@@ -180,7 +220,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       setBatchProgress({ 
           current: 0, 
           total: shotsToProcess.length, 
-          message: isRegenerate ? "正在重新生成所有首帧..." : "正在批量生成缺失的首帧..." 
+          message: isRegenerate ? "正在重新生成所有帧图片..." : "正在批量生成缺失的帧图片..." 
       });
 
       let currentShots = [...project.shots];
@@ -197,31 +237,84 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
           });
           
           try {
-             const existingKf = shot.keyframes?.find(k => k.type === 'start');
-             const prompt = existingKf?.visualPrompt || shot.actionSummary;
-             const kfId = existingKf?.id || `kf-${shot.id}-start-${Date.now()}`;
+            const referenceImages = getRefImagesForShot(shot);
+            const referencePrompt = getRefImagesDescForShot(shot);
 
-             const referenceImages = getRefImagesForShot(shot);
-             const url = await ModelService.generateImage(prompt, referenceImages, false, localStyle, imageSize);
+            if(imageCount > 1){
+                const startKey = shot.keyframes?.find(k => k.type === 'start');
+                const endKey = shot.keyframes?.find(k => k.type === 'end');
+                let full_prompt = shot.actionSummary;
+                if (startKey || endKey){
+                    full_prompt = `画面开始：${startKey.visualPrompt} 画面结束：${endKey.visualPrompt}`;
+                }
+                const existingFf = shot.keyframes?.find(k => k.type === 'full');
+                const ffId = existingFf?.id || `kf-${shot.id}-full-${Date.now()}`;
+                if(referencePrompt){
+                    full_prompt = `${full_prompt} 参考图说明：${referencePrompt}`;
+                }
+                const full_url = await ModelService.generateImage(full_prompt, referenceImages, false, localStyle, imageSize);
+                currentShots = currentShots.map(s => {
+                    if (s.id !== shot.id) return s;
+                    const newKeyframes = [...(s.keyframes || [])];
+                    const idx = newKeyframes.findIndex(k => k.type === 'full');
+                    const newKf: Keyframe = {
+                        id: ffId,
+                        type: 'full',
+                        visualPrompt: full_prompt,
+                        imageUrl: full_url,
+                        status: 'completed'
+                    };
+                    if (idx >= 0) newKeyframes[idx] = newKf;
+                    else newKeyframes.push(newKf);
+                    return { ...s, keyframes: newKeyframes };
+                });
+            }else{
+                const existingKf = shot.keyframes?.find(k => k.type === 'start');
+                let prompt = existingKf?.visualPrompt || shot.actionSummary;
+                const kfId = existingKf?.id || `kf-${shot.id}-start-${Date.now()}`;
+                if(referencePrompt){
+                    prompt = `${prompt} 参考图说明：${referencePrompt}`;
+                }
+                const url = await ModelService.generateImage(prompt, referenceImages, false, localStyle, imageSize);
+                currentShots = currentShots.map(s => {
+                    if (s.id !== shot.id) return s;
+                    const newKeyframes = [...(s.keyframes || [])];
+                    const idx = newKeyframes.findIndex(k => k.type === 'start');
+                    const newKf: Keyframe = {
+                        id: kfId,
+                        type: 'start',
+                        visualPrompt: prompt,
+                        imageUrl: url,
+                        status: 'completed'
+                    };
+                    if (idx >= 0) newKeyframes[idx] = newKf;
+                    else newKeyframes.push(newKf);
+                    return { ...s, keyframes: newKeyframes };
+                });
 
-             currentShots = currentShots.map(s => {
-                if (s.id !== shot.id) return s;
-                
-                const newKeyframes = [...(s.keyframes || [])];
-                const idx = newKeyframes.findIndex(k => k.type === 'start');
-                const newKf: Keyframe = {
-                    id: kfId,
-                    type: 'start',
-                    visualPrompt: prompt,
-                    imageUrl: url,
-                    status: 'completed'
-                };
-
-                if (idx >= 0) newKeyframes[idx] = newKf;
-                else newKeyframes.push(newKf);
-
-                return { ...s, keyframes: newKeyframes };
-             });
+                const existingEf = shot.keyframes?.find(k => k.type === 'end');
+                let end_prompt = existingEf?.visualPrompt || shot.actionSummary;
+                const efId = existingEf?.id || `kf-${shot.id}-end-${Date.now()}`;
+                const end_url = await ModelService.generateImage(end_prompt, referenceImages, false, localStyle, imageSize);
+                if(referencePrompt){
+                    end_prompt = `${end_prompt} 参考图说明：${referencePrompt}`;
+                }
+                currentShots = currentShots.map(s => {
+                    if (s.id !== shot.id) return s;
+                    const newKeyframes = [...(s.keyframes || [])];
+                    const idx = newKeyframes.findIndex(k => k.type === 'end');
+                    const newEf: Keyframe = {
+                        id: efId,
+                        type: 'end',
+                        visualPrompt: prompt,
+                        imageUrl: end_url,
+                        status: 'completed'
+                    };
+                    if (idx >= 0) newKeyframes[idx] = newEf;
+                    else newKeyframes.push(newEf);
+                    return { ...s, keyframes: newKeyframes };
+                });
+            }
 
              updateProject({ shots: currentShots });
 
@@ -281,7 +374,9 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
                         <span className="text-white text-sm font-bold">{scene?.location || '未知场景'}</span>
-                        <span className="text-sm px-2 py-0.5 bg-slate-800 text-slate-400 rounded-full flex items-center gap-1">
+                    </div>
+                    <div className="flex items-center justify-between">
+                        <span className="text-[11px] px-2 py-0.5 bg-slate-800 text-slate-400 rounded-full flex items-center gap-1">
                             <Clock className="w-3 h-3" />
                             {scene?.time}
                         </span>
@@ -292,17 +387,23 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                     <div className="flex flex-col gap-2 pt-2">
                          {activeCharacters.map(char => {
                              const hasVars = char.variations && char.variations.length > 0;
+                             const selectedVarId = activeShot.characterVariations?.[char.id];
+                             const selectedVar = char.variations.find(v => v.id === selectedVarId);
+                             const displayImage = selectedVar?.referenceImage || char.referenceImage;
                              return (
                                  <div key={char.id} className="flex items-center justify-between bg-slate-900 rounded p-1.5 border border-slate-800">
                                      <div className="flex items-center gap-2">
-                                         <div className="w-6 h-6 rounded-full bg-slate-700 overflow-hidden">
-                                             {char.referenceImage && <img src={char.referenceImage} className="w-full h-full object-cover" />}
+                                         <div
+                                           className="w-6 h-6 rounded-full bg-slate-700 overflow-hidden cursor-pointer hover:ring-2 hover:ring-indigo-500 transition-all"
+                                           onClick={() => displayImage && setPreviewImageUrl(displayImage)}
+                                         >
+                                             {displayImage && <img src={displayImage} className="w-full h-full object-cover" />}
                                          </div>
                                          <span className="text-[11px] text-slate-300 font-medium">{char.name}</span>
                                      </div>
-                                     
+
                                      {hasVars && (
-                                         <select 
+                                         <select
                                             value={activeShot.characterVariations?.[char.id] || ""}
                                             onChange={(e) => handleVariationChange(activeShot.id, char.id, e.target.value)}
                                             className="bg-black text-[12px] text-slate-400 border border-slate-700 rounded px-1.5 py-0.5 max-w-[100px] outline-none focus:border-indigo-500"
@@ -369,7 +470,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                   }`}
               >
                   <Sparkles className="w-3 h-3" />
-                  {allStartFramesGenerated ? '重新生成所有首帧' : '批量生成首帧'}
+                  {allStartFramesGenerated ? '重新生成所有帧图片' : '批量生成帧图片'}
               </button>
           </div>
       </div>

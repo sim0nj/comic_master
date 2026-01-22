@@ -72,6 +72,9 @@ export const createDefaultModelConfigs = async (): Promise<void> => {
   const existing = await getAllModelConfigs();
   if (existing.length > 0) return;
 
+  // 从 localStorage 读取 API Key
+  const storedApiKey = localStorage.getItem('cinegen_api_key') || '';
+
   const defaultConfigs: AIModelConfig[] = [
     {
       id: 'deepseek-llm',
@@ -88,7 +91,7 @@ export const createDefaultModelConfigs = async (): Promise<void> => {
       provider: 'doubao',
       modelType: 'llm',
       model: 'doubao-1-5-pro-32k-250115',
-      apiKey: '',
+      apiKey: storedApiKey,
       apiUrl: 'https://ark.cn-beijing.volces.com/api/v3',
       enabled: true,
       description: 'Doubao LLM'
@@ -98,7 +101,7 @@ export const createDefaultModelConfigs = async (): Promise<void> => {
       provider: 'doubao',
       modelType: 'text2image',
       model: 'doubao-seedream-4-5-251128',
-      apiKey: '',
+      apiKey: storedApiKey,
       apiUrl: 'https://ark.cn-beijing.volces.com/api/v3',
       enabled: true,
       description: 'Doubao Image'
@@ -108,7 +111,7 @@ export const createDefaultModelConfigs = async (): Promise<void> => {
       provider: 'doubao',
       modelType: 'image2video',
       model: 'doubao-seedance-1-0-lite-i2v-250428',
-      apiKey: '',
+      apiKey: storedApiKey,
       apiUrl: 'https://ark.cn-beijing.volces.com/api/v3',
       enabled: true,
       description: 'Doubao Video'

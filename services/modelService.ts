@@ -33,8 +33,7 @@ import {
   parseScriptToData as parseScriptToDataDoubao,
   setGlobalApiKey as setDoubaoApiKey,
   setDoubaoApiUrl,
-  setDoubaoModel,
-  initializeDoubaoConfig
+  setDoubaoModel
 } from "./doubaoService";
 
 const IMAGE_X = [
@@ -161,6 +160,8 @@ export class ModelService {
 
     if (!config) {
       console.warn('未找到启用的图生视频配置，使用默认的 doubao');
+      const storedApiKey = localStorage.getItem('cinegen_api_key') || '';
+      setDoubaoApiKey(storedApiKey);
       return 'doubao';
     }
 

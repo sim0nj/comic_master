@@ -59,6 +59,11 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       return;
     }
 
+    if (formData.enabled && !formData.apiKey) {
+      alert('未配置 API Key 的配置不能启用');
+      return;
+    }
+
     const newConfig: AIModelConfig = {
       id: `${formData.provider}-${formData.modelType}-${Date.now()}`,
       provider: formData.provider,
@@ -66,7 +71,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       model: formData.model,
       apiKey: formData.apiKey,
       apiUrl: formData.apiUrl || '',
-      enabled: formData.enabled,
+      enabled: formData.enabled && !!formData.apiKey,
       description: formData.description
     };
 
@@ -102,6 +107,11 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       return;
     }
 
+    if (formData.enabled && !formData.apiKey) {
+      alert('未配置 API Key 的配置不能启用');
+      return;
+    }
+
     const updatedConfig: AIModelConfig = {
       id: editingConfig.id,
       provider: formData.provider,
@@ -109,7 +119,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       model: formData.model,
       apiKey: formData.apiKey,
       apiUrl: formData.apiUrl || '',
-      enabled: formData.enabled,
+      enabled: formData.enabled && !!formData.apiKey,
       description: formData.description
     };
 
@@ -388,9 +398,16 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                         </div>
                         <div className="flex items-center gap-2">
                           <button
-                            onClick={() => toggleConfigEnabled(config.id).then(loadConfigs)}
-                            className={`p-2 transition-colors rounded-lg ${config.enabled ? 'text-indigo-400 hover:text-indigo-300 bg-indigo-900/20 hover:bg-indigo-900/30' : 'text-slate-600 hover:text-slate-300 hover:bg-slate-800'}`}
-                            title={config.enabled ? '禁用' : '启用'}
+                            onClick={() => {
+                              if (!config.enabled && !config.apiKey) {
+                                alert('请先配置 API Key');
+                                return;
+                              }
+                              toggleConfigEnabled(config.id).then(loadConfigs);
+                            }}
+                            disabled={!config.enabled && !config.apiKey}
+                            className={`p-2 transition-colors rounded-lg ${config.enabled ? 'text-indigo-400 hover:text-indigo-300 bg-indigo-900/20 hover:bg-indigo-900/30' : !config.apiKey ? 'text-slate-700 bg-transparent cursor-not-allowed' : 'text-slate-600 hover:text-slate-300 hover:bg-slate-800'}`}
+                            title={config.enabled ? '禁用' : config.apiKey ? '启用' : '请先配置 API Key'}
                           >
                             <Check className="w-4 h-4" />
                           </button>
