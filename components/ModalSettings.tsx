@@ -1,4 +1,4 @@
-import { Check, ChevronRight, Globe, Key, Plus, Sparkles, Trash2, X } from 'lucide-react';
+import { Check, ChevronRight, Film, Globe, Image, Key, Music, Plus, Sparkles, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createDefaultModelConfigs, deleteModelConfig, getAllModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
 import { AIModelConfig } from '../types';
@@ -18,10 +18,10 @@ const PROVIDER_OPTIONS = [
 
 const MODEL_TYPE_OPTIONS = [
   { value: 'llm', label: '大语言模型 (LLM)', icon: Sparkles },
-  { value: 'text2image', label: '文生图', icon: Globe },
-  { value: 'image2video', label: '图生视频', icon: ChevronRight },
-  { value: 'tts', label: '语音合成 (TTS)', icon: Key },
-  { value: 'stt', label: '语音识别 (STT)', icon: Key }
+  { value: 'text2image', label: '文生图', icon: Image },
+  { value: 'image2video', label: '图生视频', icon: Film },
+  { value: 'tts', label: '语音合成 (TTS)', icon: Music },
+  { value: 'stt', label: '语音识别 (STT)', icon: Music }
 ] as const;
 
 const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
@@ -419,7 +419,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                             className="p-2 hover:bg-slate-800 text-slate-600 hover:text-white transition-colors rounded-lg"
                             title="编辑"
                           >
-                            <Key className="w-4 h-4" />
+                            <Music className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(config.id)}
