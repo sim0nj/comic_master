@@ -460,7 +460,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
               <span className="text-xs text-slate-500 mr-4 font-mono">
                   {project.shots.filter(s => s.interval?.videoUrl).length} / {project.shots.length} 完成
               </span>
-              <button 
+              <button
                   onClick={handleBatchGenerateImages}
                   disabled={!!batchProgress}
                   className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
@@ -477,10 +477,10 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
       {/* Main Content Area */}
       <div className="flex-1 overflow-hidden flex">
-          
+
           {/* Grid View - Responsive Logic */}
           <div className={`flex-1 overflow-y-auto p-6 transition-all duration-500 ease-in-out ${activeShotId ? 'border-r border-slate-800' : ''}`}>
-              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-2' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'}`}>
+              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'}`}>
                   {project.shots.map((shot, idx) => {
                       const sKf = shot.keyframes?.find(k => k.type === 'start');
                       const fKf = shot.keyframes?.find(k => k.type === 'full');
@@ -505,20 +505,28 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
                               {/* Thumbnail */}
                               <div className="aspect-video bg-slate-900 relative overflow-hidden">
-                                  {hasImage ? (
+                                  {hasVideo ? (
+                                      <video
+                                        src={shot.interval?.videoUrl}
+                                        className="w-full h-full object-cover"
+                                        loop controls
+                                        onMouseEnter={(e) => e.currentTarget.play()}
+                                        onMouseLeave={(e) => e.currentTarget.pause()}
+                                      />
+                                  ) : hasImage ? (
                                       <img src={sKf!.imageUrl || fKf!.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                                   ) : (
                                       <div className="absolute inset-0 flex items-center justify-center text-slate-800">
                                           <ImageIcon className="w-8 h-8 opacity-20" />
                                       </div>
                                   )}
-                                  
+
                                   {/* Badges */}
                                   <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                                       {hasVideo && <div className="p-1 bg-green-500 text-white rounded shadow-lg backdrop-blur"><Video className="w-3 h-3" /></div>}
                                   </div>
 
-                                  {!activeShotId && !hasImage && (
+                                  {!activeShotId && !hasImage && !hasVideo && (
                                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                           <span className="text-[12px] text-white font-bold uppercase tracking-wider bg-slate-900/90 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur">点击生成</span>
                                       </div>

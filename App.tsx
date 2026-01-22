@@ -21,7 +21,8 @@ function App() {
   const [cozeApiKey, setCozeApiKey] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
-  
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
   // Ref to hold debounce timer
   const saveTimeoutRef = useRef<any>(null);
 
@@ -238,15 +239,17 @@ function App() {
   // Workspace View
   return (
     <div className="flex h-screen bg-[#0e1229] font-sans text-gray-100 selection:bg-indigo-500/30">
-      <Sidebar 
-        currentStage={project.stage} 
-        setStage={setStage} 
-        onExit={handleExitProject} 
+      <Sidebar
+        currentStage={project.stage}
+        setStage={setStage}
+        onExit={handleExitProject}
         onOpenSettings={() => setShowSettings(true)}
+        onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+        collapsed={sidebarCollapsed}
         projectName={project.title}
       />
-      
-      <main className="ml-72 flex-1 h-screen overflow-hidden relative">
+
+      <main className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'ml-20' : 'ml-72'} flex-1 h-screen overflow-hidden relative`}>
         {renderStage()}
 {showSettings && (
   <ApiKeyModal
