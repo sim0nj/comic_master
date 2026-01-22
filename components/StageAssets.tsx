@@ -35,7 +35,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       }
 
       // Real API Call
-      const imageUrl = await ModelService.generateImage(prompt, [], type === 'character', localStyle, imageSize);
+      const imageUrl = await ModelService.generateImage(prompt, [], type === 'character', localStyle, '2560x1440');
 
       // Update state
       if (project.scriptData) {

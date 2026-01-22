@@ -272,10 +272,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                 const existingKf = shot.keyframes?.find(k => k.type === 'start');
                 let prompt = existingKf?.visualPrompt || shot.actionSummary;
                 const kfId = existingKf?.id || `kf-${shot.id}-start-${Date.now()}`;
-                if(referencePrompt){
-                    prompt = `${prompt} 参考图说明：${referencePrompt}`;
-                }
-                const url = await ModelService.generateImage(prompt, referenceImages, false, localStyle, imageSize);
+                const url = await ModelService.generateImage(prompt + (referencePrompt?"参考图说明："+referencePrompt:""), referenceImages, false, localStyle, imageSize);
                 currentShots = currentShots.map(s => {
                     if (s.id !== shot.id) return s;
                     const newKeyframes = [...(s.keyframes || [])];
@@ -295,10 +292,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                 const existingEf = shot.keyframes?.find(k => k.type === 'end');
                 let end_prompt = existingEf?.visualPrompt || shot.actionSummary;
                 const efId = existingEf?.id || `kf-${shot.id}-end-${Date.now()}`;
-                const end_url = await ModelService.generateImage(end_prompt, referenceImages, false, localStyle, imageSize);
-                if(referencePrompt){
-                    end_prompt = `${end_prompt} 参考图说明：${referencePrompt}`;
-                }
+                const end_url = await ModelService.generateImage(end_prompt + (referencePrompt?"参考图说明："+referencePrompt:""), referenceImages, false, localStyle, imageSize);
                 currentShots = currentShots.map(s => {
                     if (s.id !== shot.id) return s;
                     const newKeyframes = [...(s.keyframes || [])];
@@ -306,7 +300,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                     const newEf: Keyframe = {
                         id: efId,
                         type: 'end',
-                        visualPrompt: prompt,
+                        visualPrompt: end_prompt,
                         imageUrl: end_url,
                         status: 'completed'
                     };
@@ -364,7 +358,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
               <div className="flex gap-4">
                   <div className="w-28 h-20 bg-slate-900 rounded-lg overflow-hidden flex-shrink-0 border border-slate-700 relative">
                     {scene?.referenceImage ? (
-                      <img src={scene.referenceImage} className="w-full h-full object-cover" />
+                        <img src={scene.referenceImage} className="w-full h-full object-cover cursor-pointer hover:ring-2 hover:ring-indigo-500" onClick={() => setPreviewImageUrl(scene.referenceImage)}/>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-slate-800">
                           <MapPin className="w-6 h-6 text-slate-700" />
