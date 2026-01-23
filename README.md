@@ -3,6 +3,8 @@
 > **工业级 AI 漫剧与视频生成工作台**  
 > *Industrial AI Motion Comic & Video Workbench*
 
+基础代码来自 [https://github.com/Will-Water/CineGen-AI](https://github.com/Will-Water/CineGen-AI)
+
 ---
 
 ## 目录
