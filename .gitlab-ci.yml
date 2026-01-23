@@ -17,4 +17,10 @@ publish:
   artifacts:
     paths:
       - dist
+pages:
+  stage: deploy
+  artifacts:
+    paths:
+      - dist
+
   
