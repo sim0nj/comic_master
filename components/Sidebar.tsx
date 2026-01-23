@@ -1,4 +1,4 @@
-import { Aperture, ArrowLeft, ChevronLeft, ChevronRight, Clapperboard, FileText, Film, Key, PanelLeft, PanelRight, Settings, Users } from 'lucide-react';
+import { Aperture, ArrowLeft, ChevronLeft, ChevronRight, Clapperboard, FileText, Film, Github as GithubIcon, Key, PanelLeft, PanelRight, Settings, Twitter as TwitterIcon, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { ProjectState } from '../types';
 import ModalSettings from './ModalSettings';
@@ -361,6 +361,41 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
               <span className="font-mono text-[12px] uppercase tracking-widest">系统设置</span>
               <Settings className="w-4 h-4" />
             </button>
+
+            {/* 社交媒体链接 */}
+            <div className="pt-2 border-t border-slate-900/50">
+              <div className="flex items-center justify-center gap-3">
+                <a
+                  href="https://github.com/3dudu/comic_master/issues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                  title="GitHub"
+                >
+                  <GithubIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://twitter.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                  title="Twitter / X"
+                >
+                  <TwitterIcon className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                  title="Facebook"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
           </>
         ) : (
           <>
@@ -372,11 +407,46 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
             <Key className="w-4 h-4" />
           </button>
           <button
-              onClick={onOpenSettings}
+              onClick={onOpenSettings} title="系统设置"
               className="flex justify-center text-slate-600 hover:text-white cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
             >
             <Settings className="w-4 h-4" />
           </button>
+
+          {/* 社交媒体链接 - 折叠状态 */}
+          <div className="pt-2 border-t border-slate-900/50">
+            <div className="flex flex-col items-center gap-2">
+              <a
+                href="https://github.com/3dudu/comic_master/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                title="GitHub"
+              >
+                <GithubIcon className="w-4 h-4" />
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                title="Twitter / X"
+              >
+                <TwitterIcon className="w-4 h-4" />
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                title="Facebook"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+              </a>
+            </div>
+          </div>
           </>
         )}
       </div>
