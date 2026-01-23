@@ -180,7 +180,7 @@ npm run dev
 |--------|----------|
 | Google Gemini | https://aistudio.google.com/ |
 | 豆包 | https://www.doubao.com/ |
-| 云雾 | https://yunwu.com/ |
+| 云雾 | https://yunwu.ai/ |
 | DeepSeek | https://www.deepseek.com/ |
 
 在应用首页配置页面输入密钥并保存。
