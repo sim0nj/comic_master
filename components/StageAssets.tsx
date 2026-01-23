@@ -1,8 +1,8 @@
 import { Check, Loader2, MapPin, Plus, RefreshCw, Shirt, Sparkles, User, Users, X } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ModelService } from '../services/modelService';
 import { CharacterVariation, ProjectState } from '../types';
-  
+
 
 interface Props {
   project: ProjectState;
@@ -20,6 +20,12 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   // Variation Form State
   const [newVarName, setNewVarName] = useState("");
   const [newVarPrompt, setNewVarPrompt] = useState("");
+
+  // Sync local state with project settings
+  useEffect(() => {
+    setLocalStyle(project.visualStyle || '写实');
+    setImageSize(project.imageSize || '2560x1440');
+  }, [project.visualStyle, project.imageSize]);
 
   const handleGenerateAsset = async (type: 'character' | 'scene', id: string) => {
     setProcessingState({ id, type });

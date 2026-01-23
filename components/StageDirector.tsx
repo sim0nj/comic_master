@@ -1,5 +1,5 @@
 import { AlertCircle, Aperture, ChevronLeft, ChevronRight, Clock, Edit, Film, Image as ImageIcon, LayoutGrid, Loader2, MapPin, MessageSquare, RefreshCw, Shirt, Sparkles, Users, Video, X } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { Keyframe, ProjectState, Scene, Shot } from '../types';
 import SceneEditModal from './SceneEditModal';
@@ -20,6 +20,13 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
   const [imageSize, setImageSize] = useState(project.imageSize || '2560x1440');
   const [imageCount, setImageCount] = useState(project.imageCount || 0);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+
+  // Sync local state with project settings
+  useEffect(() => {
+    setLocalStyle(project.visualStyle || '写实');
+    setImageSize(project.imageSize || '2560x1440');
+    setImageCount(project.imageCount || 0);
+  }, [project.visualStyle, project.imageSize, project.imageCount]);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
   const [newVarName, setNewVarName] = useState("");
   const [newVarPrompt, setNewVarPrompt] = useState("");
@@ -812,7 +819,14 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                               {String(activeShotIndex + 1).padStart(2, '0')}
                            </span>
                            <div>
-                               <h3 className="text-white font-bold text-sm">镜头详情</h3>
+                               <span className="text-[16px] text-white font-bold text-sm">镜头详情</span>
+                               <button
+                                        onClick={(e) => { e.stopPropagation(); startEditShot(activeShot); }}
+                                        className="ml-2 p-1.5 hover:bg-slate-700 text-slate-500 hover:text-white rounded transition-colors"
+                                        title="编辑镜头"
+                                      >
+                                <Edit className="w-3 h-3" />
+                                </button>
                                <p className="text-[12px] text-slate-500 uppercase tracking-widest">{activeShot.cameraMovement}</p>
                            </div>
                        </div>
@@ -870,8 +884,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                </div>
                                <button
                                    onClick={() => handleOneClickProduction(activeShot)}
-                                   disabled={!!processingState || !!batchProgress || oneClickProcessing?.shotId === activeShot.id ||
-                                       (imageCount > 1 ? !!fullKf?.imageUrl : (!!startKf?.imageUrl && !!endKf?.imageUrl))}
+                                   disabled={!!processingState || !!batchProgress || oneClickProcessing?.shotId === activeShot.id}
                                    className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold uppercase tracking-wider rounded transition-all flex items-center gap-1.5 shadow-lg shadow-indigo-600/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
                                >
                                    {oneClickProcessing?.shotId === activeShot.id ? (
@@ -882,7 +895,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                    ) : (
                                        <>
                                            <Sparkles className="w-3 h-3" />
-                                           一键制作
+                                           {imageCount > 1 ? (!!fullKf?.imageUrl ? '一键重新制作' : '一键制作') : ((!!startKf?.imageUrl && !!endKf?.imageUrl) ? '一键重新制作' : '一键制作')}
                                        </>
                                    )}
                                </button>

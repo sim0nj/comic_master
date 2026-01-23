@@ -122,7 +122,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
     // 初始化模型服务
     ModelService.initialize();
-  }, [project.id]);
+  }, [project.id, project.title, project.targetDuration, project.language, project.visualStyle, project.imageSize, project.imageCount]);
 
   // 自动保存 localScript
   useEffect(() => {
