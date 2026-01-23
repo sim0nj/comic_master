@@ -13,7 +13,7 @@ publish:
         - package.json
   script:
     - npm install
-    - npm run bulid
+    - npm run build
   artifacts:
     paths:
       - dist
