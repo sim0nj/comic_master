@@ -1,4 +1,4 @@
-import { AlertCircle, Aperture, ChevronLeft, ChevronRight, Clock, Edit, Film, Image as ImageIcon, LayoutGrid, Loader2, MapPin, MessageSquare, RefreshCw, Shirt, Sparkles, Users, Video, X } from 'lucide-react';
+import { AlertCircle, Aperture, ChevronLeft, ChevronRight, Clock, Edit, Film, Image as ImageIcon, LayoutGrid, Loader2, MapPin, MessageSquare, RefreshCw, Shirt, Sparkles, Trash, Users, Video, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { Keyframe, ProjectState, Scene, Shot } from '../types';
@@ -56,6 +56,17 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       const idx = newKeyframes.findIndex(k => k.type === type);
       if (idx >= 0) {
         newKeyframes[idx] = { ...newKeyframes[idx], visualPrompt: prompt };
+      }
+      return { ...s, keyframes: newKeyframes };
+    });
+  };
+
+  const deleteKeyframeImage = (shotId: string, type: 'start' | 'end' | 'full') => {
+    updateShot(shotId, (s) => {
+      const newKeyframes = [...(s.keyframes || [])];
+      const idx = newKeyframes.findIndex(k => k.type === type);
+      if (idx >= 0) {
+        newKeyframes[idx] = { ...newKeyframes[idx], imageUrl: undefined };
       }
       return { ...s, keyframes: newKeyframes };
     });
@@ -734,7 +745,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
           {/* Grid View - Responsive Logic */}
           <div className={`flex-1 overflow-y-auto p-6 transition-all duration-500 ease-in-out ${activeShotId ? 'border-r border-slate-800' : ''}`}>
-              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'}`}>
+              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'}`}>
                   {project.shots.map((shot, idx) => {
                       const sKf = shot.keyframes?.find(k => k.type === 'start');
                       const fKf = shot.keyframes?.find(k => k.type === 'full');
@@ -810,7 +821,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
           {/* Right Workbench - Optimized Interaction */}
           {activeShotId && activeShot && (
-              <div className="w-[720px] bg-[#0f1225] flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20">
+              <div className="w-[640px] bg-[#0f1225] flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20">
                   
                   {/* Workbench Header */}
                   <div className="h-16 px-6 border-b border-slate-800 flex items-center justify-between bg-[#0c0c2d] shrink-0">
@@ -992,13 +1003,25 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                    <div className="space-y-2">
                                        <div className="flex justify-between items-center">
                                            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">结束帧 (End)</span>
-                                           <button
-                                               onClick={() => handleGenerateKeyframe(activeShot, 'end')}
-                                               disabled={!!processingState || !!batchProgress}
-                                               className="text-[12px] text-indigo-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                           >
-                                               {processingState?.type === 'kf_end' && (processingState?.id === endKf?.id || (!endKf && processingState?.type === 'kf_end')) ? '生成中...' : endKf?.imageUrl ? '重新生成' : '生成'}
-                                           </button>
+                                           <div className="flex items-center gap-2">
+                                               {endKf?.imageUrl && (
+                                                   <button
+                                                       onClick={() => deleteKeyframeImage(activeShot.id, 'end')}
+                                                       disabled={!!processingState || !!batchProgress}
+                                                       className="text-[12px] text-red-400 hover:text-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                       title="删除尾帧图片"
+                                                   >
+                                                       <Trash className="w-3 h-3" />
+                                                   </button>
+                                               )}
+                                               <button
+                                                   onClick={() => handleGenerateKeyframe(activeShot, 'end')}
+                                                   disabled={!!processingState || !!batchProgress}
+                                                   className="text-[12px] text-indigo-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                               >
+                                                   {processingState?.type === 'kf_end' && (processingState?.id === endKf?.id || (!endKf && processingState?.type === 'kf_end')) ? '生成中...' : endKf?.imageUrl ? '重新生成' : '生成'}
+                                               </button>
+                                           </div>
                                        </div>
                                        <div className="aspect-video bg-black rounded-lg border border-slate-800 overflow-hidden relative group">
                                            {endKf?.imageUrl ? (
