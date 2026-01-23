@@ -18,6 +18,7 @@ publish:
     paths:
       - dist
 pages:
+  image: hub.good365.net/node:24.5.0
   stage: deploy
   script:
     - npm install
