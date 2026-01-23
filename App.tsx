@@ -8,8 +8,8 @@ import StageDirector from './components/StageDirector';
 import StageExport from './components/StageExport';
 import StageScript from './components/StageScript';
 
-import { setGlobalApiKey } from './services/doubaoService';
 import { initializeCozeConfig } from './services/cozeService';
+import { setGlobalApiKey } from './services/doubaoService';
 import { saveProjectToDB } from './services/storageService';
 import { ProjectState } from './types';
 
@@ -247,6 +247,8 @@ function App() {
         onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
         collapsed={sidebarCollapsed}
         projectName={project.title}
+        project={project}
+        updateProject={updateProject}
       />
 
       <main className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'ml-20' : 'ml-72'} flex-1 h-screen overflow-hidden relative`}>

@@ -1,4 +1,4 @@
-import { AlertCircle, Aperture, ArrowLeft, BookOpen, BrainCircuit, ChevronRight, Clock, Edit, List, MapPin, Plus, Settings, Sparkles, TextQuote, Trash, Users, Wand2 } from 'lucide-react';
+import { AlertCircle, Aperture, ArrowLeft, BookOpen, BrainCircuit, ChevronRight, Clock, Edit, List, MapPin, Plus, Sparkles, TextQuote, Trash, Users, Wand2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { Character, ProjectState, Scene } from '../types';
@@ -56,6 +56,23 @@ const IMAGE_COUNT_OPTIONS = [
   { label: '8 张', value: 8 },
   { label: '9 张', value: 9 }
 ];
+
+const GENRE_OPTIONS = [
+  { label: '剧情片', value: '剧情片' },
+  { label: '动作片', value: '动作片' },
+  { label: '科幻片', value: '科幻片' },
+  { label: '悬疑片', value: '悬疑片' },
+  { label: '恐怖片', value: '恐怖片' },
+  { label: '喜剧片', value: '喜剧片' },
+  { label: '爱情片', value: '爱情片' },
+  { label: '历史片', value: '历史片' },
+  { label: '战争片', value: '战争片' },
+  { label: '动画片', value: '动画片' },
+  { label: '纪录片', value: '纪录片' },
+  { label: '短片', value: '短片' },
+  { label: '微电影', value: '微电影' },
+  { label: '广告', value: '广告' }
+];
 /*
   */
 
@@ -73,7 +90,6 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showSettings, setShowSettings] = useState(false);
   const [scriptPrompt, setScriptPrompt] = useState('');
   const [isGeneratingScript, setIsGeneratingScript] = useState(false);
   const [processingStep, setProcessingStep] = useState<string>('');
@@ -81,6 +97,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   // Editing states
   const [editingLogline, setEditingLogline] = useState(false);
   const [tempLogline, setTempLogline] = useState('');
+  const [editingGenre, setEditingGenre] = useState(false);
+  const [tempGenre, setTempGenre] = useState('');
   const [editingCharacterId, setEditingCharacterId] = useState<string | null>(null);
   const [tempCharacter, setTempCharacter] = useState<Partial<Character>>({});
   const [showAddCharacter, setShowAddCharacter] = useState(false);
@@ -145,30 +163,6 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     return localDuration === 'custom' ? customDurationInput : localDuration;
   };
 
-  const openSettings = () => {
-    setLocalTitle(project.title);
-    setLocalDuration(project.targetDuration || '60s');
-    setLocalLanguage(project.language || '中文');
-    setLocalStyle(project.visualStyle || '写实');
-    setLocalImageSize(project.imageSize || '1440x2560');
-    setLocalImageCount(project.imageCount || 1);
-    setCustomDurationInput(project.targetDuration === 'custom' ? project.targetDuration : '');
-    setShowSettings(true);
-  };
-
-  const saveSettings = () => {
-    const finalDuration = localDuration === 'custom' ? customDurationInput : localDuration;
-    updateProject({
-      title: localTitle,
-      targetDuration: finalDuration,
-      language: localLanguage,
-      visualStyle: localStyle,
-      imageSize: localImageSize,
-      imageCount: localImageCount
-    });
-    setShowSettings(false);
-  };
-
   // Logline editing
   const startEditLogline = () => {
     setTempLogline(project.scriptData?.logline || '');
@@ -184,6 +178,22 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
       }
     });
     setEditingLogline(false);
+  };
+
+  const startEditGenre = () => {
+    setTempGenre(project.scriptData?.genre || '剧情片');
+    setEditingGenre(true);
+  };
+
+  const saveGenre = () => {
+    if (!project.scriptData) return;
+    updateProject({
+      scriptData: {
+        ...project.scriptData,
+        genre: tempGenre
+      }
+    });
+    setEditingGenre(false);
   };
 
   // Character editing
@@ -461,11 +471,11 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     <div className="flex h-full bg-[#0e1229] text-slate-300">
       
       {/* Middle Column: Config Panel - Adjusted Width to w-96 */}
-      <div className="w-96 border-r border-slate-800 flex flex-col bg-[#0e0e28]">
+      <div className="w-96 border-r border-slate-800 flex flex-col bg-[#0e1230]">
         {/* Header - Fixed Height 56px */}
-        <div className="h-14 px-5 border-b border-slate-800 flex items-center justify-between shrink-0">
-            <h2 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-slate-400" />
+        <div className="h-16 px-6 border-b border-slate-800 flex items-center justify-between shrink-0">
+            <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-3">
+              <BookOpen className="w-5 h-5 text-indigo-500" />
               项目配置
             </h2>
         </div>
@@ -635,12 +645,18 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
       {/* Right: Text Editor - Optimized */}
       <div className="flex-1 flex flex-col bg-[#0e1229] relative">
-        <div className="h-14 border-b border-slate-800 flex items-center justify-between px-8 bg-[#0e1229] shrink-0">
+        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-8 bg-[#0e1230] shrink-0">
            <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 rounded-full bg-slate-700"></div>
               <span className="text-xs font-bold text-slate-400">剧本编辑器</span>
            </div>
-           <span className="text-[12px] font-mono text-slate-600 uppercase tracking-widest">MARKDOWN SUPPORTED</span>
+           <button
+               onClick={() => setActiveTab('script')}
+               className="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
+             >
+               <ArrowLeft className="w-3 h-3" />
+               分镜
+            </button>
         </div>
 
         {/* AI Script Generation Input */}
@@ -677,11 +693,11 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-           <div className="max-w-3xl mx-auto h-full flex flex-col py-12 px-8">
+           <div className="max-w-3xl mx-auto h-full flex flex-col py-2">
               <textarea
                   value={localScript}
                   onChange={(e) => setLocalScript(e.target.value)}
-                  className="flex-1 bg-transparent text-slate-200 font-serif text-lg leading-loose focus:outline-none resize-none placeholder:text-slate-800 selection:bg-slate-700"
+                  className="px-2 flex-1 bg-[#0c0c2d] text-slate-200 font-serif text-lg leading-loose focus:outline-none resize-none placeholder:text-slate-800 selection:bg-slate-700"
                   placeholder="在此输入故事大纲或直接粘贴剧本..."
                   spellCheck={false}
               />
@@ -716,14 +732,13 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     return (
       <div className="flex flex-col h-full bg-[#0e1229] animate-in fade-in duration-500">
         {/* Header */}
-        <div className="h-16 px-6 border-b border-slate-800 bg-[#090923] flex items-center justify-between shrink-0 z-20">
+        <div className="h-16 px-6 border-b border-slate-800 bg-[#0e1230] flex items-center justify-between shrink-0 z-20">
            <div className="flex items-center gap-6">
-              <h2 className="text-lg font-light text-white tracking-tight flex items-center gap-3">
-                 <List className="w-5 h-5 text-slate-400" />
+              <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-3">
+                 <List className="w-5 h-5 text-indigo-500" />
                  拍摄清单
-                 <span className="text-xs text-slate-600 font-mono uppercase tracking-wider ml-1">Script Manifest</span>
+                 <span className="text-xs text-slate-600 font-mono font-normal uppercase tracking-wider bg-black/30 px-1 py-1 rounded">Script Manifest</span>
               </h2>
-              <div className="h-6 w-px bg-slate-800"></div>
               
               <div className="flex items-center gap-4">
                   <div className="flex flex-col">
@@ -739,18 +754,11 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
            <div className="flex gap-2">
              <button
-               onClick={openSettings}
-               className="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
-             >
-               <Settings className="w-3 h-3" />
-               项目设置
-             </button>
-             <button
                onClick={() => setActiveTab('story')}
                className="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
              >
                <ArrowLeft className="w-3 h-3" />
-               返回编辑
+               剧本
              </button>
            </div>
         </div>
@@ -759,34 +767,74 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
         <div className="flex-1 overflow-hidden flex">
            
            {/* Sidebar: Index */}
-           <div className="w-72 border-r border-slate-800 bg-[#0e0e28] flex flex-col hidden lg:flex">
+           <div className="w-96 border-r border-slate-800 bg-[#0e1230] flex flex-col hidden lg:flex">
               <div className="p-6 border-b border-slate-900">
-                 <div className="flex items-center justify-between mb-4">
-                   <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
-                     <TextQuote className="w-3 h-3" /> 故事梗概
-                   </h3>
-                   {!editingLogline && (
-                     <button onClick={startEditLogline} className="text-slate-600 hover:text-white transition-colors">
-                       <Edit className="w-3 h-3" />
-                     </button>
+                 {/* Genre Selection */}
+                 <div>
+                   <div className="flex items-center justify-between mb-2">
+                     <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                       <TextQuote className="w-3 h-3" /> 类型
+                     </h3>
+                     {!editingGenre && (
+                       <button onClick={startEditGenre} className="text-slate-600 hover:text-white transition-colors">
+                         <Edit className="w-3 h-3" />
+                       </button>
+                     )}
+                   </div>
+                   {editingGenre ? (
+                     <div className="relative">
+                       <select
+                         value={tempGenre}
+                         onChange={(e) => setTempGenre(e.target.value)}
+                         className="w-full bg-[#0c0c2d] border border-slate-800 text-white text-xs rounded px-2 py-1.5 appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                       >
+                         {GENRE_OPTIONS.map(opt => (
+                           <option key={opt.value} value={opt.value}>{opt.label}</option>
+                         ))}
+                       </select>
+                       <div className="absolute right-2 top-2 pointer-events-none">
+                         <ChevronRight className="w-3 h-3 text-slate-600 rotate-90" />
+                       </div>
+                       <div className="flex gap-2 mt-2">
+                         <button onClick={saveGenre} className="flex-1 py-1 bg-slate-800 text-slate-300 text-[11px] font-bold rounded hover:bg-slate-700 transition-colors">保存</button>
+                         <button onClick={() => setEditingGenre(false)} className="flex-1 py-1 bg-slate-900 text-slate-500 text-[11px] font-bold rounded hover:text-slate-300 transition-colors">取消</button>
+                       </div>
+                     </div>
+                   ) : (
+                     <p className="text-xs text-slate-300 font-medium cursor-text hover:text-white" onClick={startEditGenre}>{project.scriptData?.genre || '剧情片'}</p>
                    )}
                  </div>
-                 {editingLogline ? (
-                   <div className="space-y-2">
-                     <textarea
-                       value={tempLogline}
-                       onChange={(e) => setTempLogline(e.target.value)}
-                       className="w-full bg-[#0c0c2d] border border-slate-800 text-slate-300 text-xs rounded p-2 focus:border-slate-600 focus:outline-none resize-none"
-                       rows={3}
-                     />
-                     <div className="flex gap-2">
-                       <button onClick={saveLogline} className="flex-1 py-1.5 bg-slate-800 text-slate-300 text-[12px] font-bold rounded hover:bg-slate-700 transition-colors">保存</button>
-                       <button onClick={() => setEditingLogline(false)} className="flex-1 py-1.5 bg-slate-900 text-slate-500 text-[12px] font-bold rounded hover:text-slate-300 transition-colors">取消</button>
-                     </div>
+              </div>
+              <div className="p-6 border-b border-slate-900">
+                 {/* Logline */}
+                 <div>
+                   <div className="flex items-center justify-between mb-2">
+                     <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                       <TextQuote className="w-3 h-3" /> 故事梗概
+                     </h3>
+                     {!editingLogline && (
+                       <button onClick={startEditLogline} className="text-slate-600 hover:text-white transition-colors">
+                         <Edit className="w-3 h-3" />
+                       </button>
+                     )}
                    </div>
-                 ) : (
-                   <p className="text-xs text-slate-400 italic leading-relaxed font-serif cursor-text hover:text-slate-300" onClick={startEditLogline}>"{project.scriptData?.logline}"</p>
-                 )}
+                   {editingLogline ? (
+                     <div className="space-y-2">
+                       <textarea
+                         value={tempLogline}
+                         onChange={(e) => setTempLogline(e.target.value)}
+                         className="w-full bg-[#0c0c2d] border border-slate-800 text-slate-300 text-xs rounded p-2 focus:border-slate-600 focus:outline-none resize-none"
+                         rows={3}
+                       />
+                       <div className="flex gap-2">
+                         <button onClick={saveLogline} className="flex-1 py-1.5 bg-slate-800 text-slate-300 text-[12px] font-bold rounded hover:bg-slate-700 transition-colors">保存</button>
+                         <button onClick={() => setEditingLogline(false)} className="flex-1 py-1.5 bg-slate-900 text-slate-500 text-[12px] font-bold rounded hover:text-slate-300 transition-colors">取消</button>
+                       </div>
+                     </div>
+                   ) : (
+                     <p className="text-xs text-slate-400 italic leading-relaxed font-serif cursor-text hover:text-slate-300" onClick={startEditLogline}>"{project.scriptData?.logline}"</p>
+                   )}
+                 </div>
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 space-y-8">
@@ -1111,169 +1159,6 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     );
   };
 
-  const renderSettingsModal = () => (
-    showSettings && (
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setShowSettings(false);
-        }}
-      >
-        <div className="bg-[#0e0e28] border border-slate-800 rounded-lg w-[480px] max-w-[90vw] max-h-[85vh] overflow-y-auto shadow-2xl">
-          <div className="p-6 border-b border-slate-800 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
-              <Settings className="w-4 h-4 text-slate-400" />
-              项目设置
-            </h3>
-            <button
-              onClick={() => setShowSettings(false)}
-              className="text-slate-500 hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="p-6 space-y-5">
-            {/* Title Input */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">项目标题</label>
-              <input
-                type="text"
-                value={localTitle}
-                onChange={(e) => setLocalTitle(e.target.value)}
-                className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none transition-all"
-                placeholder="输入项目名称..."
-              />
-            </div>
-
-            {/* Language Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">输出语言</label>
-              <div className="relative">
-                <select
-                  value={localLanguage}
-                  onChange={(e) => setLocalLanguage(e.target.value)}
-                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
-                >
-                  {LANGUAGE_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-3 pointer-events-none">
-                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
-                </div>
-              </div>
-            </div>
-
-            {/* Visual Style Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">画面风格</label>
-              <div className="relative">
-                <select
-                  value={localStyle}
-                  onChange={(e) => setLocalStyle(e.target.value)}
-                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
-                >
-                  {STYLE_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-3 pointer-events-none">
-                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
-                </div>
-              </div>
-            </div>
-
-            {/* Image Size Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">图片尺寸</label>
-              <div className="relative">
-                <select
-                  value={localImageSize}
-                  onChange={(e) => setLocalImageSize(e.target.value)}
-                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
-                >
-                  {IMAGE_SIZE_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-3 pointer-events-none">
-                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
-                </div>
-              </div>
-            </div>
-
-            {/* Image Count Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">组图数量</label>
-              <div className="relative">
-                <select
-                  value={localImageCount}
-                  onChange={(e) => setLocalImageCount(Number(e.target.value))}
-                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
-                >
-                  {IMAGE_COUNT_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-3 pointer-events-none">
-                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
-                </div>
-              </div>
-              <p className="text-[10px] text-slate-600">文生图模型一次生成的画面数</p>
-            </div>
-
-            {/* Duration Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">目标时长</label>
-              <div className="grid grid-cols-2 gap-2">
-                {DURATION_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    onClick={() => setLocalDuration(opt.value)}
-                    className={`px-2 py-2.5 text-[11px] font-medium rounded-md transition-all text-center border ${
-                      localDuration === opt.value
-                        ? 'bg-slate-100 text-black border-slate-100 shadow-sm'
-                        : 'bg-transparent border-slate-800 text-slate-400 hover:border-slate-600 hover:text-slate-200'
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-              {localDuration === 'custom' && (
-                <div className="pt-1">
-                  <input
-                    type="text"
-                    value={customDurationInput}
-                    onChange={(e) => setCustomDurationInput(e.target.value)}
-                    className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none font-mono placeholder:text-slate-700"
-                    placeholder="输入时长 (如: 90s, 3m)"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="p-6 border-t border-slate-800 flex gap-3">
-            <button
-              onClick={() => setShowSettings(false)}
-              className="flex-1 py-3 bg-slate-900 text-slate-400 hover:text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors"
-            >
-              取消
-            </button>
-            <button
-              onClick={saveSettings}
-              className="flex-1 py-3 bg-white text-black hover:bg-slate-200 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors"
-            >
-              保存设置
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  );
-
   const renderEditShotModal = () => {
     // 编辑现有 shot
     if (editingShotId) {
@@ -1339,7 +1224,6 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   return (
     <div className="h-full bg-[#0e1229]">
       {activeTab === 'story' ? renderStoryInput() : renderScriptBreakdown()}
-      {renderSettingsModal()}
       {renderEditShotModal()}
       {renderEditSceneModal()}
     </div>

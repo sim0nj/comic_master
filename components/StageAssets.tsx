@@ -28,10 +28,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       let prompt = "";
       if (type === 'character') {
         const char = project.scriptData?.characters.find(c => String(c.id) === String(id));
-        if (char) prompt = char.visualPrompt || await ModelService.generateVisualPrompts('character', char, project.scriptData?.genre || 'Cinematic');
+        if (char) prompt = char.visualPrompt || await ModelService.generateVisualPrompts('character', char, project.scriptData?.genre || '剧情片');
       } else {
         const scene = project.scriptData?.scenes.find(s => String(s.id) === String(id));
-        if (scene) prompt = scene.visualPrompt || await ModelService.generateVisualPrompts('scene', scene, project.scriptData?.genre || 'Cinematic');
+        if (scene) prompt = scene.visualPrompt || await ModelService.generateVisualPrompts('scene', scene, project.scriptData?.genre || '剧情片');
       }
 
       // Real API Call

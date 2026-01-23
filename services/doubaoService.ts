@@ -239,7 +239,7 @@ export const parseScriptToData = async (
 
   return {
     title: parsed.title || "未命名剧本",
-    genre: parsed.genre || "通用",
+    genre: parsed.genre || "剧情片",
     logline: parsed.logline || "",
     language: language,
     characters,
@@ -447,7 +447,7 @@ export const generateVisualPrompts = async (
   data: Character | Scene,
   genre: string
 ): Promise<string> => {
-  const prompt = `为电影${genre}的${type}生成高还原度视觉提示词。 
+  const prompt = `为${genre}的${type}生成高还原度视觉提示词。 
   内容: ${JSON.stringify(data)}. 
   中文输出提示词，以逗号分隔，聚焦视觉细节（光线、质感、外观）。`;
 
