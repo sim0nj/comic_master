@@ -313,7 +313,7 @@
 - 多模态支持 (文本/图像)
 - 企业级稳定性
 
-#### 3. 云舞 (Yunwu)
+#### 3. 云雾 (Yunwu)
 
 **配置文件**: `services/yunwuService.ts`
 
@@ -392,7 +392,7 @@
 - Start + End Frame (首尾帧插值)
 - Full Grid Mode (连续宫格帧)
 
-#### 2. 云舞
+#### 2. 云雾
 
 **支持特性**:
 - 🎬 高质量视频生成
@@ -448,7 +448,7 @@ ModelService (统一模型服务层)
 ├── deepseekService.ts (DeepSeek API)
 ├── doubaoService.ts (豆包 API)
 ├── geminiService.ts (Gemini API)
-├── yunwuService.ts (云舞 API)
+├── yunwuService.ts (云雾 API)
 └── openaiService.ts (OpenAI API - 计划中)
 
 其他服务
@@ -634,8 +634,8 @@ npm run dev
 2. 注册并获取 API Key
 3. 配置到应用
 
-#### 云舞 (Yunwu)
-1. 访问 [云舞官网](https://yunwu.com/)
+#### 云雾 (Yunwu)
+1. 访问 [云雾官网](https://yunwu.com/)
 2. 注册并获取 API Key
 3. 配置到应用
 
@@ -843,7 +843,7 @@ A: 确保:
 - `doubao` - 豆包大模型
 - `deepseek` - DeepSeek
 - `gemini` - Google Gemini
-- `yunwu` - 云舞
+- `yunwu` - 云雾
 - `openai` - OpenAI (计划中)
 
 **支持的模型类型**:
@@ -895,9 +895,6 @@ Built for Creators, by CineGen.
 - 📧 提交 Issue
 - 📖 查看 README (多语言支持)
   - [中文](./README.md)
-  - [English](./README_EN.md)
-  - [日本語](./README_JA.md)
-  - [한국인](./README_KO.md)
 
 ---
 
