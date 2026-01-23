@@ -1,4 +1,4 @@
-import { Aperture, ChevronRight, Plus, Trash, X } from 'lucide-react';
+import { Aperture, Check, ChevronRight, Plus, Trash, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { Character } from '../types';
 
@@ -185,20 +185,46 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
           <div className="space-y-2">
             <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">角色</label>
             <div className="flex flex-wrap gap-2">
-              {characters.map(char => (
-                <button
-                  key={char.id}
-                  onClick={() => toggleCharacter(char.id)}
-                  className={`px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
-                    (tempShot.characters || []).includes(char.id)
-                      ? 'bg-indigo-600 text-white border-indigo-500'
-                      : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-600'
-                  }`}
-                >
-                  {char.name}
-                </button>
-              ))}
+              {characters.map(char => {
+                const isSelected = (tempShot.characters || []).includes(char.name);
+                const hasImage = !!char.referenceImage;
+                return (
+                  <button
+                    key={char.name}
+                    onClick={() => toggleCharacter(char.name)}
+                    className={`relative px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 border flex items-center gap-1.5 ${
+                      isSelected
+                        ? 'bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-500/25 scale-105'
+                        : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-600 hover:text-slate-300 hover:bg-slate-800'
+                    }`}
+                  >
+                    {/* 头像 */}
+                    {hasImage && (
+                      <div className={`w-5 h-5 rounded-full overflow-hidden flex-shrink-0 ${
+                        isSelected ? 'ring-2 ring-white/30' : 'opacity-70'
+                      }`}>
+                        <img
+                          src={char.referenceImage}
+                          alt={char.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    {/* 对勾图标 - 如果没有头像则显示，如果有头像则显示在右侧 */}
+                    {isSelected && !hasImage && <Check className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={3} />}
+                    {/* 角色名 */}
+                    <span className="truncate">{char.name}</span>
+                    {/* 选中且有头像时的对勾 */}
+                    {isSelected && hasImage && <Check className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={3} />}
+                  </button>
+                );
+              })}
             </div>
+            {(tempShot.characters || []).length > 0 && (
+              <div className="text-[11px] text-slate-500">
+                已选择 {tempShot.characters?.length} 个角色
+              </div>
+            )}
           </div>
 
           {/* Keyframes */}
