@@ -551,7 +551,6 @@ export const generateVideo = async (
   }
 
   // 处理结束图片（如果火山引擎支持）
-  
   if (endImageBase64 && !full_frame) {
     requestBody.content.push({
             "type": "image_url",

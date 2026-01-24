@@ -56,6 +56,13 @@ import {
   setModel as setDoubaoModel
 } from "./doubaoService";
 
+// MiniMax 方法
+import {
+  generateVideo as generateVideoMinimax,
+  setApiKey as setMinimaxApiKey,
+  setApiUrl as setMinimaxApiUrl
+} from "./minimaxService";
+
 const IMAGE_X = [
   '1','1x1','1x2','1x3','2x2','2x3','2x3','3x3','3x3','3x3'
 ];
@@ -168,6 +175,14 @@ export class ModelService {
           }
           console.log(`已更新 Yunwu ${config.modelType} 配置`);
           break;
+
+        case 'minimax':
+          setMinimaxApiKey(config.apiKey);
+          if (config.apiUrl) {
+            setMinimaxApiUrl(config.apiUrl);
+          }
+          console.log(`已更新 MiniMax ${config.modelType} 配置`);
+          break;
       }
     } catch (error) {
       console.error(`更新 ${config.provider} 配置失败:`, error);
@@ -238,7 +253,7 @@ export class ModelService {
    * 获取当前启用的图生视频提供商
    * @param projectModelProviders - 项目级别的模型供应商配置
    */
-  private static async getEnabledVideoProvider(projectModelProviders?: { image2video?: string }): Promise<'doubao' | 'gemini' | 'openai' | 'yunwu'> {
+  private static async getEnabledVideoProvider(projectModelProviders?: { image2video?: string }): Promise<'doubao' | 'gemini' | 'openai' | 'yunwu' | 'minimax'> {
     let config;
 
     // 优先使用项目级别的供应商配置
@@ -409,7 +424,7 @@ export class ModelService {
    * @param provider - 提供商
    * @param apiKey - API 密钥
    */
-  static setApiKey(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu', apiKey: string): void {
+  static setApiKey(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax', apiKey: string): void {
     switch (provider) {
       case 'deepseek':
         setDeepseekApiKey(apiKey);
@@ -426,6 +441,9 @@ export class ModelService {
       case 'yunwu':
         setYunwuApiKey(apiKey);
         break;
+      case 'minimax':
+        setMinimaxApiKey(apiKey);
+        break;
       default:
         throw new Error(`暂不支持 ${provider} 提供商的 API 密钥设置`);
     }
@@ -436,7 +454,7 @@ export class ModelService {
    * @param provider - 提供商
    * @param apiUrl - API 端点
    */
-  static setApiUrl(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu', apiUrl: string): void {
+  static setApiUrl(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax', apiUrl: string): void {
     switch (provider) {
       case 'deepseek':
         setDeepseekApiUrl(apiUrl);
@@ -454,6 +472,9 @@ export class ModelService {
       case 'yunwu':
         setYunwuApiUrl(apiUrl);
         break;
+      case 'minimax':
+        setMinimaxApiUrl(apiUrl);
+        break;
     }
   }
 
@@ -461,7 +482,7 @@ export class ModelService {
    * 获取当前使用的提供商信息
    */
   static async getProviderInfo(): Promise<{
-    provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu';
+    provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax';
     enabled: boolean;
   }> {
     const config = await getEnabledConfigByType('llm');
@@ -533,6 +554,8 @@ export class ModelService {
         return await generateVideoGemini(prompt, startImageBase64, endImageBase64);
       case 'yunwu':
         return await generateVideoYunwu(prompt, startImageBase64, endImageBase64, duration);
+      case 'minimax':
+        return await generateVideoMinimax(prompt, startImageBase64, endImageBase64, duration, full_frame);
       case 'openai':
       default:
         throw new Error(`暂不支持 ${provider} 提供商的图生视频`);

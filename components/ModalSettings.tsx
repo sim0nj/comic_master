@@ -13,7 +13,8 @@ const PROVIDER_OPTIONS = [
   { value: 'deepseek', label: 'DeepSeek' },
   { value: 'openai', label: 'OpenAI' },
   { value: 'gemini', label: 'Gemini (Google)' },
-  { value: 'yunwu', label: 'Yunwu (云雾)' }
+  { value: 'yunwu', label: 'Yunwu (云雾)' },
+  { value: 'minimax', label: 'Minimax (海螺)'}
 ] as const;
 
 const MODEL_TYPE_OPTIONS = [
@@ -25,18 +26,19 @@ const MODEL_TYPE_OPTIONS = [
 ] as const;
 
 // 定义不同供应商支持的模型类型
-const PROVIDER_MODEL_TYPES = {
+const PROVIDER_MODEL_TYPES: Record<string, readonly string[]> = {
   doubao: ['llm', 'text2image', 'image2video', 'tts', 'stt'] as const,
   deepseek: ['llm'] as const,
   openai: ['llm', 'text2image', 'image2video'] as const,
   gemini: ['llm', 'text2image', 'image2video'] as const,
-  yunwu: ['llm', 'text2image', 'image2video'] as const
+  yunwu: ['llm', 'text2image', 'image2video'] as const,
+  minimax: ['image2video'] as const
 };
 
 // 根据供应商获取支持的模型类型选项
 const getModelTypesForProvider = (provider: AIModelConfig['provider']) => {
   const supportedTypes = PROVIDER_MODEL_TYPES[provider] || ['llm'];
-  return MODEL_TYPE_OPTIONS.filter(opt => supportedTypes.includes(opt.value as any));
+  return MODEL_TYPE_OPTIONS.filter(opt => supportedTypes.includes(opt.value as string));
 };
 
 const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
