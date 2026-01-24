@@ -6,34 +6,39 @@ import { getAllModelConfigs, getEnabledConfigByType } from "./modelConfigService
 
 // DeepSeek 方法
 import {
-  generateScriptDeepseek,
-  generateShotListDeepseek,
-  generateShotListDeepseekForScene,
-  generateVisualPromptsDeepseek,
-  parseScriptToDataDeepseek,
-  setDeepseekApiKey,
-  setDeepseekApiUrl,
-  setDeepseekModel
+  generateScript as generateScriptDeepseek,
+  generateShotList as generateShotListDeepseek,
+  generateShotListForScene as generateShotListDeepseekForScene,
+  generateVisualPrompts as generateVisualPromptsDeepseek,
+  parseScriptToData as parseScriptToDataDeepseek,
+  setApiKey as setDeepseekApiKey,
+  setApiUrl as setDeepseekApiUrl,
+  setModel as setDeepseekModel
 } from "./deepseekService";
 
 // Gemini 方法
 import {
   generateImage as generateImageGemini,
+  generateScript as generateScriptGemini,
+  generateShotListForScene as generateShotListForSceneGemini,
+  generateShotList as generateShotListGemini,
   generateVideo as generateVideoGemini,
-  setGlobalApiKey as setGeminiApiKey
+  generateVisualPrompts as generateVisualPromptsGemini,
+  parseScriptToData as parseScriptToDataGemini,
+  setApiKey as setGeminiApiKey
 } from "./geminiService";
 
 // Yunwu 方法
 import {
   generateScript as generateScriptYunwu,
-  generateShotList as generateShotListYunwu,
   generateShotListForScene as generateShotListForSceneYunwu,
+  generateShotList as generateShotListYunwu,
   generateVideo as generateVideoYunwu,
   generateVisualPrompts as generateVisualPromptsYunwu,
   parseScriptToData as parseScriptToDataYunwu,
-  setGlobalApiKey as setYunwuApiKey,
-  setYunwuApiUrl,
-  setYunwuModel
+  setApiKey as setYunwuApiKey,
+  setApiUrl as setYunwuApiUrl,
+  setModel as setYunwuModel
 } from "./yunwuService";
 
 // Doubao 方法
@@ -41,13 +46,13 @@ import {
   generateImage as generateImageDoubao,
   generateScript as generateScriptDoubao,
   generateShotList as generateShotListDoubao,
-  generateShotListDoubaoForScene,
+  generateShotListForScene as generateShotListDoubaoForScene,
   generateVideo as generateVideoDoubao,
   generateVisualPrompts as generateVisualPromptsDoubao,
   parseScriptToData as parseScriptToDataDoubao,
-  setGlobalApiKey as setDoubaoApiKey,
-  setDoubaoApiUrl,
-  setDoubaoModel
+  setApiKey as setDoubaoApiKey,
+  setApiUrl as setDoubaoApiUrl,
+  setModel as setDoubaoModel
 } from "./doubaoService";
 
 const IMAGE_X = [
@@ -223,14 +228,13 @@ export class ModelService {
       case 'deepseek':
         return await parseScriptToDataDeepseek(rawText, language);
       case 'doubao':
-      default:
         return await parseScriptToDataDoubao(rawText, language);
-      case 'openai':
       case 'gemini':
+        return await parseScriptToDataGemini(rawText, language);
       case 'yunwu':
-        if (provider === 'yunwu') {
-          return await parseScriptToDataYunwu(rawText, language);
-        }
+        return await parseScriptToDataYunwu(rawText, language);
+      case 'openai':
+      default:
         // TODO: 实现其他提供商
         throw new Error(`暂不支持 ${provider} 提供商的剧本分析`);
     }
@@ -248,14 +252,13 @@ export class ModelService {
       case 'deepseek':
         return await generateShotListDeepseek(scriptData);
       case 'doubao':
-      default:
         return await generateShotListDoubao(scriptData);
-      case 'openai':
       case 'gemini':
+        return await generateShotListGemini(scriptData);
       case 'yunwu':
-        if (provider === 'yunwu') {
-          return await generateShotListYunwu(scriptData);
-        }
+        return await generateShotListYunwu(scriptData);
+      case 'openai':
+      default:
         // TODO: 实现其他提供商
         throw new Error(`暂不支持 ${provider} 提供商的镜头生成`);
     }
@@ -279,15 +282,13 @@ export class ModelService {
       case 'deepseek':
         return await generateShotListDeepseekForScene(scriptData, scene, sceneIndex);
       case 'doubao':
-      default:
         return await generateShotListDoubaoForScene(scriptData, scene, sceneIndex);
-      case 'openai':
       case 'gemini':
+        return await generateShotListForSceneGemini(scriptData, scene, sceneIndex);
       case 'yunwu':
-        if (provider === 'yunwu') {
-          return await generateShotListForSceneYunwu(scriptData, scene, sceneIndex);
-        }
-        // TODO: 实现其他提供商
+        return await generateShotListForSceneYunwu(scriptData, scene, sceneIndex);
+      case 'openai':
+      default:   // TODO: 实现其他提供商
         throw new Error(`暂不支持 ${provider} 提供商的镜头生成`);
     }
   }
@@ -312,15 +313,13 @@ export class ModelService {
       case 'deepseek':
         return await generateScriptDeepseek(prompt, genre, targetDuration, language);
       case 'doubao':
-      default:
         return await generateScriptDoubao(prompt, genre, targetDuration, language);
-      case 'openai':
       case 'gemini':
+        return await generateScriptGemini(prompt, genre, targetDuration, language);
       case 'yunwu':
-        if (provider === 'yunwu') {
-          return await generateScriptYunwu(prompt, genre, targetDuration, language);
-        }
-        // TODO: 实现其他提供商
+        return await generateScriptYunwu(prompt, genre, targetDuration, language);
+      case 'openai':
+      default: 
         throw new Error(`暂不支持 ${provider} 提供商的剧本生成`);
     }
   }
@@ -343,15 +342,13 @@ export class ModelService {
       case 'deepseek':
         return await generateVisualPromptsDeepseek(type, data, genre);
       case 'doubao':
-      default:
         return await generateVisualPromptsDoubao(type, data, genre);
-      case 'openai':
       case 'gemini':
+        return await generateVisualPromptsGemini(type, data, genre);
       case 'yunwu':
-        if (provider === 'yunwu') {
-          return await generateVisualPromptsYunwu(type, data, genre);
-        }
-        // TODO: 实现其他提供商
+        return await generateVisualPromptsYunwu(type, data, genre);
+      case 'openai':
+      default:
         throw new Error(`暂不支持 ${provider} 提供商的视觉提示词生成`);
     }
   }
@@ -367,7 +364,7 @@ export class ModelService {
         setDeepseekApiKey(apiKey);
         break;
       case 'doubao':
-        // Doubao 使用全局设置
+        setDoubaoApiKey(apiKey);
         break;
       case 'openai':
         // TODO: 实现 OpenAI
@@ -378,6 +375,8 @@ export class ModelService {
       case 'yunwu':
         setYunwuApiKey(apiKey);
         break;
+      default:
+        throw new Error(`暂不支持 ${provider} 提供商的 API 密钥设置`);
     }
   }
 

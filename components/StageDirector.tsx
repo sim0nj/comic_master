@@ -140,7 +140,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
         // 1. Scene Reference (Environment / Atmosphere) - PRIORITY
         const scene = project.scriptData.scenes.find(s => String(s.id) === String(shot.sceneId));
         if (scene?.referenceImage) {
-          referenceImages.push("第1张图是故事场景布置。");
+          referenceImages.push("第1张图是镜头布景、环境。");
         }
         let imagecount = 2;
         // 2. Character References (Appearance)
@@ -154,7 +154,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
             if (varId) {
                 const variation = char.variations?.find(v => v.id === varId);
                 if (variation?.referenceImage) {
-                    referenceImages.push("第"+imagecount+"张图是角色"+char.name);
+                    referenceImages.push("第"+imagecount+"张图是角色："+char.name);
                     imagecount++;
                     return; // Use variation image instead of base
                 }
@@ -162,7 +162,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
             // Fallback to base image
             if (char.referenceImage) {
-                referenceImages.push("第"+imagecount+"张图是角色"+char.name);
+                referenceImages.push("第"+imagecount+"张图是角色："+char.name);
             }
             imagecount++;
           });
@@ -180,7 +180,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
         const startKey = shot.keyframes?.find(k => k.type === 'start');
         const endKey = shot.keyframes?.find(k => k.type === 'end');
         if (startKey || endKey){
-            prompt = `画面开始：${startKey.visualPrompt} 画面结束：${endKey.visualPrompt}`;
+            prompt = `连环画开始：${startKey.visualPrompt} 连环画结束：${endKey.visualPrompt}`;
         }
     }else{
         prompt = existingKf?.visualPrompt || shot.actionSummary;
@@ -421,7 +421,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
           // Use Base Look as reference to maintain facial consistency
           const refImages = char.referenceImage ? [char.referenceImage] : [];
           // Enhance prompt to emphasize character consistency
-          const enhancedPrompt = `Character: ${char.name}. ${variation.visualPrompt}. Keep facial features consistent with reference.`;
+          const enhancedPrompt = `角色:  ${char.name} 的造型，服装: ${variation.visualPrompt}。 保持面部特征与参考图一致。`;
 
           const imageUrl = await ModelService.generateImage(enhancedPrompt, refImages, true, localStyle, imageSize);
 

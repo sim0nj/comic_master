@@ -1,5 +1,5 @@
 import { Check, Loader2, MapPin, Plus, RefreshCw, Shirt, Sparkles, User, Users, X } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { CharacterVariation, ProjectState } from '../types';
 
@@ -124,7 +124,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           // IMPORTANT: Use Base Look as reference to maintain facial consistency
           const refImages = char.referenceImage ? [char.referenceImage] : [];
           // Enhance prompt to emphasize character consistency
-          const enhancedPrompt = `Character: ${char.name}. ${variation.visualPrompt}. Keep facial features consistent with reference.`;
+          const enhancedPrompt = `角色: ${char.name} 的造型，服装: ${variation.visualPrompt}。 保持面部特征与参考图一致。`;
 
           const imageUrl = await ModelService.generateImage(enhancedPrompt, refImages, true, localStyle, imageSize);
 

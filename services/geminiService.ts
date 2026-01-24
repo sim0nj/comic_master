@@ -1,10 +1,11 @@
 import { GenerateContentResponse, GoogleGenAI, Type } from "@google/genai";
 import { Character, Scene, ScriptData, Shot } from "../types";
+import { PROMPT_TEMPLATES } from "./promptTemplates";
 
 // Module-level variable to store the key at runtime
 let runtimeApiKey: string = process.env.API_KEY || "";
 
-export const setGlobalApiKey = (key: string) => {
+export const setApiKey = (key: string) => {
   runtimeApiKey = key;
 };
 
@@ -49,18 +50,7 @@ const cleanJsonString = (str: string): string => {
  */
 export const parseScriptToData = async (rawText: string, language: string = '中文'): Promise<ScriptData> => {
   const ai = getAiClient();
-  const prompt = `
-    分析文本并以 ${language} 语言输出一个 JSON 对象。
-
-    任务：
-    提取title:标题、genre:类型、logline:故事梗概（以 ${language} 语言呈现）。
-    提取characters:人物信息（id:编号、name:姓名、gender:性别、age:年龄、personality:性格）。
-    提取scenes:场景信息（id:编号、location:地点、time:时间、atmosphere:氛围）。
-    storyParagraphs:故事段落（id:编号、sceneRefId:引用场景编号、text:内容）。
-
-    输入：
-    "${rawText.slice(0, 30000)}"
-  `;
+  const prompt = PROMPT_TEMPLATES.PARSE_SCRIPT(rawText, language);
 
   const response = await retryOperation<GenerateContentResponse>(() => ai.models.generateContent({
     model: 'gemini-2.5-flash',
@@ -148,121 +138,108 @@ export const parseScriptToData = async (rawText: string, language: string = '中
   };
 };
 
+/**
+ * 为单个场景生成镜头清单
+ * @param scriptData - 剧本数据
+ * @param scene - 场景数据
+ * @param index - 场景索引
+ */
+export const generateShotListForScene = async (
+  scriptData: ScriptData,
+  scene: Scene,
+  index: number
+): Promise<Shot[]> => {
+  const ai = getAiClient();
+  const lang = scriptData.language || '中文';
+
+  const paragraphs = scriptData.storyParagraphs
+    .filter(p => String(p.sceneRefId) === String(scene.id))
+    .map(p => p.text)
+    .join('\n');
+
+  if (!paragraphs.trim()) return [];
+
+  const prompt = PROMPT_TEMPLATES.GENERATE_SHOTS(
+    index,
+    scene,
+    paragraphs,
+    scriptData.genre,
+    scriptData.targetDuration || "Standard",
+    scriptData.characters,
+    lang
+  );
+
+  try {
+    const response = await retryOperation<GenerateContentResponse>(() => ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        maxOutputTokens: 8192,
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              id: { type: Type.STRING },
+              sceneId: { type: Type.STRING },
+              actionSummary: { type: Type.STRING },
+              dialogue: { type: Type.STRING, description: "本镜头中的台词。若无台词则留空。" },
+              cameraMovement: { type: Type.STRING },
+              shotSize: { type: Type.STRING, description: "例如：广角镜头、特写镜头" },
+              characters: { type: Type.ARRAY, items: { type: Type.STRING } },
+              keyframes: {
+                type: Type.ARRAY,
+                items: {
+                  type: Type.OBJECT,
+                  properties: {
+                    id: { type: Type.STRING },
+                    type: { type: Type.STRING, enum: ["start", "end"] },
+                    visualPrompt: { type: Type.STRING, description: "详细的中文视觉描述" }
+                  },
+                  required: ["id", "type", "visualPrompt"]
+                }
+              }
+            },
+            required: ["sceneId", "actionSummary", "cameraMovement", "shotSize", "characters", "keyframes"]
+          }
+        }
+      }
+    }));
+
+    const text = cleanJsonString(response.text || "[]");
+    const shots = JSON.parse(text);
+
+    // FIX: Explicitly override the sceneId to match the source scene
+    // This prevents the AI from hallucinating incorrect scene IDs
+    const validShots = Array.isArray(shots) ? shots : [];
+    return validShots.map(s => ({
+      ...s,
+      sceneId: String(scene.id) // Force String
+    }));
+
+  } catch (e) {
+    console.error(`Failed to generate shots for scene ${scene.id}`, e);
+    return [];
+  }
+};
+
 export const generateShotList = async (scriptData: ScriptData): Promise<Shot[]> => {
   if (!scriptData.scenes || scriptData.scenes.length === 0) {
     return [];
   }
 
-  const ai = getAiClient();
-  const lang = scriptData.language || '中文';
-  
-  // Helper to process a single scene
-  // We process per-scene to avoid token limits and parsing errors with large JSONs
-  const processScene = async (scene: Scene, index: number): Promise<Shot[]> => {
-    const paragraphs = scriptData.storyParagraphs
-      .filter(p => String(p.sceneRefId) === String(scene.id))
-      .map(p => p.text)
-      .join('\n');
-
-    if (!paragraphs.trim()) return [];
-
-    const prompt = `
-      担任专业摄影师，为第${index + 1}场戏制作一份详尽的镜头清单（镜头调度设计）。
-      文本输出语言: ${lang}。
-      
-      场景细节:
-      地点: ${scene.location}
-      时间: ${scene.time}
-      氛围: ${scene.atmosphere}
-      
-      场景动作:
-      "${paragraphs.slice(0, 5000)}"
-      
-
-      创作背景:
-      题材类型: ${scriptData.genre}
-      剧本整体目标时长: ${scriptData.targetDuration || "Standard"}
-      
-      角色:
-      ${JSON.stringify(scriptData.characters.map(c => ({ id: c.id, name: c.name, desc: c.visualPrompt || c.personality })))}
-
-      说明：
-      1. 设计一组覆盖全部情节动作的镜头序列。
-      2. 重要提示：每场戏镜头数量上限为 6-8 个，避免出现 JSON 截断错误。
-      3. 镜头运动：请使用专业术语（如：前推、右摇、固定、手持、跟拍）。
-      4. 景别：明确取景范围（如：大特写、中景、全景）。
-      5. 镜头情节概述：详细描述该镜头内发生的情节（使用 ${lang} 指定语言）。
-      6. 视觉提示语：用于图像生成的详细英文描述，字数控制在 40 词以内。
-      7. 转场动画：包含起始帧，结束帧，时长，运动强度（取值为 0-100）。
-      8. 视频提示词：visualPrompt 使用 ${lang} 指定语言。
-    `;
-
-    try {
-      const response = await retryOperation<GenerateContentResponse>(() => ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          maxOutputTokens: 8192, 
-          responseSchema: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                id: { type: Type.STRING },
-                sceneId: { type: Type.STRING },
-                actionSummary: { type: Type.STRING },
-                dialogue: { type: Type.STRING, description: "Spoken lines in this shot. Empty if none." },
-                cameraMovement: { type: Type.STRING },
-                shotSize: { type: Type.STRING, description: "e.g. Wide Shot, Close Up" },
-                characters: { type: Type.ARRAY, items: { type: Type.STRING } },
-                keyframes: {
-                  type: Type.ARRAY,
-                  items: {
-                    type: Type.OBJECT,
-                    properties: {
-                      id: { type: Type.STRING },
-                      type: { type: Type.STRING, enum: ["start", "end"] }, 
-                      visualPrompt: { type: Type.STRING, description: "Detailed English visual description" }
-                    },
-                    required: ["id", "type", "visualPrompt"]
-                  }
-                }
-              },
-              required: ["sceneId", "actionSummary", "cameraMovement", "shotSize", "characters", "keyframes"]
-            }
-          }
-        }
-      }));
-
-      const text = cleanJsonString(response.text || "[]");
-      const shots = JSON.parse(text);
-      
-      // FIX: Explicitly override the sceneId to match the source scene
-      // This prevents the AI from hallucinating incorrect scene IDs
-      const validShots = Array.isArray(shots) ? shots : [];
-      return validShots.map(s => ({
-        ...s,
-        sceneId: String(scene.id) // Force String
-      }));
-
-    } catch (e) {
-      console.error(`Failed to generate shots for scene ${scene.id}`, e);
-      return [];
-    }
-  };
-
   // Process scenes sequentially (Batch Size 1) to strictly minimize rate limits
   const BATCH_SIZE = 1;
   const allShots: Shot[] = [];
-  
+
   for (let i = 0; i < scriptData.scenes.length; i += BATCH_SIZE) {
     // Add delay between batches
     if (i > 0) await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     const batch = scriptData.scenes.slice(i, i + BATCH_SIZE);
     const batchResults = await Promise.all(
-      batch.map((scene, idx) => processScene(scene, i + idx))
+      batch.map((scene, idx) => generateShotListForScene(scriptData, scene, i + idx))
     );
     batchResults.forEach(shots => allShots.push(...shots));
   }
@@ -280,42 +257,60 @@ export const generateShotList = async (scriptData: ScriptData): Promise<Shot[]> 
 };
 
 /**
+ * Agent 0: Script Generation from simple prompt
+ * 根据简单提示词生成完整剧本
+ */
+export const generateScript = async (
+  prompt: string,
+  genre: string = "剧情片",
+  targetDuration: string = "60s",
+  language: string = "中文"
+): Promise<string> => {
+  const ai = getAiClient();
+
+  const generationPrompt = PROMPT_TEMPLATES.GENERATE_SCRIPT(prompt, targetDuration, genre, language);
+
+  const response = await retryOperation<GenerateContentResponse>(() => ai.models.generateContent({
+    model: 'gemini-2.5-flash',
+    contents: generationPrompt,
+    config: {
+      systemInstruction: PROMPT_TEMPLATES.SYSTEM_SCREENWRITER,
+      maxOutputTokens: 8192,
+    }
+  }));
+
+  return (response.text || "").trim();
+};
+
+/**
  * Agent 3: Visual Design (Prompt Generation)
  */
 export const generateVisualPrompts = async (type: 'character' | 'scene', data: Character | Scene, genre: string): Promise<string> => {
    const ai = getAiClient();
-    const prompt = `为${genre}的${type}生成高还原度视觉提示词。 
-    内容: ${JSON.stringify(data)}. 
-    中文输出提示词，以逗号分隔，聚焦视觉细节（光线、质感、外观）。`;
+    const prompt = PROMPT_TEMPLATES.GENERATE_VISUAL_PROMPT(type, data, genre);
 
    const response = await retryOperation<GenerateContentResponse>(() => ai.models.generateContent({
      model: 'gemini-2.5-flash',
      contents: prompt,
    }));
-   return response.text || "";
+   return (response.text || "").trim();
 };
 
 /**
  * Agent 4 & 6: Image Generation
  */
-export const generateImage = async (prompt: string, referenceImages: string[] = []): Promise<string> => {
+export const generateImage = async (prompt: string, referenceImages: string[] = [],
+    ischaracter: boolean = false,
+  localStyle: string = "写实",
+  imageSize: string = "2560x1440",
+  imageCount: number = 1
+): Promise<string> => {
   const ai = getAiClient();
 
   // If we have reference images, instruct the model to use them for consistency
   let finalPrompt = prompt;
   if (referenceImages.length > 0) {
-    finalPrompt = `
-      Reference Images Information:
-      - The FIRST image provided is the Scene/Environment reference.
-      - Any subsequent images are Character references (e.g. Base Look, or specific Variation).
-      
-      Task:
-      Generate a cinematic shot matching this prompt: "${prompt}".
-      
-      Requirements:
-      - STRICTLY maintain the visual style, lighting, and environment from the scene reference.
-      - If characters are present, they MUST resemble the character reference images provided.
-    `;
+    finalPrompt = PROMPT_TEMPLATES.IMAGE_GENERATION_WITH_REFERENCE(prompt);
   }
 
   const parts: any[] = [{ text: finalPrompt }];
