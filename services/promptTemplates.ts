@@ -19,7 +19,7 @@ export const PROMPT_TEMPLATES = {
 
     任务：
     提取title:标题、genre:类型、logline:故事梗概（以 ${language} 语言呈现）。
-    提取characters:人物信息（id:编号、name:姓名、gender:性别、age:年龄、personality:性格）。
+    提取characters:角色信息（id:编号、name:姓名、gender:性别、age:年龄、personality:性格）。
     提取scenes:场景信息（id:编号、location:地点、time:时间、atmosphere:氛围）。
     storyParagraphs:故事段落（id:编号、sceneRefId:引用场景编号、text:内容）。
 
@@ -96,9 +96,9 @@ export const PROMPT_TEMPLATES = {
     1. 目标时长：${targetDuration}
     2. 题材类型：${genre}
     3. 输出语言：${language}
-    4. 剧本结构清晰，包含场景标题、时间、地点、人物、动作描述、对白
+    4. 剧本结构清晰，包含场景标题、时间、地点、角色、动作描述、对白
     5. 情节紧凑，画面感强
-    6. 人物性格鲜明，对话自然
+    6. 角色性格鲜明，对话自然
 
     用户提示词：
     "${prompt}"

@@ -230,7 +230,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
     if (!shot.interval) return;
     
     let sKf = shot.keyframes?.find(k => k.type === 'start');
-    let prompt = "镜头运动："+shot.cameraMovement+"； 取景："+shot.shotSize+"； 情节概述："+shot.actionSummary+" 人物："+shot.characters + (shot.dialogue?"; 对白："+shot.dialogue:"");
+    let prompt = "镜头运动："+shot.cameraMovement+"； 取景："+shot.shotSize+"； 情节概述："+shot.actionSummary+" 角色："+shot.characters + (shot.dialogue?"; 对白："+shot.dialogue:"");
     //console.log("Generating Video for Shot:", shot, "with Prompt:", prompt);
     if(imageCount > 1){
         sKf = shot.keyframes?.find(k => k.type === 'full');

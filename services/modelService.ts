@@ -30,6 +30,7 @@ import {
 
 // Yunwu 方法
 import {
+  generateImage as generateImageYunwu,
   generateScript as generateScriptYunwu,
   generateShotListForScene as generateShotListForSceneYunwu,
   generateShotList as generateShotListYunwu,
@@ -447,15 +448,12 @@ export class ModelService {
       case 'doubao':
         return await generateImageDoubao(new_prompt, referenceImages, isCharacter, localStyle, imageSize,imageCount);
       case 'gemini':
-        return await generateImageGemini(new_prompt, referenceImages);
+        return await generateImageGemini(new_prompt, referenceImages,isCharacter, localStyle, imageSize,imageCount);
       case 'yunwu':
-        // TODO: 实现 Yunwu 文生图
-        throw new Error(`暂不支持 ${provider} 提供商的文生图`);
-      case 'openai':
-        // TODO: 实现 OpenAI 文生图
-        throw new Error(`暂不支持 ${provider} 提供商的文生图`);
+        return await generateImageYunwu(new_prompt, referenceImages, isCharacter, localStyle, imageSize,imageCount);
       default:
-        return await generateImageDoubao(new_prompt, referenceImages, isCharacter, localStyle, imageSize,imageCount);
+      case 'openai':
+        throw new Error(`暂不支持 ${provider} 提供商的文生图`);
     }
   }
 
@@ -484,10 +482,8 @@ export class ModelService {
       case 'yunwu':
         return await generateVideoYunwu(prompt, startImageBase64, endImageBase64, duration);
       case 'openai':
-        // TODO: 实现 OpenAI 图生视频
-        throw new Error(`暂不支持 ${provider} 提供商的图生视频`);
       default:
-        return await generateVideoDoubao(prompt, startImageBase64, endImageBase64, duration,full_frame);
+        throw new Error(`暂不支持 ${provider} 提供商的图生视频`);
     }
   }
 }

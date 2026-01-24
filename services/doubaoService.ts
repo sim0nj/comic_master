@@ -34,6 +34,9 @@ let runtimeVideoModel: string = DOUBAO_CONFIG.VIDEO_MODEL;
 export const setApiKey = (key: string) => {
   runtimeApiKey = key?key : process.env.VOLCENGINE_API_KEY;
 };
+export const setGlobalApiKey = (key: string) => {
+  runtimeApiKey = key?key : process.env.VOLCENGINE_API_KEY;
+};
 
 export const setRegion = (r: string) => {
   region = r;

@@ -290,12 +290,12 @@ const pollVideoTask = async (taskId: string): Promise<string> => {
 
     const status = response.status;
 
-    if (status === "completed" || status === "succeeded") {
+    if (status === "completed" || status === "succeeded" || status === "video_upsampling" || status === "video_generation_completed") {
       console.log(`视频生成完成: ${taskId}`);
-      return response.video_url || response.content?.video_url || "";
+      return response.video_url || response.content?.video_url || response.detail?.video_url || "";
     } else if (status === "failed") {
       throw new Error(`视频生成失败: ${response.error || "未知错误"}`);
-    } else if (status === "pending" || status === "processing") {
+    } else if (status === "pending" || status === "processing" || status === "video_generating" || status === "image_downloading") {
       console.log(`视频生成中... (${i + 1}/${maxAttempts})`);
       continue;
     } else {
@@ -304,6 +304,71 @@ const pollVideoTask = async (taskId: string): Promise<string> => {
   }
 
   throw new Error("视频生成超时");
+};
+
+/**
+ * Agent 4 & 6: Image Generation
+ * 使用云雾API的Gemini图片生成模型
+ */
+export const generateImage = async (
+  prompt: string,
+  referenceImages: string[] = [],
+  ischaracter: boolean = false,
+  localStyle: string = "写实",
+  imageSize: string = "2560x1440",
+  imageCount: number = 1
+): Promise<string> => {
+  const endpoint = `${runtimeApiUrl}/v1beta/models/${runtimeImageModel}:generateContent`;
+
+  // 构建提示词
+  let finalPrompt = prompt;
+  if (!ischaracter && referenceImages.length > 0) {
+    finalPrompt = PROMPT_TEMPLATES.IMAGE_GENERATION_WITH_REFERENCE(prompt);
+  }
+
+  const parts: any[] = [{ text: finalPrompt }];
+
+  // 添加参考图片
+  referenceImages.forEach((imgUrl) => {
+    const match = imgUrl.match(/^data:(image\/[a-zA-Z]+);base64,(.+)$/);
+    if (match) {
+      parts.push({
+        inline_data: {
+          mime_type: match[1],
+          data: match[2]
+        }
+      });
+    }
+  });
+
+  const requestBody = {
+    contents: [
+      {
+        role: "user",
+        parts: parts
+      }
+    ]
+  };
+
+  const response = await retryOperation(async () => {
+    return await fetchWithRetry(endpoint, {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+    });
+  });
+
+  // 提取图片 base64 数据
+  // 云雾 API 返回的格式可能使用驼峰命名或下划线命名
+  const responseParts = response.candidates?.[0]?.content?.parts || [];
+  for (const part of responseParts) {
+    // 兼容两种命名格式: inlineData (驼峰) 或 inline_data (下划线)
+    const inlineData = part.inlineData || part.inline_data;
+    if (inlineData) {
+      const mimeType = inlineData.mime_type || inlineData.mimeType || 'image/png';
+      return `data:${mimeType};base64,${inlineData.data}`;
+    }
+  }
+  throw new Error("图片生成失败 (No image data returned)");
 };
 
 /**

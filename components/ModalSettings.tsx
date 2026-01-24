@@ -24,6 +24,21 @@ const MODEL_TYPE_OPTIONS = [
   { value: 'stt', label: '语音识别 (STT)', icon: Music }
 ] as const;
 
+// 定义不同供应商支持的模型类型
+const PROVIDER_MODEL_TYPES = {
+  doubao: ['llm', 'text2image', 'image2video', 'tts', 'stt'] as const,
+  deepseek: ['llm'] as const,
+  openai: ['llm', 'text2image', 'image2video'] as const,
+  gemini: ['llm', 'text2image', 'image2video'] as const,
+  yunwu: ['llm', 'text2image', 'image2video'] as const
+};
+
+// 根据供应商获取支持的模型类型选项
+const getModelTypesForProvider = (provider: AIModelConfig['provider']) => {
+  const supportedTypes = PROVIDER_MODEL_TYPES[provider] || ['llm'];
+  return MODEL_TYPE_OPTIONS.filter(opt => supportedTypes.includes(opt.value as any));
+};
+
 const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
   const [configs, setConfigs] = useState<AIModelConfig[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -69,7 +84,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       id: `${formData.provider}-${formData.modelType}-${Date.now()}`,
       provider: formData.provider,
       modelType: formData.modelType,
-      model: formData.model,
+      model: formData.model || undefined, // 模型名称现在是可选的
       apiKey: formData.apiKey,
       apiUrl: formData.apiUrl || '',
       enabled: formData.enabled && !!formData.apiKey,
@@ -117,7 +132,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       id: editingConfig.id,
       provider: formData.provider,
       modelType: formData.modelType,
-      model: formData.model,
+      model: formData.model || undefined, // 模型名称现在是可选的
       apiKey: formData.apiKey,
       apiUrl: formData.apiUrl || '',
       enabled: formData.enabled && !!formData.apiKey,
@@ -211,7 +226,18 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                 <div className="relative">
                   <select
                     value={formData.provider}
-                    onChange={(e) => setFormData({ ...formData, provider: e.target.value as AIModelConfig['provider'] })}
+                    onChange={(e) => {
+                      const newProvider = e.target.value as AIModelConfig['provider'];
+                      const supportedTypes = getModelTypesForProvider(newProvider);
+                      const firstSupportedType = supportedTypes[0]?.value as AIModelConfig['modelType'];
+
+                      setFormData({
+                        ...formData,
+                        provider: newProvider,
+                        modelType: firstSupportedType || 'llm',
+                        model: '' // 切换供应商时清空模型名称
+                      });
+                    }}
                     className="w-full bg-[#141414] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                   >
                     {PROVIDER_OPTIONS.map(opt => (
@@ -230,10 +256,17 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                 <div className="relative">
                   <select
                     value={formData.modelType}
-                    onChange={(e) => setFormData({ ...formData, modelType: e.target.value as AIModelConfig['modelType'] })}
+                    onChange={(e) => {
+                      const newModelType = e.target.value as AIModelConfig['modelType'];
+                      setFormData({ ...formData, modelType: newModelType });
+                      // 如果模型名称不属于新类型，清空模型名称
+                      if (formData.model && !getModelTypesForProvider(formData.provider).find(opt => opt.value === newModelType)) {
+                        setFormData(prev => ({ ...prev, model: '' }));
+                      }
+                    }}
                     className="w-full bg-[#141414] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                   >
-                    {MODEL_TYPE_OPTIONS.map(opt => (
+                    {getModelTypesForProvider(formData.provider).map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
                   </select>
@@ -241,21 +274,6 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                     <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
                   </div>
                 </div>
-              </div>
-
-              {/* Model Name */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                  <Sparkles className="w-3 h-3" />
-                  模型名称
-                </label>
-                <input
-                  type="text"
-                  value={formData.model}
-                  onChange={(e) => setFormData({ ...formData, model: e.target.value })}
-                  className="w-full bg-[#141414] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none transition-all font-mono placeholder:text-slate-700"
-                  placeholder="输入具体的模型名称（如：gpt-4、claude-3-sonnet）"
-                />
               </div>
 
               {/* API Key */}
@@ -270,6 +288,21 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                   onChange={(e) => setFormData({ ...formData, apiKey: e.target.value })}
                   className="w-full bg-[#141414] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none transition-all font-mono placeholder:text-slate-700"
                   placeholder="输入您的 API Key..."
+                />
+              </div>
+
+              {/* Model Name - Optional */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                  <Sparkles className="w-3 h-3" />
+                  模型名称 <span className="text-slate-700 font-normal">(可选)</span>
+                </label>
+                <input
+                  type="text"
+                  value={formData.model}
+                  onChange={(e) => setFormData({ ...formData, model: e.target.value })}
+                  className="w-full bg-[#141414] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none transition-all font-mono placeholder:text-slate-700"
+                  placeholder="输入具体的模型名称（如：gpt-4、claude-3-sonnet）"
                 />
               </div>
 
