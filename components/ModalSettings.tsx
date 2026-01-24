@@ -204,7 +204,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
         {/* Header */}
         <div className="p-6 border-b border-slate-800 flex items-center justify-between">
           <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
-            <Key className="w-4 h-4 text-indigo-500" />
+            <Sparkles className="w-4 h-4 text-indigo-500" />
             大模型配置管理
           </h3>
           <button

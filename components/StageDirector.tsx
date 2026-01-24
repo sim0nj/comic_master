@@ -1,7 +1,7 @@
 import { AlertCircle, Aperture, ChevronLeft, ChevronRight, Clock, Edit, Film, Image as ImageIcon, LayoutGrid, Loader2, MapPin, MessageSquare, RefreshCw, Shirt, Sparkles, Trash, Users, Video, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { getAllModelConfigs } from '../services/modelConfigService';
 import { modelConfigEventBus } from '../services/modelConfigEvents';
+import { getAllModelConfigs } from '../services/modelConfigService';
 import { ModelService } from '../services/modelService';
 import { AIModelConfig, Keyframe, ProjectState, Scene, Shot } from '../types';
 import SceneEditModal from './SceneEditModal';
@@ -926,7 +926,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                        <div className="space-y-4">
                            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                                <div className="flex items-center gap-2">
-                                   <RefreshCw className="w-4 h-4 text-slate-500" />
+                                   <Sparkles className="w-4 h-4 text-slate-500" />
                                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">模型供应商 (Model Providers)</h4>
                                </div>
                                <button

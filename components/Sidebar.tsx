@@ -1,4 +1,4 @@
-import { Aperture, ChevronLeft, ChevronRight, Clapperboard, FileText, Film, Github as GithubIcon, Image as ImageIcon, Key, PanelLeft, PanelRight, Settings, Sparkles, Twitter as TwitterIcon, Users, X } from 'lucide-react';
+import { Aperture, ChevronLeft, ChevronRight, Clapperboard, FileText, Film, Github as GithubIcon, Image as ImageIcon, PanelLeft, PanelRight, Settings, Sparkles, Users, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { getAllModelConfigs } from '../services/modelConfigService';
 import { ProjectState } from '../types';
@@ -468,7 +468,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
               className="flex items-center justify-between text-slate-600 hover:text-white cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
             >
               <span className="font-mono text-[12px] uppercase tracking-widest">大模型配置</span>
-              <Key className="w-4 h-4" />
+              <Sparkles className="w-4 h-4" />
             </button>
             <button
               onClick={onOpenSettings}
@@ -490,26 +490,6 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                 >
                   <GithubIcon className="w-4 h-4" />
                 </a>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
-                  title="Twitter / X"
-                >
-                  <TwitterIcon className="w-4 h-4" />
-                </a>
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
-                  title="Facebook"
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                  </svg>
-                </a>
               </div>
             </div>
           </>
@@ -520,7 +500,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
             className="flex justify-center text-slate-600 hover:text-white cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
             title="大模型配置"
           >
-            <Key className="w-4 h-4" />
+            <Sparkles className="w-4 h-4" />
           </button>
           <button
               onClick={onOpenSettings} title="系统设置"
@@ -540,26 +520,6 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                 title="GitHub"
               >
                 <GithubIcon className="w-4 h-4" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
-                title="Twitter / X"
-              >
-                <TwitterIcon className="w-4 h-4" />
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
-                title="Facebook"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                </svg>
               </a>
             </div>
           </div>

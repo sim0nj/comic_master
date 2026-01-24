@@ -230,11 +230,23 @@ export const generateVideo = async (
   const requestBody: any = {
     model: runtimeVideoModel || "veo3-fast-frames",
     prompt: prompt,
-    enhance_prompt: true,
-    enable_upsample: true,
-    aspect_ratio: "16:9",
     images: [],
   };
+
+  if(runtimeVideoModel.indexOf("veo") !== -1) {
+    requestBody.enhance_prompt=true;
+    requestBody.enable_upsample=true;
+    requestBody.aspect_ratio="16:9";
+  }
+  if(runtimeVideoModel.indexOf("sora") !== -1) {
+    requestBody.size = "small";
+    requestBody.orientation="portrait";
+    requestBody.watermark=false;
+  }
+  if(runtimeVideoModel.indexOf("grok") !== -1) {
+    requestBody.size = "720P";
+    requestBody.aspect_ratio="3:2";
+  }
 
   // 处理起始图片
   if (startImageBase64) {
@@ -292,7 +304,7 @@ const pollVideoTask = async (taskId: string): Promise<string> => {
       return response.video_url || response.content?.video_url || response.detail?.video_url || "";
     } else if (status === "failed") {
       throw new Error(`视频生成失败: ${response.error || "未知错误"}`);
-    } else if (status === "pending" || status === "processing" || status === "video_generating" || status === "image_downloading") {
+    } else if (status === "pending" || status === "processing" || status === "video_generating" || status === "image_downloading" || status === "queued") {
       console.log(`视频生成中... (${i + 1}/${maxAttempts})`);
       continue;
     } else {

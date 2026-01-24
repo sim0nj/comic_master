@@ -1,4 +1,4 @@
-import { AlertTriangle, Calendar, Check, ChevronRight, Download, Edit, Loader2, Plus, Trash2, Upload } from 'lucide-react';
+import { AlertTriangle, Calendar, Check, ChevronRight, Copy, Download, Edit, Loader2, Plus, Trash2, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { createNewProjectState, deleteProjectFromDB, exportProjectToFile, getAllProjectsMetadata, importProjectFromFile, saveProjectToDB } from '../services/storageService';
 import { ProjectState } from '../types';
@@ -88,6 +88,29 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
       alert(error.message || '导入项目失败');
     } finally {
       setImporting(false);
+    }
+  };
+
+  const handleDuplicate = async (e: React.MouseEvent, proj: ProjectState) => {
+    e.stopPropagation();
+    try {
+      // 创建项目副本
+      const duplicatedProject = JSON.parse(JSON.stringify(proj));
+      // 生成新的ID
+      duplicatedProject.id = 'proj_' + Date.now().toString(36);
+      // 修改标题，添加"副本"后缀
+      const suffix = ':副本';
+      duplicatedProject.title = proj.title.endsWith(suffix) ? proj.title : proj.title + suffix;
+      // 更新时间戳
+      duplicatedProject.createdAt = Date.now();
+      duplicatedProject.lastModified = Date.now();
+      // 保存到数据库
+      await saveProjectToDB(duplicatedProject);
+      // 重新加载项目列表
+      await loadProjects();
+    } catch (error) {
+      console.error('Duplicate project failed:', error);
+      alert('复制项目失败');
     }
   };
 
@@ -225,6 +248,17 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
                         title="编辑项目名"
                      >
                         <Edit className="w-4 h-4" />
+                     </button>
+                     ) : null}
+
+                     {/* Duplicate Button */}
+                     {editingProjectId === null ? (
+                     <button
+                        onClick={(e) => handleDuplicate(e, proj)}
+                        className="absolute top-4 right-28 opacity-0 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-600 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        title="复制项目"
+                     >
+                        <Copy className="w-4 h-4" />
                      </button>
                      ) : null}
 
