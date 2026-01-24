@@ -1,7 +1,7 @@
-import { Check, ChevronRight, Edit, Film, Globe, Image, Key, Music, Plus, Sparkles, Trash2, X } from 'lucide-react';
+import { Check, ChevronRight, Download, Edit, Film, Globe, Image, Key, Music, Plus, Sparkles, Trash2, Upload, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { triggerModelConfigChanged } from '../services/modelConfigEvents';
-import { createDefaultModelConfigs, deleteModelConfig, getAllModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
+import { createDefaultModelConfigs, deleteModelConfig, getAllModelConfigs, saveModelConfig, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
 import { AIModelConfig } from '../types';
 
 interface Props {
@@ -161,6 +161,94 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleExport = () => {
+    try {
+      const exportData = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        configs: configs.map(c => ({
+          id: c.id,
+          provider: c.provider,
+          modelType: c.modelType,
+          model: c.model,
+          apiKey: c.apiKey,
+          apiUrl: c.apiUrl,
+          enabled: c.enabled,
+          description: c.description
+        }))
+      };
+
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cinegen-model-configs-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('导出失败:', error);
+      alert('导出配置失败');
+    }
+  };
+
+  const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const content = e.target?.result as string;
+        const importData = JSON.parse(content);
+
+        // 验证导入数据格式
+        if (!importData.configs || !Array.isArray(importData.configs)) {
+          alert('导入文件格式不正确');
+          return;
+        }
+
+        const importCount = importData.configs.length;
+        const confirmMessage = `确定要导入 ${importCount} 个配置吗？\n\n导入的配置将与现有配置合并，ID 相同的配置将被覆盖。`;
+
+        if (!window.confirm(confirmMessage)) {
+          event.target.value = '';
+          return;
+        }
+
+        // 导入配置
+        for (const config of importData.configs) {
+          try {
+            const validConfig: AIModelConfig = {
+              id: config.id || `${config.provider}-${config.modelType}-${Date.now()}`,
+              provider: config.provider,
+              modelType: config.modelType,
+              model: config.model,
+              apiKey: config.apiKey,
+              apiUrl: config.apiUrl || '',
+              enabled: false, // 导入的配置默认不启用
+              description: config.description || ''
+            };
+            await saveModelConfig(validConfig);
+          } catch (error) {
+            console.error('导入单个配置失败:', config, error);
+          }
+        }
+
+        await loadConfigs();
+        triggerModelConfigChanged();
+        alert(`成功导入 ${importCount} 个配置`);
+      } catch (error) {
+        console.error('导入失败:', error);
+        alert('导入文件解析失败，请检查文件格式');
+      }
+    };
+
+    reader.readAsText(file);
+    event.target.value = ''; // 清空 input 以便重复导入同一文件
+  };
+
   const resetForm = () => {
     setFormData({
       provider: 'doubao',
@@ -197,7 +285,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
         <div className="p-6 border-b border-slate-800 flex items-center justify-between">
           <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-indigo-500" />
-            大模型配置管理
+            模型管理
           </h3>
           <button
             onClick={handleCancelAdd}
@@ -474,13 +562,36 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
         {/* Footer */}
         {!showAddModal && (
           <div className="p-6 border-t border-slate-800">
-            <button
-              onClick={() => setShowAddModal(true)}
-              className="w-full py-3 bg-white text-black hover:bg-slate-200 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-white/5 flex items-center justify-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              添加新配置
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={handleExport}
+                className="flex-1 py-3 bg-slate-900 text-slate-400 hover:text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                导出配置
+              </button>
+              <div className="relative flex-1">
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleImport}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <button
+                  className="w-full py-3 bg-slate-900 text-slate-400 hover:text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+                >
+                  <Upload className="w-4 h-4" />
+                  导入配置
+                </button>
+              </div>
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="flex-1 py-3 bg-white text-black hover:bg-slate-200 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-white/5 flex items-center justify-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                添加新配置
+              </button>
+            </div>
           </div>
         )}
       </div>

@@ -467,7 +467,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
               onClick={() => setShowModelSettings(true)}
               className="flex items-center justify-between text-slate-600 hover:text-white cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
             >
-              <span className="font-mono text-[12px] uppercase tracking-widest">大模型配置</span>
+              <span className="font-mono text-[12px] uppercase tracking-widest">模型管理</span>
               <Sparkles className="w-4 h-4" />
             </button>
             <button
@@ -498,7 +498,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
           <button
             onClick={() => setShowModelSettings(true)}
             className="flex justify-center text-slate-600 hover:text-white cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
-            title="大模型配置"
+            title="模型管理"
           >
             <Sparkles className="w-4 h-4" />
           </button>
