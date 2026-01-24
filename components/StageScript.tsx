@@ -1,7 +1,8 @@
-import { AlertCircle, Aperture, ArrowLeft, BookOpen, BrainCircuit, ChevronRight, Clock, Edit, List, MapPin, Plus, Sparkles, TextQuote, Trash, Users, Wand2 } from 'lucide-react';
+import { AlertCircle, Aperture, ArrowLeft, BookOpen, BrainCircuit, ChevronRight, Clock, Edit, Film, Image, List, MapPin, Plus, Sparkles, TextQuote, Trash, Users, Wand2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { Character, ProjectState, Scene } from '../types';
+import { getAllModelConfigs } from '../services/modelConfigService';
 import SceneEditModal from './SceneEditModal';
 import ShotEditModal from './ShotEditModal';
 
@@ -88,6 +89,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [localImageCount, setLocalImageCount] = useState(project.imageCount || 1);
   const [customDurationInput, setCustomDurationInput] = useState('');
 
+  const [modelConfigs, setModelConfigs] = useState<any[]>([]);
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [scriptPrompt, setScriptPrompt] = useState('');
@@ -122,7 +125,19 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
     // 初始化模型服务
     ModelService.initialize();
+
+    // 加载模型配置
+    loadModelConfigs();
   }, [project.id, project.title, project.targetDuration, project.language, project.visualStyle, project.imageSize, project.imageCount]);
+
+  const loadModelConfigs = async () => {
+    try {
+      const configs = await getAllModelConfigs();
+      setModelConfigs(configs);
+    } catch (error) {
+      console.error('Failed to load model configs:', error);
+    }
+  };
 
   // 自动保存 localScript
   useEffect(() => {
@@ -599,7 +614,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
               </div>
               {localDuration === 'custom' && (
                 <div className="pt-1">
-                  <input 
+                  <input
                     type="text"
                     value={customDurationInput}
                     onChange={(e) => setCustomDurationInput(e.target.value)}
@@ -608,6 +623,110 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
                   />
                 </div>
               )}
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-slate-800 pt-4">
+              <p className="text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-4">模型供应商</p>
+            </div>
+
+            {/* LLM Provider Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <Sparkles className="w-3 h-3" />
+                大语言模型 (LLM)
+              </label>
+              <div className="relative">
+                <select
+                  value={project.modelProviders?.llm || ''}
+                  onChange={(e) => {
+                    const currentProviders = project.modelProviders || {};
+                    updateProject({
+                      modelProviders: {
+                        ...currentProviders,
+                        llm: e.target.value || undefined
+                      }
+                    });
+                  }}
+                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  <option value="">默认模型</option>
+                  {modelConfigs.filter(c => c.modelType === 'llm').map(config => (
+                    <option key={config.id} value={config.id}>
+                      {config.provider} - {config.model || config.description}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                   <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Text2Image Provider Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <Image className="w-3 h-3" />
+                文生图模型
+              </label>
+              <div className="relative">
+                <select
+                  value={project.modelProviders?.text2image || ''}
+                  onChange={(e) => {
+                    const currentProviders = project.modelProviders || {};
+                    updateProject({
+                      modelProviders: {
+                        ...currentProviders,
+                        text2image: e.target.value || undefined
+                      }
+                    });
+                  }}
+                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  <option value="">默认模型</option>
+                  {modelConfigs.filter(c => c.modelType === 'text2image').map(config => (
+                    <option key={config.id} value={config.id}>
+                      {config.provider} - {config.model || config.description}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                   <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Image2Video Provider Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <Film className="w-3 h-3" />
+                图生视频模型
+              </label>
+              <div className="relative">
+                <select
+                  value={project.modelProviders?.image2video || ''}
+                  onChange={(e) => {
+                    const currentProviders = project.modelProviders || {};
+                    updateProject({
+                      modelProviders: {
+                        ...currentProviders,
+                        image2video: e.target.value || undefined
+                      }
+                    });
+                  }}
+                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  <option value="">默认模型</option>
+                  {modelConfigs.filter(c => c.modelType === 'image2video').map(config => (
+                    <option key={config.id} value={config.id}>
+                      {config.provider} - {config.model || config.description}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                   <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                </div>
+              </div>
             </div>
         </div>
 

@@ -1,5 +1,6 @@
-import { Aperture, ArrowLeft, ChevronLeft, ChevronRight, Clapperboard, FileText, Film, Github as GithubIcon, Key, PanelLeft, PanelRight, Settings, Twitter as TwitterIcon, Users } from 'lucide-react';
-import React, { useState } from 'react';
+import { Aperture, ChevronLeft, ChevronRight, Clapperboard, FileText, Film, Github as GithubIcon, Image as ImageIcon, Key, PanelLeft, PanelRight, Settings, Sparkles, Twitter as TwitterIcon, Users, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { getAllModelConfigs } from '../services/modelConfigService';
 import { ProjectState } from '../types';
 import ModalSettings from './ModalSettings';
 
@@ -68,6 +69,7 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpenSettings, onToggleSidebar, collapsed = false, projectName,project,updateProject }) => {
   const [showModelSettings, setShowModelSettings] = useState(false);
+  const [modelConfigs, setModelConfigs] = useState<any[]>([]);
   const navItems = [
     { id: 'script', label: '剧本与故事', icon: FileText, sub: '制作脚本' },
     { id: 'assets', label: '角色与场景', icon: Users, sub: '角色布景' },
@@ -84,6 +86,25 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
   const [localImageCount, setLocalImageCount] = useState(project.imageCount || 1);
   const [customDurationInput, setCustomDurationInput] = useState('');
   const [showSettings, setShowSettings] = useState(false);
+  const [localLlmProvider, setLocalLlmProvider] = useState(project.modelProviders?.llm || '');
+  const [localText2imageProvider, setLocalText2imageProvider] = useState(project.modelProviders?.text2image || '');
+  const [localImage2videoProvider, setLocalImage2videoProvider] = useState(project.modelProviders?.image2video || '');
+
+  // 加载模型配置
+  useEffect(() => {
+    if (showSettings) {
+      loadModelConfigs();
+    }
+  }, [showSettings]);
+
+  const loadModelConfigs = async () => {
+    try {
+      const configs = await getAllModelConfigs();
+      setModelConfigs(configs);
+    } catch (error) {
+      console.error('Failed to load model configs:', error);
+    }
+  };
 
   const openSettings = () => {
     setLocalTitle(project.title);
@@ -93,6 +114,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
     setLocalImageSize(project.imageSize || '1440x2560');
     setLocalImageCount(project.imageCount || 1);
     setCustomDurationInput(project.targetDuration === 'custom' ? project.targetDuration : '');
+    setLocalLlmProvider(project.modelProviders?.llm || '');
+    setLocalText2imageProvider(project.modelProviders?.text2image || '');
+    setLocalImage2videoProvider(project.modelProviders?.image2video || '');
     setShowSettings(true);
   };
 
@@ -104,7 +128,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
       language: localLanguage,
       visualStyle: localStyle,
       imageSize: localImageSize,
-      imageCount: localImageCount
+      imageCount: localImageCount,
+      modelProviders: {
+        ...project.modelProviders,
+        llm: localLlmProvider,
+        text2image: localText2imageProvider,
+        image2video: localImage2videoProvider
+      }
     });
     setShowSettings(false);
   };
@@ -127,7 +157,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
               onClick={() => setShowSettings(false)}
               className="text-slate-500 hover:text-white transition-colors"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
@@ -144,81 +174,87 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
               />
             </div>
 
-            {/* Language Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">输出语言</label>
-              <div className="relative">
-                <select
-                  value={localLanguage}
-                  onChange={(e) => setLocalLanguage(e.target.value)}
-                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
-                >
-                  {LANGUAGE_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-3 pointer-events-none">
-                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+            {/* Language and Visual Style in one row */}
+            <div className="grid grid-cols-2 gap-3">
+              {/* Language Selection */}
+              <div className="space-y-2">
+                <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">输出语言</label>
+                <div className="relative">
+                  <select
+                    value={localLanguage}
+                    onChange={(e) => setLocalLanguage(e.target.value)}
+                    className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  >
+                    {LANGUAGE_OPTIONS.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-3 pointer-events-none">
+                    <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Visual Style Selection */}
+              <div className="space-y-2">
+                <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">画面风格</label>
+                <div className="relative">
+                  <select
+                    value={localStyle}
+                    onChange={(e) => setLocalStyle(e.target.value)}
+                    className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  >
+                    {STYLE_OPTIONS.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-3 pointer-events-none">
+                    <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Visual Style Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">画面风格</label>
-              <div className="relative">
-                <select
-                  value={localStyle}
-                  onChange={(e) => setLocalStyle(e.target.value)}
-                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
-                >
-                  {STYLE_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-3 pointer-events-none">
-                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+            {/* Image Size and Image Count in one row */}
+            <div className="grid grid-cols-2 gap-3">
+              {/* Image Size Selection */}
+              <div className="space-y-2">
+                <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">图片尺寸</label>
+                <div className="relative">
+                  <select
+                    value={localImageSize}
+                    onChange={(e) => setLocalImageSize(e.target.value)}
+                    className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  >
+                    {IMAGE_SIZE_OPTIONS.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-3 pointer-events-none">
+                    <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Image Size Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">图片尺寸</label>
-              <div className="relative">
-                <select
-                  value={localImageSize}
-                  onChange={(e) => setLocalImageSize(e.target.value)}
-                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
-                >
-                  {IMAGE_SIZE_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-3 pointer-events-none">
-                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+              {/* Image Count Selection */}
+              <div className="space-y-2">
+                <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">组图数量</label>
+                <div className="relative">
+                  <select
+                    value={localImageCount}
+                    onChange={(e) => setLocalImageCount(Number(e.target.value))}
+                    className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  >
+                    {IMAGE_COUNT_OPTIONS.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-3 pointer-events-none">
+                    <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                  </div>
                 </div>
+                <p className="text-[10px] text-slate-600">文生图模型一次生成的画面数</p>
               </div>
-            </div>
-
-            {/* Image Count Selection */}
-            <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">组图数量</label>
-              <div className="relative">
-                <select
-                  value={localImageCount}
-                  onChange={(e) => setLocalImageCount(Number(e.target.value))}
-                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
-                >
-                  {IMAGE_COUNT_OPTIONS.map(opt => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-                <div className="absolute right-3 top-3 pointer-events-none">
-                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
-                </div>
-              </div>
-              <p className="text-[10px] text-slate-600">文生图模型一次生成的画面数</p>
             </div>
 
             {/* Duration Selection */}
@@ -250,6 +286,86 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                   />
                 </div>
               )}
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-slate-800 pt-4">
+              <p className="text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-4">模型供应商</p>
+            </div>
+
+            {/* LLM Provider Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <Sparkles className="w-3 h-3" />
+                大语言模型 (LLM)
+              </label>
+              <div className="relative">
+                <select
+                  value={localLlmProvider}
+                  onChange={(e) => setLocalLlmProvider(e.target.value)}
+                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  <option value="">默认模型</option>
+                  {modelConfigs.filter(c => c.modelType === 'llm').map(config => (
+                    <option key={config.id} value={config.id}>
+                      {config.provider} - {config.model || config.description}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Text2Image Provider Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <ImageIcon className="w-3 h-3" />
+                文生图模型
+              </label>
+              <div className="relative">
+                <select
+                  value={localText2imageProvider}
+                  onChange={(e) => setLocalText2imageProvider(e.target.value)}
+                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  <option value="">默认模型</option>
+                  {modelConfigs.filter(c => c.modelType === 'text2image').map(config => (
+                    <option key={config.id} value={config.id}>
+                      {config.provider} - {config.model || config.description}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                </div>
+              </div>
+            </div>
+
+            {/* Image2Video Provider Selection */}
+            <div className="space-y-2">
+              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                <Film className="w-3 h-3" />
+                图生视频模型
+              </label>
+              <div className="relative">
+                <select
+                  value={localImage2videoProvider}
+                  onChange={(e) => setLocalImage2videoProvider(e.target.value)}
+                  className="w-full bg-[#0c0c2d] border border-slate-800 text-white px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                >
+                  <option value="">默认模型</option>
+                  {modelConfigs.filter(c => c.modelType === 'image2video').map(config => (
+                    <option key={config.id} value={config.id}>
+                      {config.provider} - {config.model || config.description}
+                    </option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-3 pointer-events-none">
+                  <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -461,7 +577,10 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
       </button>
 
       {/* Model Settings Modal */}
-      <ModalSettings isOpen={showModelSettings} onClose={() => setShowModelSettings(false)} />
+      <ModalSettings
+        isOpen={showModelSettings}
+        onClose={() => setShowModelSettings(false)}
+      />
       {renderSettingsModal()}
     </aside>
   );

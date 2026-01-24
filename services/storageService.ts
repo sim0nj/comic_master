@@ -98,6 +98,12 @@ export const createNewProjectState = (): ProjectState => {
     scriptData: null,
     shots: [],
     isParsingScript: false,
+    // Default to empty providers (will be set by user)
+    modelProviders: {
+      llm: undefined,
+      text2image: undefined,
+      image2video: undefined,
+    },
   };
 };
 

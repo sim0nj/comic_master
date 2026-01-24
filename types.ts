@@ -88,6 +88,13 @@ export interface ProjectState {
 
   // Export Phase Data
   mergedVideoUrl?: string;
+
+  // AI Model Providers configuration (stores config IDs)
+  modelProviders?: {
+    llm?: string; // LLM model config ID
+    text2image?: string; // Text-to-image model config ID
+    image2video?: string; // Image-to-video model config ID
+  };
 }
 
 export interface AIModelConfig {

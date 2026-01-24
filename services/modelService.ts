@@ -65,6 +65,17 @@ const IMAGE_X = [
  */
 export class ModelService {
   private static initialized = false;
+  private static currentProjectModelProviders: any = null;
+
+  /**
+   * 设置当前项目的模型供应商
+   * @param modelProviders - 项目级别的模型供应商配置
+   */
+  static setCurrentProjectProviders(modelProviders: any) {
+    this.currentProjectModelProviders = modelProviders;
+    console.log('已设置项目模型供应商:', modelProviders);
+  }
+
   /**
    * 初始化模型配置
    * 在应用启动时调用，加载启用的模型配置
@@ -165,12 +176,25 @@ export class ModelService {
 
   /**
    * 获取当前启用的 LLM 提供商
+   * @param projectModelProviders - 项目级别的模型供应商配置
    */
-  private static async getEnabledLLMProvider(): Promise<'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu'> {
-    const config = await getEnabledConfigByType('llm');
+  private static async getEnabledLLMProvider(projectModelProviders?: { llm?: string }): Promise<'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu'> {
+    let config;
+
+    // 优先使用项目级别的供应商配置
+    if (projectModelProviders?.llm) {
+      const allConfigs = await getAllModelConfigs();
+      config = allConfigs.find(c => c.id === projectModelProviders.llm);
+      console.log(`使用项目配置的 LLM 供应商: ${config?.provider}`);
+    }
+
+    // 如果项目没有配置，使用系统默认的启用配置
+    if (!config) {
+      config = await getEnabledConfigByType('llm');
+    }
 
     if (!config) {
-      console.warn('未找到启用的 LLM 配置，使用默认的 doubao');
+      console.warn('未找到 LLM 配置，使用默认的 doubao');
       return 'doubao';
     }
 
@@ -182,12 +206,25 @@ export class ModelService {
 
   /**
    * 获取当前启用的文生图提供商
+   * @param projectModelProviders - 项目级别的模型供应商配置
    */
-  private static async getEnabledImageProvider(): Promise<'doubao' | 'gemini' | 'openai' | 'yunwu'> {
-    const config = await getEnabledConfigByType('text2image');
+  private static async getEnabledImageProvider(projectModelProviders?: { text2image?: string }): Promise<'doubao' | 'gemini' | 'openai' | 'yunwu'> {
+    let config;
+
+    // 优先使用项目级别的供应商配置
+    if (projectModelProviders?.text2image) {
+      const allConfigs = await getAllModelConfigs();
+      config = allConfigs.find(c => c.id === projectModelProviders.text2image);
+      console.log(`使用项目配置的文生图供应商: ${config?.provider}`);
+    }
+
+    // 如果项目没有配置，使用系统默认的启用配置
+    if (!config) {
+      config = await getEnabledConfigByType('text2image');
+    }
 
     if (!config) {
-      console.warn('未找到启用的文生图配置，使用默认的 doubao');
+      console.warn('未找到文生图配置，使用默认的 doubao');
       return 'doubao';
     }
 
@@ -199,12 +236,25 @@ export class ModelService {
 
   /**
    * 获取当前启用的图生视频提供商
+   * @param projectModelProviders - 项目级别的模型供应商配置
    */
-  private static async getEnabledVideoProvider(): Promise<'doubao' | 'gemini' | 'openai' | 'yunwu'> {
-    const config = await getEnabledConfigByType('image2video');
+  private static async getEnabledVideoProvider(projectModelProviders?: { image2video?: string }): Promise<'doubao' | 'gemini' | 'openai' | 'yunwu'> {
+    let config;
+
+    // 优先使用项目级别的供应商配置
+    if (projectModelProviders?.image2video) {
+      const allConfigs = await getAllModelConfigs();
+      config = allConfigs.find(c => c.id === projectModelProviders.image2video);
+      console.log(`使用项目配置的图生视频供应商: ${config?.provider}`);
+    }
+
+    // 如果项目没有配置，使用系统默认的启用配置
+    if (!config) {
+      config = await getEnabledConfigByType('image2video');
+    }
 
     if (!config) {
-      console.warn('未找到启用的图生视频配置，使用默认的 doubao');
+      console.warn('未找到图生视频配置，使用默认的 doubao');
       const storedApiKey = localStorage.getItem('cinegen_api_key') || '';
       setDoubaoApiKey(storedApiKey);
       return 'doubao';
@@ -222,7 +272,7 @@ export class ModelService {
    * @param language - 输出语言
    */
   static async parseScriptToData(rawText: string, language: string = "中文"): Promise<ScriptData> {
-    const provider = await this.getEnabledLLMProvider();
+    const provider = await this.getEnabledLLMProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 进行剧本分析`);
 
     switch (provider) {
@@ -246,7 +296,7 @@ export class ModelService {
    * @param scriptData - 剧本数据
    */
   static async generateShotList(scriptData: ScriptData): Promise<Shot[]> {
-    const provider = await this.getEnabledLLMProvider();
+    const provider = await this.getEnabledLLMProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成镜头清单`);
 
     switch (provider) {
@@ -276,7 +326,7 @@ export class ModelService {
     scene: any,
     sceneIndex: number
   ): Promise<Shot[]> {
-    const provider = await this.getEnabledLLMProvider();
+    const provider = await this.getEnabledLLMProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成场景 ${sceneIndex + 1} 的镜头清单`);
 
     switch (provider) {
@@ -307,7 +357,7 @@ export class ModelService {
     targetDuration: string = "60s",
     language: string = "中文"
   ): Promise<string> {
-    const provider = await this.getEnabledLLMProvider();
+    const provider = await this.getEnabledLLMProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成剧本`);
 
     switch (provider) {
@@ -320,7 +370,7 @@ export class ModelService {
       case 'yunwu':
         return await generateScriptYunwu(prompt, genre, targetDuration, language);
       case 'openai':
-      default: 
+      default:
         throw new Error(`暂不支持 ${provider} 提供商的剧本生成`);
     }
   }
@@ -336,7 +386,7 @@ export class ModelService {
     data: any,
     genre: string
   ): Promise<string> {
-    const provider = await this.getEnabledLLMProvider();
+    const provider = await this.getEnabledLLMProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成视觉提示词`);
 
     switch (provider) {
@@ -437,7 +487,7 @@ export class ModelService {
     imageSize: string = "2560x1440",
     imageCount: number = 1
   ): Promise<string> {
-    const provider = await this.getEnabledImageProvider();
+    const provider = await this.getEnabledImageProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成图片`);
 
     const image_rate = imageSize=="2560x1440" ? "16:9" : "9:16";
@@ -471,7 +521,7 @@ export class ModelService {
     duration: number = 5,
     full_frame: boolean = false
   ): Promise<string> {
-    const provider = await this.getEnabledVideoProvider();
+    const provider = await this.getEnabledVideoProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成视频`);
 
     switch (provider) {
