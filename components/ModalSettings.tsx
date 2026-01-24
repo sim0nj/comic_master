@@ -78,11 +78,6 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       return;
     }
 
-    if (formData.enabled && !formData.apiKey) {
-      alert('未配置 API Key 的配置不能启用');
-      return;
-    }
-
     const newConfig: AIModelConfig = {
       id: `${formData.provider}-${formData.modelType}-${Date.now()}`,
       provider: formData.provider,
@@ -124,11 +119,6 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     if (!editingConfig?.id) return;
     if (!formData.apiKey) {
       alert('请填写 API Key');
-      return;
-    }
-
-    if (formData.enabled && !formData.apiKey) {
-      alert('未配置 API Key 的配置不能启用');
       return;
     }
 
@@ -344,7 +334,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
 
               {/* Enable Toggle */}
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">启用状态</label>
+                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">系统默认</label>
                 <button
                   type="button"
                   onClick={() => setFormData({ ...formData, enabled: !formData.enabled })}
@@ -357,10 +347,10 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                   {formData.enabled ? (
                     <>
                       <Check className="w-4 h-4" />
-                      已启用 - 将用作此类型的默认配置
+                      系统默认 - 将用作此类型的系统默认配置
                     </>
                   ) : (
-                    '未启用'
+                    '非系统默认'
                   )}
                 </button>
               </div>
@@ -419,7 +409,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                               {config.enabled && (
                                 <span className="text-[12px] text-yellow-500 bg-yellow-900/20 border border-yellow-500/30 px-1.5 py-0.5 rounded-full font-mono uppercase tracking-wider flex items-center gap-1">
                                   <Check className="w-2.5 h-2.5" />
-                                  已启用
+                                  系统默认
                                 </span>
                               )}
                             </div>
@@ -451,7 +441,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                             }}
                             disabled={!config.enabled && !config.apiKey}
                             className={`p-2 transition-colors rounded-lg ${config.enabled ? 'text-indigo-400 hover:text-indigo-300 bg-indigo-900/20 hover:bg-indigo-900/30' : !config.apiKey ? 'text-slate-700 bg-transparent cursor-not-allowed' : 'text-slate-600 hover:text-slate-300 hover:bg-slate-800'}`}
-                            title={config.enabled ? '禁用' : config.apiKey ? '启用' : '请先配置 API Key'}
+                            title={config.enabled ? '非默认' : config.apiKey ? '系统默认' : '请先配置 API Key'}
                           >
                             <Check className="w-4 h-4" />
                           </button>

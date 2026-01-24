@@ -254,7 +254,7 @@ export const generateVideo = async (
   }
 
   // 处理结束图片（云雾API支持首尾帧）
-  if (endImageBase64 && !full_frame && runtimeVideoModel.indexOf("grok") !== -1) {
+  if (endImageBase64 && !full_frame && runtimeVideoModel.indexOf("grok") === -1) {
     requestBody.images.push(endImageBase64);
   }
 
