@@ -221,7 +221,8 @@ export const generateVideo = async (
   prompt: string,
   startImageBase64?: string,
   endImageBase64?: string,
-  duration: number = 5
+  duration: number = 5,
+  full_frame: boolean = false
 ): Promise<string> => {
   const endpoint = `${runtimeApiUrl}/v1/video/create`;
 
@@ -230,23 +231,19 @@ export const generateVideo = async (
     model: runtimeVideoModel || "veo3-fast-frames",
     prompt: prompt,
     enhance_prompt: true,
-      enable_upsample: true,
-      aspect_ratio: "16:9"
+    enable_upsample: true,
+    aspect_ratio: "16:9",
+    images: [],
   };
 
   // 处理起始图片
   if (startImageBase64) {
-    const images: any[] = [];
-    images.push(startImageBase64);
-    requestBody.images = images;
+    requestBody.images.push(startImageBase64);;
   }
 
   // 处理结束图片（云雾API支持首尾帧）
-  if (endImageBase64 && startImageBase64) {
-    const images: any[] = [];
-    images.push(startImageBase64);
-    images.push(endImageBase64);
-    requestBody.images = images;
+  if (endImageBase64 && !full_frame && runtimeVideoModel.indexOf("grok") !== -1) {
+    requestBody.images.push(endImageBase64);
   }
 
   const response = await retryOperation(async () => {

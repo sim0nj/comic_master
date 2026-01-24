@@ -551,9 +551,9 @@ export class ModelService {
       case 'doubao':
         return await generateVideoDoubao(prompt, startImageBase64, endImageBase64, duration,full_frame);
       case 'gemini':
-        return await generateVideoGemini(prompt, startImageBase64, endImageBase64);
+        return await generateVideoGemini(prompt, startImageBase64, endImageBase64,full_frame);
       case 'yunwu':
-        return await generateVideoYunwu(prompt, startImageBase64, endImageBase64, duration);
+        return await generateVideoYunwu(prompt, startImageBase64, endImageBase64, duration,full_frame);
       case 'minimax':
         return await generateVideoMinimax(prompt, startImageBase64, endImageBase64, duration, full_frame);
       case 'openai':

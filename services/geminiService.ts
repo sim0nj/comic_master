@@ -349,7 +349,7 @@ export const generateImage = async (prompt: string, referenceImages: string[] = 
  * Agent 8: Video Generation
  * Supports Start Image -> Video OR Start Image + End Image -> Video
  */
-export const generateVideo = async (prompt: string, startImageBase64?: string, endImageBase64?: string): Promise<string> => {
+export const generateVideo = async (prompt: string, startImageBase64?: string, endImageBase64?: string,full_frame:boolean=false): Promise<string> => {
   const ai = getAiClient();
   const apiKey = runtimeApiKey; // Use runtime key
   
@@ -364,7 +364,7 @@ export const generateVideo = async (prompt: string, startImageBase64?: string, e
   };
 
   // If end frame is provided, use lastFrame config
-  if (cleanEnd) {
+  if (cleanEnd && !full_frame) {
       config.lastFrame = {
         imageBytes: cleanEnd,
         mimeType: 'image/png'

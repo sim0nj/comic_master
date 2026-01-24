@@ -1,7 +1,7 @@
 import { Check, ChevronRight, Edit, Film, Globe, Image, Key, Music, Plus, Sparkles, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { createDefaultModelConfigs, deleteModelConfig, getAllModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
 import { triggerModelConfigChanged } from '../services/modelConfigEvents';
+import { createDefaultModelConfigs, deleteModelConfig, getAllModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
 import { AIModelConfig } from '../types';
 
 interface Props {
@@ -52,7 +52,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
     model: '',
     apiKey: '',
     apiUrl: '',
-    enabled: true,
+    enabled: false,
     description: ''
   });
 
