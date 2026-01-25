@@ -18,7 +18,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
   const progress = totalShots > 0 ? Math.round((completedShots.length / totalShots) * 100) : 0;
 
   // Calculate total duration roughly
-  const estimatedDuration = project.shots.reduce((acc, s) => acc + (s.interval?.duration || 3), 0);
+  const estimatedDuration = project.shots.reduce((acc, s) => acc + (s.interval?.duration || 5), 0);
 
   // Toggle shot selection
   const toggleShotSelection = (shotId: string) => {

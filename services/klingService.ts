@@ -91,7 +91,7 @@ export async function generateVideo(
       negative_prompt: '',
       cfg_scale: 0.5,
       mode: 'std',
-      duration: duration
+      duration: duration>6?10:5
     };
     if(runtimeVideoModel.indexOf("2-6")>0){
       requestBody.sound = 'on';

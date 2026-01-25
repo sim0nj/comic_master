@@ -44,6 +44,38 @@ const getModelTypesForProvider = (provider: AIModelConfig['provider']) => {
   return MODEL_TYPE_OPTIONS.filter(opt => supportedTypes.includes(opt.value as string));
 };
 
+// 根据模型类型获取颜色样式
+const getModelTypeColorStyles = (modelType: AIModelConfig['modelType']) => {
+  const colorMap = {
+    llm: {
+      text: 'text-green-400',
+      bg: 'bg-green-900/30',
+      border: 'border-green-500/30'
+    },
+    text2image: {
+      text: 'text-orange-400',
+      bg: 'bg-orange-900/30',
+      border: 'border-orange-500/30'
+    },
+    image2video: {
+      text: 'text-purple-400',
+      bg: 'bg-purple-900/30',
+      border: 'border-purple-500/30'
+    },
+    tts: {
+      text: 'text-blue-400',
+      bg: 'bg-blue-900/30',
+      border: 'border-blue-500/30'
+    },
+    stt: {
+      text: 'text-yellow-400',
+      bg: 'bg-yellow-900/30',
+      border: 'border-yellow-500/30'
+    }
+  };
+  return colorMap[modelType] || colorMap.llm;
+};
+
 const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
   const [configs, setConfigs] = useState<AIModelConfig[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -477,22 +509,23 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                   const providerOption = PROVIDER_OPTIONS.find(p => p.value === config.provider);
                   const modelTypeOption = MODEL_TYPE_OPTIONS.find(m => m.value === config.modelType);
                   const ModelIcon = modelTypeOption?.icon || Key;
+                  const typeColors = getModelTypeColorStyles(config.modelType);
 
                   return (
                     <div key={config.id} className={`p-4 transition-colors ${config.enabled ? 'bg-[#141414]' : 'bg-transparent'}`}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${config.enabled ? 'bg-indigo-900/30 ring-1 ring-indigo-500/30' : 'bg-slate-900'}`}>
-                            <ModelIcon className={`w-5 h-5 ${config.enabled ? 'text-indigo-400' : 'text-slate-600'}`} />
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${config.enabled ? typeColors.bg + ' ring-1 ' + typeColors.border : 'bg-slate-900'}`}>
+                            <ModelIcon className={`w-5 h-5 ${config.enabled ? typeColors.text : 'text-slate-600'}`} />
                           </div>
                           <div>
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-sm font-bold text-white">{providerOption?.label || config.provider}</span>
-                              <span className="text-[12px] text-green-600 bg-green-900 px-1.5 py-0.5 rounded font-mono">
+                              <span className={`text-[12px] ${getModelTypeColorStyles(config.modelType).text} ${getModelTypeColorStyles(config.modelType).bg} border ${getModelTypeColorStyles(config.modelType).border} px-1.5 py-0.5 rounded font-mono`}>
                                 {modelTypeOption?.label || config.modelType}
                               </span>
                               {config.description && (
-                              <span className="text-[12px] text-green-600 bg-slate-900 border border-green-500/30 px-1.5 py-0.5 rounded font-mono">
+                              <span className="text-[12px] text-slate-400 bg-slate-900 border border-slate-700 px-1.5 py-0.5 rounded font-mono">
                                   {config.description}
                               </span>
                               )}

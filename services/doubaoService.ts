@@ -528,7 +528,7 @@ export const generateVideo = async (
 
   const requestBody: any = {
     model: runtimeVideoModel,
-    duration: duration,
+    duration: duration>6?10:5,
     watermark: false,
     content: [{
       type: "text",
