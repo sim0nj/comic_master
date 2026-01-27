@@ -322,7 +322,7 @@ const pollVideoTask = async (taskId: string): Promise<string> => {
 export const generateImage = async (
   prompt: string,
   referenceImages: string[] = [],
-  ischaracter: boolean = false,
+  ischaracter: string = "character",
   localStyle: string = "写实",
   imageSize: string = "2560x1440",
   imageCount: number = 1

@@ -300,7 +300,7 @@ export const generateVisualPrompts = async (type: 'character' | 'scene', data: C
  * Agent 4 & 6: Image Generation
  */
 export const generateImage = async (prompt: string, referenceImages: string[] = [],
-    ischaracter: boolean = false,
+    imageType: string = "character",
   localStyle: string = "写实",
   imageSize: string = "2560x1440",
   imageCount: number = 1

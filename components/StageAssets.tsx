@@ -1,8 +1,9 @@
-import { Check, Download, Loader2, MapPin, Plus, RefreshCw, Shirt, Sparkles, Upload, User, Users, X } from 'lucide-react';
+import { Check, Download, Expand, Loader2, MapPin, RefreshCw, Shirt, Sparkles, Upload, User, Users, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
-import { CharacterVariation, ProjectState } from '../types';
+import { ProjectState } from '../types';
 import FileUploadModal from './FileUploadModal';
+import WardrobeModal from './WardrobeModal';
 
 
 interface Props {
@@ -22,9 +23,6 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   const [uploadingItem, setUploadingItem] = useState<{id: string, type: 'character'|'scene'}|null>(null);
 
   // Variation Form State
-  const [newVarName, setNewVarName] = useState("");
-  const [newVarPrompt, setNewVarPrompt] = useState("");
-  const [editingVisualPrompt, setEditingVisualPrompt] = useState("");
   const [editingSceneVisualPrompt, setEditingSceneVisualPrompt] = useState("");
 
   // Sync local state with project settings
@@ -32,16 +30,6 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
     setLocalStyle(project.visualStyle || '写实');
     setImageSize(project.imageSize || '2560x1440');
   }, [project.visualStyle, project.imageSize]);
-
-  // Sync visual prompt when character is selected
-  useEffect(() => {
-    if (selectedCharId && project.scriptData) {
-      const char = project.scriptData.characters.find(c => c.id === selectedCharId);
-      if (char) {
-        setEditingVisualPrompt(char.visualPrompt || '');
-      }
-    }
-  }, [selectedCharId, project.scriptData]);
 
   // Sync visual prompt when scene is selected
   useEffect(() => {
@@ -67,7 +55,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       }
 
       // Real API Call
-      const imageUrl = await ModelService.generateImage(prompt, [], type === 'character', localStyle, '2560x1440');
+      const imageUrl = await ModelService.generateImage(prompt, [], type, localStyle, '2560x1440',1,{},project.id);
 
       // Update state
       if (project.scriptData) {
@@ -125,65 +113,6 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
     setBatchProgress(null);
   };
 
-  const handleAddVariation = (charId: string) => {
-      if (!project.scriptData) return;
-      const newData = { ...project.scriptData };
-      const char = newData.characters.find(c => c.id === charId);
-      if (!char) return;
-
-      const newVar: CharacterVariation = {
-          id: `var-${Date.now()}`,
-          name: newVarName || "New Outfit",
-          visualPrompt: newVarPrompt || char.visualPrompt || "",
-          referenceImage: undefined
-      };
-
-      if (!char.variations) char.variations = [];
-      char.variations.push(newVar);
-      
-      updateProject({ scriptData: newData });
-      setNewVarName("");
-      setNewVarPrompt("");
-  };
-
-  const handleGenerateVariation = async (charId: string, varId: string) => {
-      const char = project.scriptData?.characters.find(c => c.id === charId);
-      const variation = char?.variations?.find(v => v.id === varId);
-      if (!char || !variation) return;
-
-      setProcessingState({ id: varId, type: 'character' });
-      try {
-          // IMPORTANT: Use Base Look as reference to maintain facial consistency
-          const refImages = char.referenceImage ? [char.referenceImage] : [];
-          // Enhance prompt to emphasize character consistency
-          const enhancedPrompt = `角色: ${char.name} 的造型，服装: ${variation.visualPrompt}。 保持面部特征与参考图一致。`;
-
-          const imageUrl = await ModelService.generateImage(enhancedPrompt, refImages, true, localStyle, imageSize);
-
-          const newData = { ...project.scriptData! };
-          const c = newData.characters.find(c => c.id === charId);
-          const v = c?.variations.find(v => v.id === varId);
-          if (v) v.referenceImage = imageUrl;
-
-          updateProject({ scriptData: newData });
-      } catch (e) {
-          console.error(e);
-          alert("Variation generation failed");
-      } finally {
-          setProcessingState(null);
-      }
-  };
-  
-  const handleDeleteVariation = (charId: string, varId: string) => {
-     if (!project.scriptData) return;
-      const newData = { ...project.scriptData };
-      const char = newData.characters.find(c => c.id === charId);
-      if (!char) return;
-
-      char.variations = char.variations.filter(v => v.id !== varId);
-      updateProject({ scriptData: newData });
-  };
-
   const handleFileUploadClick = (itemId: string, itemType: 'character' | 'scene') => {
     setUploadingItem({ id: itemId, type: itemType });
     setFileUploadModalOpen(true);
@@ -208,17 +137,6 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
     updateProject({ scriptData: newData });
     setUploadingItem(null);
-  };
-
-  const handleSaveVisualPrompt = () => {
-    if (!project.scriptData || !selectedCharId) return;
-
-    const newData = { ...project.scriptData };
-    const char = newData.characters.find(c => c.id === selectedCharId);
-    if (char) {
-      char.visualPrompt = editingVisualPrompt;
-      updateProject({ scriptData: newData });
-    }
   };
 
   const handleSaveSceneVisualPrompt = () => {
@@ -293,140 +211,17 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       )}
 
       {/* Wardrobe Modal */}
-      {selectedChar && (
-          <div className="absolute inset-0 z-40 bg-black/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
-              <div className="bg-[#0c0c2d] border border-slate-800 w-full max-w-4xl max-h-[90vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
-                  {/* Modal Header */}
-                  <div className="h-16 px-8 border-b border-slate-800 flex items-center justify-between shrink-0 bg-[#0e1230]">
-                      <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-slate-800 overflow-hidden border border-slate-700">
-                              {selectedChar.referenceImage && <img src={selectedChar.referenceImage} className="w-full h-full object-cover"/>}
-                          </div>
-                          <div>
-                              <h3 className="text-lg font-bold text-white">{selectedChar.name}</h3>
-                              <p className="text-xs text-slate-500 font-mono uppercase tracking-wider">服装造型（Wardrobe & Variations）</p>
-                          </div>
-                      </div>
-                      <button onClick={() => setSelectedCharId(null)} className="p-2 hover:bg-slate-800 rounded-full transition-colors">
-                          <X className="w-5 h-5 text-slate-500" />
-                      </button>
-                  </div>
-                  
-                  {/* Modal Body */}
-                  <div className="flex-1 overflow-y-auto p-8">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                          {/* Base Look */}
-                          <div>
-                              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                  <User className="w-4 h-4" /> 基础形象
-                              </h4>
-                              <div className="bg-[#0e0e28] p-4 rounded-xl border border-slate-800">
-                                  <div className="aspect-[3/4] bg-slate-900 rounded-lg overflow-hidden mb-4 relative cursor-pointer" onClick={() => setPreviewImage(selectedChar.referenceImage)}>
-                                      {selectedChar.referenceImage ? (
-                                          <img src={selectedChar.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
-                                      ) : (
-                                          <div className="flex items-center justify-center h-full text-slate-700">无图像</div>
-                                      )}
-                                      <div className="absolute top-2 left-2 px-2 py-1 bg-black/60 backdrop-blur rounded text-[12px] text-white font-bold uppercase border border-white/10">默认</div>
-                                      {selectedChar.referenceImage && (
-                                          <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
-                                              <span className="text-white/80 text-xs font-bold uppercase tracking-wider">点击预览</span>
-                                          </div>
-                                      )}
-                                  </div>
-                                  <div className="space-y-2">
-                                      <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold">视觉提示（Visual Prompt）</label>
-                                      <textarea
-                                          value={editingVisualPrompt}
-                                          onChange={(e) => setEditingVisualPrompt(e.target.value)}
-                                          onBlur={handleSaveVisualPrompt}
-                                          placeholder="输入角色的视觉描述..."
-                                          className="w-full bg-[#0c0c2d] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors resize-none h-24 font-mono"
-                                      />
-                                  </div>
-                              </div>
-                          </div>
-
-                          {/* Variations */}
-                          <div>
-                              <div className="flex items-center justify-between mb-4">
-                                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                      <Shirt className="w-4 h-4" /> 服装造型
-                                  </h4>
-                              </div>
-
-                              <div className="space-y-4">
-                                  {/* List */}
-                                  {(selectedChar.variations || []).map((variation) => (
-                                      <div key={variation.id} className="flex gap-4 p-4 bg-[#0e0e28] border border-slate-800 rounded-xl group hover:border-slate-700 transition-colors">
-                                          <div className={`w-20 h-24 bg-slate-900 rounded-lg flex-shrink-0 overflow-hidden relative border border-slate-800 ${variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? 'cursor-pointer' : ''}`} onClick={variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? () => setPreviewImage(variation.referenceImage) : undefined}>
-                                              {variation.referenceImage ? (
-                                                  <img src={variation.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
-                                              ) : (
-                                                  <div className="w-full h-full flex items-center justify-center">
-                                                      <Shirt className="w-6 h-6 text-slate-800" />
-                                                  </div>
-                                              )}
-                                              {variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) && (
-                                                  <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 hover:opacity-100 pointer-events-none">
-                                                      <span className="text-white/80 text-[10px] font-bold uppercase tracking-wider">预览</span>
-                                                  </div>
-                                              )}
-                                              {processingState?.type === 'character' && processingState?.id === variation.id && (
-                                                  <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                                                      <Loader2 className="w-4 h-4 text-white animate-spin" />
-                                                  </div>
-                                              )}
-                                          </div>
-                                          <div className="flex-1 min-w-0">
-                                              <div className="flex justify-between items-start mb-2">
-                                                  <h5 className="font-bold text-slate-200 text-sm">{variation.name}</h5>
-                                                  <button onClick={() => handleDeleteVariation(selectedChar.id, variation.id)} className="text-slate-600 hover:text-red-500"><X className="w-3 h-3"/></button>
-                                              </div>
-                                              <p className="text-[12px] text-slate-500 line-clamp-2 mb-3 font-mono">{variation.visualPrompt}</p>
-                                              <button
-                                                  onClick={() => handleGenerateVariation(selectedChar.id, variation.id)}
-                                                  disabled={!!processingState || !!batchProgress}
-                                                  className="text-[12px] font-bold uppercase tracking-wider text-indigo-400 hover:text-white flex items-center gap-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                              >
-                                                  <RefreshCw className={`w-3 h-3 ${processingState?.type === 'character' && processingState?.id === variation.id ? 'animate-spin' : ''}`} />
-                                                  {processingState?.type === 'character' && processingState?.id === variation.id ? '生成中...' : variation.referenceImage ? '重新生成' : '生成造型'}
-                                              </button>
-                                          </div>
-                                      </div>
-                                  ))}
-
-                                  {/* Add New */}
-                                  <div className="p-4 border border-dashed border-slate-800 rounded-xl bg-[#0e0e28]/50">
-                                      <div className="space-y-3">
-                                          <input 
-                                              type="text" 
-                                              placeholder="造型名称（示例：穿校服）" 
-                                              value={newVarName}
-                                              onChange={e => setNewVarName(e.target.value)}
-                                              className="w-full bg-[#0c0c2d] border border-slate-800 rounded px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-slate-600"
-                                          />
-                                          <textarea 
-                                              placeholder="服饰 / 状态的视觉描述……"
-                                              value={newVarPrompt}
-                                              onChange={e => setNewVarPrompt(e.target.value)}
-                                              className="w-full bg-[#0c0c2d] border border-slate-800 rounded px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-slate-600 resize-none h-16"
-                                          />
-                                          <button 
-                                              onClick={() => handleAddVariation(selectedChar.id)}
-                                              disabled={!newVarName || !newVarPrompt}
-                                              className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
-                                          >
-                                              <Plus className="w-3 h-3" /> 添加造型
-                                          </button>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
+      {selectedChar && project.scriptData && (
+        <WardrobeModal
+          character={project.scriptData.characters.find(c => c.id === selectedCharId) || null}
+          project={project}
+          localStyle={localStyle}
+          imageSize={imageSize}
+          processingState={processingState}
+          updateProject={updateProject}
+          onClose={() => setSelectedCharId(null)}
+          setPreviewImage={setPreviewImage}
+        />
       )}
 
       {/* Scene Edit Modal */}
@@ -600,30 +395,43 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                        </button>
                      </div>
                   )}
+                  <div className="absolute bottom-0 right-0 flex items-center justify-center gap-2 p-2"> 
                   {/* Action Buttons */}
                   {char.referenceImage && (
-                    <button
-                      onClick={() => handleDownloadImage(char.referenceImage!, char.name)}
-                      className="absolute bottom-2 right-20 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
-                      title="下载图片"
-                    >
-                      <Download className="w-3 h-3" />
-                    </button>
+                    <>
+                      {/* Preview Button */}
+                      <button
+                        onClick={(e) => { setPreviewImage(char.referenceImage); }}
+                        className="p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        title="全屏预览"
+                      >
+                        <Expand className="w-3 h-3" />
+                      </button>
+                      {/* Download Button */}
+                      <button
+                        onClick={(e) => { handleDownloadImage(char.referenceImage!, char.name); }}
+                        className="p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        title="下载图片"
+                      >
+                        <Download className="w-3 h-3" />
+                      </button>
+                    </>
                   )}
                   <button
-                            onClick={() => handleFileUploadClick(char.id, 'character')}
+                            onClick={(e) => { handleFileUploadClick(char.id, 'character'); }}
                             disabled={!!batchProgress || !!processingState}
-                            className="absolute bottom-2 right-11 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                            className="p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
                           >
                             <Upload className="w-3 h-3" />
                   </button>
                   <button
-                     onClick={() => setSelectedCharId(char.id)}
-                     className="absolute bottom-2 right-2 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                     onClick={(e) => { setSelectedCharId(char.id); }}
+                     className="p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
                      title="管理造型"
                   >
                       <Shirt className="w-3 h-3" />
                   </button>
+                  </div>
                 </div>
                 <div className="p-3 border-t border-slate-800 bg-[#0e1229]">
                   <div className="flex items-center justify-between mb-1">
@@ -680,7 +488,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       ) : (
                         <div className={`absolute inset-0 bg-black/60 opacity-0 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm ${batchProgress || processingState ? 'pointer-events-none opacity-50' : 'group-hover:opacity-100'}`}>
                           <button
-                            onClick={() => handleGenerateAsset('scene', scene.id)}
+                            onClick={(e) => {handleGenerateAsset('scene', scene.id); }}
                             disabled={!!batchProgress || !!processingState}
                             className="px-3 py-1.5 bg-black/50 text-white text-[12px] font-bold uppercase tracking-wider rounded flex items-center gap-2 border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
                           >
@@ -692,29 +500,12 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       <div className="absolute top-2 right-2 p-1 bg-indigo-500 text-white rounded shadow-lg backdrop-blur">
                         <Check className="w-3 h-3" />
                       </div>
-                      {/* Upload Button */}
-                      <button
-                        onClick={() => handleFileUploadClick(scene.id, 'scene')}
-                        disabled={!!batchProgress || !!processingState}
-                        className="absolute bottom-2 right-11 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
-                        title="上传图片"
-                      >
-                        <Upload className="w-3 h-3" />
-                      </button>
-                      {/* Download Button */}
-                      <button
-                        onClick={() => handleDownloadImage(scene.referenceImage!, scene.location)}
-                        className="absolute bottom-2 right-2 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
-                        title="下载图片"
-                      >
-                        <Download className="w-3 h-3" />
-                      </button>
                     </>
                   ) : (
                      <div className="w-full h-full flex flex-col items-center justify-center text-slate-700 p-4 text-center">
                        <MapPin className="w-10 h-10 mb-3 opacity-10" />
                        <button
-                          onClick={() => handleGenerateAsset('scene', scene.id)}
+                          onClick={(e) => { handleGenerateAsset('scene', scene.id); }}
                           disabled={processingState?.type === 'scene' && processingState?.id === scene.id || !!batchProgress || !!processingState}
                           className="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 rounded text-xs font-bold transition-all border border-slate-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                        >
@@ -723,6 +514,37 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                        </button>
                      </div>
                   )}
+                      {/* Preview Button */}
+                      <div className="absolute bottom-0 right-0 flex items-center justify-center gap-2 p-2"> 
+                      {scene.referenceImage && (
+                          <>
+                      <button
+                        onClick={(e) => {setPreviewImage(scene.referenceImage); }}
+                        className="p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        title="全屏预览"
+                      >
+                        <Expand className="w-3 h-3" />
+                      </button>
+                      {/* Download Button */}
+                      <button
+                        onClick={(e) => { handleDownloadImage(scene.referenceImage!, scene.location); }}
+                        className="p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        title="下载图片"
+                      >
+                        <Download className="w-3 h-3" />
+                      </button>
+                      </>
+                      )}
+                    {/* Upload Button */}
+                    <button
+                      onClick={(e) => { handleFileUploadClick(scene.id, 'scene'); }}
+                      disabled={!!batchProgress || !!processingState}
+                      className="p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                      title="上传图片"
+                      >
+                      <Upload className="w-3 h-3" />
+                    </button>
+                    </div>
                 </div>
                 <div className="p-3 border-t border-slate-800 bg-[#0e1229]">
                   <div className="flex justify-between items-center mb-1">

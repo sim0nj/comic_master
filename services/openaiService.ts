@@ -377,7 +377,7 @@ export const generateVisualPrompts = async (
 export const generateImage = async (
   prompt: string,
   referenceImages: string[] = [],
-  ischaracter: boolean = false,
+  imageType: string = "character",
   localStyle: string = "写实",
   imageSize: string = "2560x1440",
   imageCount: number = 1
@@ -394,7 +394,7 @@ export const generateImage = async (
 
   // 构建提示词
   let finalPrompt = prompt;
-  if (!ischaracter && referenceImages.length > 0) {
+  if (imageType!="character" && referenceImages.length > 0) {
     finalPrompt = PROMPT_TEMPLATES.IMAGE_GENERATION_WITH_REFERENCE(prompt);
   }
 

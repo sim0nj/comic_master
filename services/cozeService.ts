@@ -163,3 +163,101 @@ export const mergeVideos = async (videoUrls: string[]): Promise<string> => {
     throw error;
   }
 };
+
+/**
+ * 工作流执行状态
+ */
+export enum WorkflowStatus {
+  RUNNING = "running",
+  SUCCEEDED = "succeeded",
+  FAILED = "failed",
+  CANCELLED = "cancelled",
+  UNKNOWN = "unknown"
+}
+
+/**
+ * 工作流执行结果
+ */
+interface WorkflowExecutionResult {
+  status: WorkflowStatus;
+  data?: any;
+  error?: string;
+}
+
+/**
+ * 提交工作流执行
+ * @param workflowId 工作流 ID
+ * @param parameters 工作流参数
+ * @returns 执行 ID
+ */
+export const submitWorkflow = async (
+  videoUrls: string[]
+): Promise<string> => {
+  const endpoint = COZE_CONFIG.API_ENDPOINT;
+
+  const requestBody = {
+    workflow_id: runtimeWorkflowId,
+    parameters: {
+      video_url: videoUrls
+    },
+    is_async: true
+  };
+
+  const response = await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
+  });
+
+  console.log("工作流提交响应:", JSON.stringify(response));
+  // Coze API 返回格式: {code: 0, data: {id: "workflow_execution_id", ...}}
+  const execute_id = response.execute_id;
+  if (!execute_id) {
+    throw new Error("视频生成失败");
+  }
+
+  // 轮询任务状态
+  const videoUrl = await pollVideoTask(execute_id);
+  return videoUrl;
+
+  throw new Error("未找到工作流执行 ID");
+};
+
+// 轮询视频生成任务
+const pollVideoTask = async (executionId: string): Promise<string> => {
+  const endpoint = `${COZE_CONFIG.API_ENDPOINT.replace('/workflow/run', `/workflows/${runtimeWorkflowId}/run_histories/${executionId}`)}`;
+
+  let attempts = 0;
+  const maxAttempts = 120; // 最多轮询 5 分钟
+
+  while (attempts < maxAttempts) {
+    const response = await fetchWithRetry(endpoint, {
+      method: "GET",
+    });
+
+    const status = response.code;
+    if (status === 0 && response?.data.length > 0) {
+      if (response?.data[0].execute_status=='Success') {
+        try {
+          const parsedData = JSON.parse(response.data[0].output);
+          console.log("视频合并成功:", parsedData);
+          if (parsedData.Output) {
+            const out = JSON.parse(parsedData.Output);
+            console.log("视频合并成功:", out.output);
+            return out.output;
+          }
+        } catch (e) {
+          console.error("解析 data 字段失败:", e);
+        }
+      }
+    } else {
+      throw new Error(`视频合成失败: ${response.msg}`);
+    }
+
+    // 等待 5 秒后继续轮询
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    attempts++;
+  }
+
+  throw new Error("视频生成超时");
+};
+

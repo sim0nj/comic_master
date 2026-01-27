@@ -416,7 +416,7 @@ export const generateVisualPrompts = async (
 export const generateImage = async (
   prompt: string,
   referenceImages: string[] = [],
-  ischaracter: boolean = false,
+  imageType: string = "character",
   localStyle: string = "写实",
   imageSize: string = "2560x1440",
   imageCount: number = 1
@@ -424,7 +424,7 @@ export const generateImage = async (
   const endpoint = `${runtimeApiUrl}/images/generations`;
   const requestBody: any = {
     model: runtimeImageModel,
-    size: ischaracter?"1728x2304":imageSize,
+    size: imageType=="character"?"1728x2304":imageSize,
     //sequential_image_generation: ischaracter?"disabled":"auto",
     watermark: false
   };
@@ -444,7 +444,7 @@ export const generateImage = async (
     // 可能需要使用 image_url 参数或其他方式
     requestBody.image = referenceImages;
   }
-  if(!ischaracter && referenceImages.length>0){
+  if(imageType!="character" && referenceImages.length>0){
     finalPrompt = PROMPT_TEMPLATES.IMAGE_GENERATION_WITH_REFERENCE(prompt);
   }
   requestBody.prompt = finalPrompt;

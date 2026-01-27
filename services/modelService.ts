@@ -572,11 +572,12 @@ export class ModelService {
   static async generateImage(
     prompt: string,
     referenceImages: string[] = [],
-    isCharacter: boolean = false,
+    imageType: string = "character",
     localStyle: string = "写实",
     imageSize: string = "2560x1440",
     imageCount: number = 1,
-    shotprovider: any = null
+    shotprovider: any = null,
+    projectid: string = "",
   ): Promise<string> {
     const provider = await this.getEnabledImageProvider(shotprovider || this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成图片`);
@@ -590,16 +591,16 @@ export class ModelService {
     // 调用各个模型服务生成图片
     switch (provider) {
       case 'doubao':
-        imageUrlOrBase64 = await generateImageDoubao(new_prompt, referenceImages, isCharacter, localStyle, imageSize,imageCount);
+        imageUrlOrBase64 = await generateImageDoubao(new_prompt, referenceImages, imageType, localStyle, imageSize,imageCount);
         break;
       case 'gemini':
-        imageUrlOrBase64 = await generateImageGemini(new_prompt, referenceImages,isCharacter, localStyle, imageSize,imageCount);
+        imageUrlOrBase64 = await generateImageGemini(new_prompt, referenceImages,imageType, localStyle, imageSize,imageCount);
         break;
       case 'yunwu':
-        imageUrlOrBase64 = await generateImageYunwu(new_prompt, referenceImages, isCharacter, localStyle, imageSize,imageCount);
+        imageUrlOrBase64 = await generateImageYunwu(new_prompt, referenceImages, imageType, localStyle, imageSize,imageCount);
         break;
       case 'openai':
-        imageUrlOrBase64 = await generateImageOpenai(new_prompt, referenceImages, isCharacter, localStyle, imageSize, imageCount);
+        imageUrlOrBase64 = await generateImageOpenai(new_prompt, referenceImages, imageType, localStyle, imageSize, imageCount);
         break;
       default:
         throw new Error(`暂不支持 ${provider} 提供商的文生图`);
@@ -611,7 +612,7 @@ export class ModelService {
       const isBase64 = imageUrlOrBase64.startsWith('data:');
 
       const uploadResponse = await uploadFileToService({
-        fileType: 'image_'+provider,
+        fileType: projectid+'_'+imageType+'_'+provider,
         fileUrl: isBase64 ? undefined : imageUrlOrBase64,
         base64Data: isBase64 ? imageUrlOrBase64 : undefined
       });
@@ -644,7 +645,8 @@ export class ModelService {
     endImageBase64?: string,
     duration: number = 5,
     full_frame: boolean = false,
-    shotprovider: any = null
+    shotprovider: any = null,
+    projectid: string = "",
   ): Promise<string> {
     const provider = await this.getEnabledVideoProvider(shotprovider || this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成视频`);
@@ -678,7 +680,7 @@ export class ModelService {
     // 将模型返回的视频 URL 转换成本地服务器文件
     try {
       const uploadResponse = await uploadFileToService({
-        fileType: 'video_'+provider,
+        fileType: projectid+'_video_'+provider,
         fileUrl: videoUrl
       });
 

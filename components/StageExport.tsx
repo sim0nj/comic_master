@@ -1,7 +1,8 @@
 import { BarChart3, Check, CheckCircle, Clock, Download, Film, Layers, Loader2, Share2, X } from 'lucide-react';
 import React, { useState } from 'react';
-import { mergeVideos } from '../services/cozeService';
+import { initializeCozeConfig, submitWorkflow } from '../services/cozeService';
 import { ProjectState } from '../types';
+import { uploadFileToService } from "../utils/fileUploadUtils";
 
 interface Props {
   project: ProjectState;
@@ -54,7 +55,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
       setMergeError("请至少选择一个镜头进行合并");
       return;
     }
-
+    initializeCozeConfig();
     setIsMerging(true);
     setMergeError(null);
 
@@ -68,7 +69,23 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
       console.log("开始合并视频...", videoUrls.length, "个视频片段");
 
       // 调用 Coze API 合并视频
-      const mergedUrl = await mergeVideos(videoUrls);
+      let mergedUrl = await submitWorkflow(videoUrls);
+
+      try {
+        const uploadResponse = await uploadFileToService({
+          fileType: project.id+'_video',
+          fileUrl: mergedUrl
+        });
+
+        if (uploadResponse.success && uploadResponse.data?.fileUrl) {
+          console.log(`视频已上传到本地服务器: ${uploadResponse.data.fileUrl}`);
+          mergedUrl = uploadResponse.data.fileUrl;
+        } else {
+          console.error(`视频上传失败: ${uploadResponse.error}`);
+        }
+      } catch (error) {
+        console.error(`处理生成图片时出错:`, error);
+      }
 
       console.log("视频合并完成:", mergedUrl);
 
@@ -243,9 +260,9 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                <button
                   onClick={handleMerge}
-                  disabled={selectedShotIds.size === 0 || isMerging || !!project.mergedVideoUrl}
+                  disabled={selectedShotIds.size === 0 || isMerging}
                   className={`h-12 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all border ${
-                 selectedShotIds.size > 0 && !isMerging && !project.mergedVideoUrl
+                 selectedShotIds.size > 0 && !isMerging
                    ? 'bg-white text-black hover:bg-slate-200 border-white shadow-lg shadow-white/5'
                    : 'bg-slate-900 text-slate-600 border-slate-800 cursor-not-allowed'
                }`}>
@@ -257,7 +274,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                  ) : project.mergedVideoUrl ? (
                    <>
                      <CheckCircle className="w-4 h-4 text-green-500" />
-                     已合并
+                     重新合并
                    </>
                  ) : (
                    <>
@@ -274,7 +291,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                     !project.mergedVideoUrl ? 'cursor-not-allowed opacity-50' : ''
                   }`}>
                  <Download className="w-4 h-4" />
-                 Download Master (.mp4)
+                 下载视频 (.mp4)
                </button>
              </div>
 
