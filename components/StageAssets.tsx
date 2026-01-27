@@ -1,7 +1,8 @@
-import { Check, Loader2, MapPin, Plus, RefreshCw, Shirt, Sparkles, User, Users, X } from 'lucide-react';
+import { Check, Download, Loader2, MapPin, Plus, RefreshCw, Shirt, Sparkles, Upload, User, Users, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { CharacterVariation, ProjectState } from '../types';
+import FileUploadModal from './FileUploadModal';
 
 
 interface Props {
@@ -13,19 +14,44 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   const [processingState, setProcessingState] = useState<{id: string, type: 'character'|'scene'}|null>(null);
   const [batchProgress, setBatchProgress] = useState<{current: number, total: number} | null>(null);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
+  const [selectedSceneId, setSelectedSceneId] = useState<string | null>(null);
   const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
   const [imageSize, setImageSize] = useState(project.imageSize || '2560x1440');
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [fileUploadModalOpen, setFileUploadModalOpen] = useState(false);
+  const [uploadingItem, setUploadingItem] = useState<{id: string, type: 'character'|'scene'}|null>(null);
 
   // Variation Form State
   const [newVarName, setNewVarName] = useState("");
   const [newVarPrompt, setNewVarPrompt] = useState("");
+  const [editingVisualPrompt, setEditingVisualPrompt] = useState("");
+  const [editingSceneVisualPrompt, setEditingSceneVisualPrompt] = useState("");
 
   // Sync local state with project settings
   useEffect(() => {
     setLocalStyle(project.visualStyle || '写实');
     setImageSize(project.imageSize || '2560x1440');
   }, [project.visualStyle, project.imageSize]);
+
+  // Sync visual prompt when character is selected
+  useEffect(() => {
+    if (selectedCharId && project.scriptData) {
+      const char = project.scriptData.characters.find(c => c.id === selectedCharId);
+      if (char) {
+        setEditingVisualPrompt(char.visualPrompt || '');
+      }
+    }
+  }, [selectedCharId, project.scriptData]);
+
+  // Sync visual prompt when scene is selected
+  useEffect(() => {
+    if (selectedSceneId && project.scriptData) {
+      const scene = project.scriptData.scenes.find(s => s.id === selectedSceneId);
+      if (scene) {
+        setEditingSceneVisualPrompt(scene.visualPrompt || '');
+      }
+    }
+  }, [selectedSceneId, project.scriptData]);
 
   const handleGenerateAsset = async (type: 'character' | 'scene', id: string) => {
     setProcessingState({ id, type });
@@ -153,9 +179,82 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       const newData = { ...project.scriptData };
       const char = newData.characters.find(c => c.id === charId);
       if (!char) return;
-      
+
       char.variations = char.variations.filter(v => v.id !== varId);
       updateProject({ scriptData: newData });
+  };
+
+  const handleFileUploadClick = (itemId: string, itemType: 'character' | 'scene') => {
+    setUploadingItem({ id: itemId, type: itemType });
+    setFileUploadModalOpen(true);
+  };
+
+  const handleFileUploadSuccess = (fileUrl: string) => {
+    if (!project.scriptData || !uploadingItem) return;
+
+    const newData = { ...project.scriptData };
+
+    if (uploadingItem.type === 'character') {
+      const char = newData.characters.find(c => c.id === uploadingItem.id);
+      if (char) {
+        char.referenceImage = fileUrl;
+      }
+    } else {
+      const scene = newData.scenes.find(s => s.id === uploadingItem.id);
+      if (scene) {
+        scene.referenceImage = fileUrl;
+      }
+    }
+
+    updateProject({ scriptData: newData });
+    setUploadingItem(null);
+  };
+
+  const handleSaveVisualPrompt = () => {
+    if (!project.scriptData || !selectedCharId) return;
+
+    const newData = { ...project.scriptData };
+    const char = newData.characters.find(c => c.id === selectedCharId);
+    if (char) {
+      char.visualPrompt = editingVisualPrompt;
+      updateProject({ scriptData: newData });
+    }
+  };
+
+  const handleSaveSceneVisualPrompt = () => {
+    if (!project.scriptData || !selectedSceneId) return;
+
+    const newData = { ...project.scriptData };
+    const scene = newData.scenes.find(s => s.id === selectedSceneId);
+    if (scene) {
+      scene.visualPrompt = editingSceneVisualPrompt;
+      updateProject({ scriptData: newData });
+    }
+  };
+
+  const handleDownloadImage = async (imageUrl: string, charName: string) => {
+    try {
+      // Fetch the image
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${charName}.png`;
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('下载失败，请重试');
+    }
   };
 
   if (!project.scriptData) return (
@@ -235,7 +334,16 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                           </div>
                                       )}
                                   </div>
-                                  <p className="text-xs text-slate-500 leading-relaxed font-mono">{selectedChar.visualPrompt}</p>
+                                  <div className="space-y-2">
+                                      <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold">视觉提示（Visual Prompt）</label>
+                                      <textarea
+                                          value={editingVisualPrompt}
+                                          onChange={(e) => setEditingVisualPrompt(e.target.value)}
+                                          onBlur={handleSaveVisualPrompt}
+                                          placeholder="输入角色的视觉描述..."
+                                          className="w-full bg-[#0c0c2d] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors resize-none h-24 font-mono"
+                                      />
+                                  </div>
                               </div>
                           </div>
 
@@ -321,6 +429,91 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           </div>
       )}
 
+      {/* Scene Edit Modal */}
+      {selectedSceneId && project.scriptData && (() => {
+        const selectedScene = project.scriptData.scenes.find(s => s.id === selectedSceneId);
+        if (!selectedScene) return null;
+
+        return (
+          <div className="absolute inset-0 z-40 bg-black/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
+            <div className="bg-[#0c0c2d] border border-slate-800 w-full max-w-2xl rounded-2xl flex flex-col shadow-2xl overflow-hidden">
+              {/* Modal Header */}
+              <div className="h-16 px-8 border-b border-slate-800 flex items-center justify-between shrink-0 bg-[#0e1230]">
+                <div className="flex items-center gap-4">
+                  <MapPin className="w-10 h-10 rounded-full bg-slate-800 p-2.5 text-emerald-500" />
+                  <div>
+                    <h3 className="text-lg font-bold text-white">{selectedScene.location}</h3>
+                    <p className="text-xs text-slate-500 font-mono uppercase tracking-wider">场景编辑（Scene Edit）</p>
+                  </div>
+                </div>
+                <button onClick={() => setSelectedSceneId(null)} className="p-2 hover:bg-slate-800 rounded-full transition-colors">
+                  <X className="w-5 h-5 text-slate-500" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="flex-1 overflow-y-auto p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Scene Image */}
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                      <MapPin className="w-4 h-4" /> 场景图像
+                    </h4>
+                    <div className="bg-[#0e0e28] p-4 rounded-xl border border-slate-800">
+                      <div className="aspect-[16/9] bg-slate-900 rounded-lg overflow-hidden mb-4 relative cursor-pointer" onClick={() => setPreviewImage(selectedScene.referenceImage)}>
+                        {selectedScene.referenceImage ? (
+                          <img src={selectedScene.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
+                        ) : (
+                          <div className="flex items-center justify-center h-full text-slate-700">无图像</div>
+                        )}
+                        {selectedScene.referenceImage && (
+                          <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
+                            <span className="text-white/80 text-xs font-bold uppercase tracking-wider">点击预览</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Scene Info */}
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                      <Check className="w-4 h-4" /> 场景信息
+                    </h4>
+                    <div className="space-y-4">
+                      <div className="bg-[#0e0e28] p-4 rounded-xl border border-slate-800">
+                        <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold block mb-2">时间</label>
+                        <p className="text-sm text-white">{selectedScene.time}</p>
+                      </div>
+                      <div className="bg-[#0e0e28] p-4 rounded-xl border border-slate-800">
+                        <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold block mb-2">氛围</label>
+                        <p className="text-sm text-white">{selectedScene.atmosphere}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Visual Prompt */}
+                <div className="mt-6">
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" /> 视觉提示（Visual Prompt）
+                  </h4>
+                  <div className="bg-[#0e0e28] p-4 rounded-xl border border-slate-800">
+                    <textarea
+                      value={editingSceneVisualPrompt}
+                      onChange={(e) => setEditingSceneVisualPrompt(e.target.value)}
+                      onBlur={handleSaveSceneVisualPrompt}
+                      placeholder="输入场景的视觉描述..."
+                      className="w-full bg-[#0c0c2d] border border-slate-800 rounded-lg px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-32 font-mono"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Header - Consistent with Director */}
       <div className="h-16 border-b border-slate-800 bg-[#0e1230] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
@@ -383,8 +576,9 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                           <button
                             onClick={() => handleGenerateAsset('character', char.id)}
                             disabled={!!batchProgress || !!processingState}
-                            className="px-3 py-1.5 bg-black/50 text-white text-[12px] font-bold uppercase tracking-wider rounded border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-3 py-1.5 bg-black/50 text-white text-[12px] font-bold uppercase flex items-center gap-2 tracking-wider rounded border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
                           >
+                            <Sparkles className="w-3 h-3" />
                             重新生成
                           </button>
                         </div>
@@ -406,25 +600,42 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                        </button>
                      </div>
                   )}
-                  {/* Manage Button */}
-                  <button 
+                  {/* Action Buttons */}
+                  {char.referenceImage && (
+                    <button
+                      onClick={() => handleDownloadImage(char.referenceImage!, char.name)}
+                      className="absolute bottom-2 right-20 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                      title="下载图片"
+                    >
+                      <Download className="w-3 h-3" />
+                    </button>
+                  )}
+                  <button
+                            onClick={() => handleFileUploadClick(char.id, 'character')}
+                            disabled={!!batchProgress || !!processingState}
+                            className="absolute bottom-2 right-11 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                          >
+                            <Upload className="w-3 h-3" />
+                  </button>
+                  <button
                      onClick={() => setSelectedCharId(char.id)}
                      className="absolute bottom-2 right-2 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
-                     title="Manage Wardrobe"
+                     title="管理造型"
                   >
                       <Shirt className="w-3 h-3" />
                   </button>
                 </div>
                 <div className="p-3 border-t border-slate-800 bg-[#0e1229]">
+                  <div className="flex items-center justify-between mb-1">
                   <h3 className="font-bold text-slate-200 truncate text-sm">{char.name}</h3>
-                  <div className="flex items-center justify-between mt-1">
-                     <span className="text-[12px] text-slate-500 font-mono uppercase bg-slate-900 px-1.5 py-0.5 rounded">{char.gender}</span>
+                     <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-800 uppercase font-mono">{char.gender}</span>
                      {char.variations && char.variations.length > 0 && (
                          <span className="text-[11px] text-slate-400 font-mono flex items-center gap-1">
                              <Shirt className="w-2.5 h-2.5" /> +{char.variations.length}
                          </span>
                      )}
                   </div>
+                  <p className="text-[12px] text-slate-500 line-clamp-1">{char.personality}</p>
                 </div>
               </div>
             ))}
@@ -458,7 +669,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {project.scriptData.scenes.map((scene) => (
               <div key={scene.id} className="bg-[#0c0c2d] border border-slate-800 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
-                <div className="aspect-video bg-slate-900 relative">
+                <div className="aspect-[16/9] bg-slate-900 relative overflow-hidden">
                   {scene.referenceImage ? (
                     <>
                       <img src={scene.referenceImage} alt={scene.location} className="w-full h-full object-cover" />
@@ -471,8 +682,9 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                           <button
                             onClick={() => handleGenerateAsset('scene', scene.id)}
                             disabled={!!batchProgress || !!processingState}
-                            className="px-3 py-1.5 bg-black/50 text-white text-[12px] font-bold uppercase tracking-wider rounded border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-3 py-1.5 bg-black/50 text-white text-[12px] font-bold uppercase tracking-wider rounded flex items-center gap-2 border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
                           >
+                            <Sparkles className="w-3 h-3" />
                             重新生成
                           </button>
                         </div>
@@ -480,6 +692,23 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       <div className="absolute top-2 right-2 p-1 bg-indigo-500 text-white rounded shadow-lg backdrop-blur">
                         <Check className="w-3 h-3" />
                       </div>
+                      {/* Upload Button */}
+                      <button
+                        onClick={() => handleFileUploadClick(scene.id, 'scene')}
+                        disabled={!!batchProgress || !!processingState}
+                        className="absolute bottom-2 right-11 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        title="上传图片"
+                      >
+                        <Upload className="w-3 h-3" />
+                      </button>
+                      {/* Download Button */}
+                      <button
+                        onClick={() => handleDownloadImage(scene.referenceImage!, scene.location)}
+                        className="absolute bottom-2 right-2 p-2 bg-black/50 text-white rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        title="下载图片"
+                      >
+                        <Download className="w-3 h-3" />
+                      </button>
                     </>
                   ) : (
                      <div className="w-full h-full flex flex-col items-center justify-center text-slate-700 p-4 text-center">
@@ -500,13 +729,46 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                      <h3 className="font-bold text-slate-200 text-sm truncate">{scene.location}</h3>
                      <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-800 uppercase font-mono">{scene.time}</span>
                   </div>
-                  <p className="text-[12px] text-slate-500 line-clamp-1">{scene.atmosphere}</p>
+                  <p className="text-[12px] text-slate-500 line-clamp-1 mb-2">{scene.atmosphere}</p>
+                  {scene.visualPrompt && (
+                    <div className="mt-2 pt-2 border-t border-slate-800/50">
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-[11px] text-slate-400 font-mono line-clamp-2 flex-1">{scene.visualPrompt}</p>
+                        <button
+                          onClick={() => setSelectedSceneId(scene.id)}
+                          className="text-[11px] text-emerald-400 hover:text-emerald-300 flex-shrink-0 font-bold uppercase tracking-wider"
+                        >
+                          编辑
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  {!scene.visualPrompt && scene.referenceImage && (
+                    <div className="mt-2 pt-2 border-t border-slate-800/50">
+                      <button
+                        onClick={() => setSelectedSceneId(scene.id)}
+                        className="w-full text-[11px] text-slate-500 hover:text-emerald-400 font-mono text-center py-1 border border-dashed border-slate-700 rounded hover:border-emerald-500/50 transition-colors"
+                      >
+                        + 添加视觉提示
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </section>
       </div>
+
+      {/* File Upload Modal */}
+      <FileUploadModal
+        isOpen={fileUploadModalOpen}
+        onClose={() => setFileUploadModalOpen(false)}
+        onUploadSuccess={handleFileUploadSuccess}
+        fileType={uploadingItem?.type === 'scene' ? 'scene' : 'yunwu_image'}
+        acceptTypes="image/png,image/jpeg,image/jpg"
+        title={uploadingItem?.type === 'scene' ? '上传场景图片' : '上传角色图片'}
+      />
 
       {/* Fullscreen Image Preview Modal */}
       {previewImage && (

@@ -72,9 +72,9 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-600 hover:text-white transition-colors"
+          className="p-2 absolute top-4 right-4 text-slate-600 hover:bg-slate-800 rounded-full transition-colors"
         >
-          <X className="w-4 h-4" />
+          <X className="w-5 h-5 text-slate-500" />
         </button>
 
         {/* Header */}

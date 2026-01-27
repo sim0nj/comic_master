@@ -216,6 +216,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
   const saveCharacter = () => {
     if (!project.scriptData || !editingCharacterId || !tempCharacter.name) return;
+    tempCharacter.visualPrompt = "";
     const updatedCharacters = project.scriptData.characters.map(c =>
       c.id === editingCharacterId ? { ...c, ...tempCharacter } as Character : c
     );
@@ -269,6 +270,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
   const saveScene = () => {
     if (!project.scriptData || !editingSceneId || !tempScene.location) return;
+    tempScene.visualPrompt = "";
     const updatedScenes = project.scriptData.scenes.map(s =>
       s.id === editingSceneId ? { ...s, ...tempScene } as Scene : s
     );
