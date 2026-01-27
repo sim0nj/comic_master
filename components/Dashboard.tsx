@@ -86,7 +86,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
     } catch (error: any) {
       console.error('Import failed:', error);
       // 如果是用户取消，不显示错误提示
-      if (error.message !== 'User cancelled file selection' && error.message !== 'No file selected') {
+      if (error.message !== 'Import cancelled' && error.message !== 'No file selected') {
         alert(error.message || '导入项目失败');
       }
     } finally {
@@ -156,6 +156,67 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
     }
   };
 
+  // 从项目中收集所有可用的图片
+  const getProjectImages = (proj: ProjectState): string[] => {
+    const images: string[] = [];
+
+    // 收集角色图片
+    if (proj.scriptData?.characters) {
+      proj.scriptData.characters.forEach(char => {
+        // 基础形象
+        if (char.referenceImage) {
+          images.push(char.referenceImage);
+        }
+        // 角色变体
+        if (char.variations) {
+          char.variations.forEach(variation => {
+            if (variation.referenceImage) {
+              images.push(variation.referenceImage);
+            }
+          });
+        }
+      });
+    }
+
+    // 收集场景图片
+    if (proj.scriptData?.scenes) {
+      proj.scriptData.scenes.forEach(scene => {
+        if (scene.referenceImage) {
+          images.push(scene.referenceImage);
+        }
+      });
+    }
+
+    // 收集关键帧图片
+    if (proj.shots) {
+      proj.shots.forEach(shot => {
+        if (shot.keyframes) {
+          shot.keyframes.forEach(keyframe => {
+            if (keyframe.imageUrl) {
+              images.push(keyframe.imageUrl);
+            }
+          });
+        }
+      });
+    }
+
+    return images;
+  };
+
+  // 随机选择N张图片
+  const getRandomImages = (images: string[], count: number): string[] => {
+    if (images.length === 0) return [];
+    
+    // 如果图片数量不足，返回所有图片
+    if (images.length <= count) {
+      return [...images];
+    }
+
+    // 随机洗牌并取前N张
+    const shuffled = [...images].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, count);
+  };
+
   return (
     <div className="min-h-screen bg-[#0e1229] text-slate-300 p-8 md:p-12 font-sans selection:bg-white/20">
       <div className="max-w-7xl mx-auto">
@@ -196,7 +257,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
             {/* Create New Card */}
             <div 
               onClick={handleCreate}
-              className="group cursor-pointer border border-slate-800 hover:border-slate-500 bg-[#0e0e28] flex flex-col items-center justify-center min-h-[240px] transition-all"
+              className="group cursor-pointer border border-slate-800 hover:border-slate-500 bg-[#0e0e28] flex flex-col items-center justify-center min-h-[280px] transition-all"
             >
               <div className="w-12 h-12 border border-slate-700 flex items-center justify-center mb-6 group-hover:bg-slate-800 transition-colors">
                 <Plus className="w-5 h-5 text-slate-500 group-hover:text-white" />
@@ -209,7 +270,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
               <div 
                 key={proj.id}
                 onClick={() => onOpenProject(proj)}
-                className="group bg-[#0e0e28] border border-slate-800 hover:border-slate-600 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[240px]"
+                className="group bg-[#0e0e28] border border-slate-800 hover:border-slate-600 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[280px]"
               >
                   {/* Delete Confirmation Overlay */}
                   {deleteConfirmId === proj.id && (
@@ -242,7 +303,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
                   )}
 
                   {/* Normal Content */}
-                  <div className="flex-1 p-6 relative flex flex-col">
+                  <div className="flex-1 px-6 pt-6 relative flex flex-col">
                      {/* Edit Button */}
                      {editingProjectId !== proj.id ? (
                      <button
@@ -339,6 +400,29 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
                             {proj.scriptData.logline}
                             </p>
                         )}
+
+                         {/* 图片预览 */}
+                  <div className="px-2 py-2 border-t border-slate-900 flex gap-2 items-center justify-center">
+                    {(() => {
+                      const projectImages = getRandomImages(getProjectImages(proj), 4);
+                      return (
+                        <div className="flex gap-2">
+                          {projectImages.map((imgUrl, idx) => (
+                            <div
+                              key={idx}
+                              className="w-14 h-14 bg-slate-900 rounded overflow-hidden flex-shrink-0 border border-slate-800 hover:border-slate-600 transition-colors cursor-pointer group/img"
+                            >
+                              <img
+                                src={imgUrl}
+                                alt={`Preview ${idx + 1}`}
+                                className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-200"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    })()}
+                  </div>
                      </div>
                   </div>
 

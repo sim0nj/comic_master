@@ -147,25 +147,17 @@ export const importProjectFromFile = (): Promise<ProjectState> => {
           reject(new Error('Invalid project file format'));
           return;
         }
-
         resolve(projectData);
       } catch (error) {
         reject(error);
       }
     };
-
-    // 添加超时处理，如果用户取消文件选择，超时后恢复按钮状态
-    const timeoutId = setTimeout(() => {
+    input.onabort = () => {
       if (!eventTriggered) {
-        reject(new Error('User cancelled file selection'));
+        reject(new Error('Import cancelled'));
       }
-    }, 500); // 短延迟检测用户是否取消
-
+    };
+    input.oncancel = input.onabort;
     input.click();
-
-    // 如果用户快速选择了文件，取消超时
-    if (eventTriggered) {
-      clearTimeout(timeoutId);
-    }
   });
 };
