@@ -1,6 +1,7 @@
 import { Check, Loader2, Upload, X } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { uploadBase64File } from '../utils/fileUploadUtils';
+import { useDialog } from './dialog';
 
 interface Props {
   isOpen: boolean;
@@ -19,6 +20,7 @@ const FileUploadModal: React.FC<Props> = ({
   acceptTypes = 'image/png,image/jpeg,image/jpg',
   title = '上传图片'
 }) => {
+  const dialog = useDialog();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -34,20 +36,20 @@ const FileUploadModal: React.FC<Props> = ({
     }
   }, [isOpen]);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     // Validate file type
     const validTypes = acceptTypes.split(',');
     if (!validTypes.includes(file.type)) {
-      alert('请选择 PNG 或 JPG 格式的图片');
+      await dialog.alert({ title: '错误', message: '请选择 PNG 或 JPG 格式的图片', type: 'error' });
       return;
     }
 
     // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('文件大小不能超过 10MB');
+      await dialog.alert({ title: '错误', message: '文件大小不能超过 10MB', type: 'error' });
       return;
     }
 
@@ -77,11 +79,11 @@ const FileUploadModal: React.FC<Props> = ({
           onClose();
         }, 800);
       } else {
-        alert(result.error || '上传失败，请重试');
+        await dialog.alert({ title: '错误', message: result.error || '上传失败，请重试', type: 'error' });
       }
     } catch (error) {
       console.error('Upload error:', error);
-      alert('上传失败，请重试');
+      await dialog.alert({ title: '错误', message: '上传失败，请重试', type: 'error' });
     } finally {
       setUploading(false);
     }

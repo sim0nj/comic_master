@@ -4,6 +4,7 @@ import { ModelService } from '../services/modelService';
 import { ProjectState } from '../types';
 import FileUploadModal from './FileUploadModal';
 import WardrobeModal from './WardrobeModal';
+import { useDialog } from './dialog';
 
 
 interface Props {
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
+  const dialog = useDialog();
   const [processingState, setProcessingState] = useState<{id: string, type: 'character'|'scene'}|null>(null);
   const [batchProgress, setBatchProgress] = useState<{current: number, total: number} | null>(null);
   const [selectedCharId, setSelectedCharId] = useState<string | null>(null);
@@ -95,7 +97,12 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
     const isRegenerate = itemsToGen.length === 0;
 
     if (isRegenerate) {
-       if(!window.confirm(`确定要重新生成所有${type === 'character' ? '角色' : '场景'}图吗？`)) return;
+       const confirmed = await dialog.confirm({
+         title: '确认重新生成',
+         message: `确定要重新生成所有${type === 'character' ? '角色' : '场景'}图吗？`,
+         type: 'warning',
+       });
+       if (!confirmed) return;
     }
 
     const targetItems = isRegenerate ? items : itemsToGen;
@@ -171,7 +178,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Download failed:', error);
-      alert('下载失败，请重试');
+      await dialog.alert({ title: '错误', message: '下载失败，请重试', type: 'error' });
     }
   };
 

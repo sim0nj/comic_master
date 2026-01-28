@@ -7,6 +7,7 @@ import StageAssets from './components/StageAssets';
 import StageDirector from './components/StageDirector';
 import StageExport from './components/StageExport';
 import StageScript from './components/StageScript';
+import { DialogProvider } from './components/dialog';
 
 import { initializeCozeConfig } from './services/cozeService';
 import { setGlobalApiKey } from './services/doubaoService';
@@ -155,54 +156,59 @@ function App() {
   // API Key Entry Screen (Industrial Design)
   if (!apiKey) {
     return (
-      <div className="h-screen bg-[#0e1229] flex items-center justify-center p-8 relative overflow-hidden">
-        {/* Background Accents */}
-        <div className="absolute top-0 right-0 p-64 bg-indigo-900/5 blur-[150px] rounded-full pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 p-48 bg-slate-900/10 blur-[120px] rounded-full pointer-events-none"></div>
+      <DialogProvider>
+        <div className="h-screen bg-[#0e1229] flex items-center justify-center p-8 relative overflow-hidden">
+          {/* Background Accents */}
+          <div className="absolute top-0 right-0 p-64 bg-indigo-900/5 blur-[150px] rounded-full pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 p-48 bg-slate-900/10 blur-[120px] rounded-full pointer-events-none"></div>
 
-        <ApiKeyModal
-          isOpen={true}
-          onClose={() => {}}
-          onSave={handleSaveKey}
-          currentKey={''}
-          cozeWorkflowId={cozeWorkflowId}
-          cozeApiKey={cozeApiKey}
-          currentFileUploadServiceUrl={fileUploadServiceUrl}
-          currentFileAccessDomain={fileAccessDomain}
-          providerName="火山引擎 / 豆包"
-          providerDescription="本应用需要火山引擎的 API 访问权限。请确保您的 API Key 已开通相应的服务权限。"
-          documentationUrl="https://www.volcengine.com/docs/82379"
-        />
-      </div>
+          <ApiKeyModal
+            isOpen={true}
+            onClose={() => {}}
+            onSave={handleSaveKey}
+            currentKey={''}
+            cozeWorkflowId={cozeWorkflowId}
+            cozeApiKey={cozeApiKey}
+            currentFileUploadServiceUrl={fileUploadServiceUrl}
+            currentFileAccessDomain={fileAccessDomain}
+            providerName="火山引擎 / 豆包"
+            providerDescription="本应用需要火山引擎的 API 访问权限。请确保您的 API Key 已开通相应的服务权限。"
+            documentationUrl="https://www.volcengine.com/docs/82379"
+          />
+        </div>
+      </DialogProvider>
     );
   }
 
   // Dashboard View
   if (!project) {
     return (
-       <>
-         <button onClick={handleClearKey} className="fixed top-4 right-4 z-50 text-[12px] text-slate-600 hover:text-red-500 transition-colors uppercase font-mono tracking-widest">
+      <DialogProvider>
+        <>
+          <button onClick={handleClearKey} className="fixed top-4 right-4 z-50 text-[12px] text-slate-600 hover:text-red-500 transition-colors uppercase font-mono tracking-widest">
             Sign Out
-         </button>
-         <Dashboard onOpenProject={handleOpenProject} />
-       </>
+          </button>
+          <Dashboard onOpenProject={handleOpenProject} />
+        </>
+      </DialogProvider>
     );
   }
 
   // Workspace View
   return (
-    <div className="flex h-screen bg-[#0e1229] font-sans text-gray-100 selection:bg-indigo-500/30">
-      <Sidebar
-        currentStage={project.stage}
-        setStage={setStage}
-        onExit={handleExitProject}
-        onOpenSettings={() => setShowSettings(true)}
-        onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
-        collapsed={sidebarCollapsed}
-        projectName={project.title}
-        project={project}
-        updateProject={updateProject}
-      />
+    <DialogProvider>
+      <div className="flex h-screen bg-[#0e1229] font-sans text-gray-100 selection:bg-indigo-500/30">
+        <Sidebar
+          currentStage={project.stage}
+          setStage={setStage}
+          onExit={handleExitProject}
+          onOpenSettings={() => setShowSettings(true)}
+          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+          collapsed={sidebarCollapsed}
+          projectName={project.title}
+          project={project}
+          updateProject={updateProject}
+        />
 
       <main className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'ml-20' : 'ml-72'} flex-1 h-screen overflow-hidden relative`}>
         {renderStage()}
@@ -240,7 +246,8 @@ function App() {
       <div className="lg:hidden fixed inset-0 bg-black z-[100] flex items-center justify-center p-8 text-center">
         <p className="text-slate-500">为了获得最佳体验，请使用桌面浏览器访问。</p>
       </div>
-    </div>
+      </div>
+    </DialogProvider>
   );
 }
 

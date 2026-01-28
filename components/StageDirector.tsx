@@ -8,6 +8,7 @@ import FileUploadModal from './FileUploadModal';
 import SceneEditModal from './SceneEditModal';
 import ShotEditModal from './ShotEditModal';
 import WardrobeModal from './WardrobeModal';
+import { useDialog } from './dialog';
 
 interface Props {
   project: ProjectState;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
+  const dialog = useDialog();
   const [wardProcessingState, setWardProcessingState] = useState<{id: string, type: 'character'|'scene'}|null>(null);
   const [activeShotId, setActiveShotId] = useState<string | null>(null);
   const [editingShotId, setEditingShotId] = useState<string | null>(null);
@@ -264,7 +266,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       });
     } catch (e: any) {
       console.error(e);
-      alert(`生成失败: ${e.message}`);
+      await dialog.alert({ title: '错误', message: `生成失败: ${e.message}`, type: 'error' });
     } finally {
       setProcessingState(null);
     }
@@ -317,7 +319,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       }));
     } catch (e: any) {
       console.error(e);
-      alert(`视频生成失败: ${e.message}`);
+      await dialog.alert({ title: '错误', message: `视频生成失败: ${e.message}`, type: 'error' });
     } finally {
       setProcessingState(null);
     }
@@ -353,10 +355,15 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
   const handleBatchGenerateImages = async () => {
       const isRegenerate = allStartFramesGenerated;
-      
+
       let shotsToProcess = [];
       if (isRegenerate) {
-          if (!window.confirm("确定要重新生成所有镜头的帧图片吗？这将覆盖现有图片。")) return;
+          const confirmed = await dialog.confirm({
+            title: '确认重新生成',
+            message: '确定要重新生成所有镜头的帧图片吗？这将覆盖现有图片。',
+            type: 'warning',
+          });
+          if (!confirmed) return;
           shotsToProcess = [...project.shots];
       } else {
           // Process shots that don't have a start image URL (handles missing keyframe objects too)
@@ -524,7 +531,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
           await handleGenerateVideo(finalShot);
       } catch (e: any) {
           console.error(e);
-          alert(`一键制作失败: ${e.message}`);
+          await dialog.alert({ title: '错误', message: `一键制作失败: ${e.message}`, type: 'error' });
       } finally {
           setOneClickProcessing(null);
       }
@@ -535,7 +542,12 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
       const isRegenerate = project.shots.every(s => s.interval?.videoUrl);
       if (isRegenerate) {
-          if (!window.confirm("确定要重新生成所有视频吗？这将覆盖现有视频。")) return;
+          const confirmed = await dialog.confirm({
+            title: '确认重新生成',
+            message: '确定要重新生成所有视频吗？这将覆盖现有视频。',
+            type: 'warning',
+          });
+          if (!confirmed) return;
       }
 
       const targetShots = isRegenerate ? project.shots : project.shots.filter(s => !s.interval?.videoUrl);

@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import ApiKeyModal from './ApiKeyModal';
 import { createNewProjectState, deleteProjectFromDB, exportProjectToFile, getAllProjectsMetadata, importProjectFromFile, saveProjectToDB } from '../services/storageService';
 import { ProjectState } from '../types';
+import { useDialog } from './dialog';
 
 interface Props {
   onOpenProject: (project: ProjectState) => void;
 }
 
 const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
+  const dialog = useDialog();
   const [projects, setProjects] = useState<ProjectState[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
@@ -95,7 +97,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
         await loadProjects();
     } catch (error) {
         console.error("Delete failed", error);
-        alert("删除项目失败");
+        await dialog.alert({ title: '错误', message: '删除项目失败', type: 'error' });
     } finally {
         setDeleteConfirmId(null);
     }
@@ -129,7 +131,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
       console.error('Import failed:', error);
       // 如果是用户取消，不显示错误提示
       if (error.message !== 'Import cancelled' && error.message !== 'No file selected') {
-        alert(error.message || '导入项目失败');
+        await dialog.alert({ title: '错误', message: error.message || '导入项目失败', type: 'error' });
       }
     } finally {
       setImporting(false);
@@ -155,7 +157,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
       await loadProjects();
     } catch (error) {
       console.error('Duplicate project failed:', error);
-      alert('复制项目失败');
+      await dialog.alert({ title: '错误', message: '复制项目失败', type: 'error' });
     }
   };
 
@@ -183,7 +185,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject }) => {
       await loadProjects();
     } catch (error) {
       console.error('Failed to update title:', error);
-      alert('更新项目名失败');
+      await dialog.alert({ title: '错误', message: '更新项目名失败', type: 'error' });
     } finally {
       setEditingProjectId(null);
       setEditingTitle('');

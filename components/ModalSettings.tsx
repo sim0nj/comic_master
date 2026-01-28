@@ -4,6 +4,7 @@ import { triggerModelConfigChanged } from '../services/modelConfigEvents';
 import { createDefaultModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
 import { deleteModelConfig, getAllModelConfigs, saveModelConfig } from '../services/storageService';
 import { AIModelConfig } from '../types';
+import { useDialog } from './dialog';
 
 interface Props {
   isOpen: boolean;
@@ -78,6 +79,7 @@ const getModelTypeColorStyles = (modelType: AIModelConfig['modelType']) => {
 };
 
 const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
+  const dialog = useDialog();
   const [configs, setConfigs] = useState<AIModelConfig[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingConfig, setEditingConfig] = useState<Partial<AIModelConfig> | null>(null);
@@ -109,7 +111,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const handleAdd = async () => {
     if (!formData.apiKey) {
-      alert('请填写 API Key');
+      await dialog.alert({ title: '错误', message: '请填写 API Key', type: 'error' });
       return;
     }
 
@@ -132,7 +134,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       resetForm();
     } catch (error) {
       console.error('Failed to save config:', error);
-      alert('保存配置失败');
+      await dialog.alert({ title: '错误', message: '保存配置失败', type: 'error' });
     }
   };
 
@@ -153,7 +155,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
   const handleUpdate = async () => {
     if (!editingConfig?.id) return;
     if (!formData.apiKey) {
-      alert('请填写 API Key');
+      await dialog.alert({ title: '错误', message: '请填写 API Key', type: 'error' });
       return;
     }
 
@@ -177,12 +179,17 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       resetForm();
     } catch (error) {
       console.error('Failed to update config:', error);
-      alert('更新配置失败');
+      await dialog.alert({ title: '错误', message: '更新配置失败', type: 'error' });
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm('确定要删除这个配置吗？')) return;
+    const confirmed = await dialog.confirm({
+      title: '确认删除',
+      message: '确定要删除这个配置吗？',
+      type: 'warning',
+    });
+    if (!confirmed) return;
 
     try {
       await deleteModelConfig(id);
@@ -190,11 +197,11 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       triggerModelConfigChanged(); // 触发配置变更事件
     } catch (error) {
       console.error('Failed to delete config:', error);
-      alert('删除配置失败');
+      await dialog.alert({ title: '错误', message: '删除配置失败', type: 'error' });
     }
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
     try {
       const exportData = {
         version: '1.0',
@@ -222,7 +229,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error('导出失败:', error);
-      alert('导出配置失败');
+      await dialog.alert({ title: '错误', message: '导出配置失败', type: 'error' });
     }
   };
 
@@ -238,14 +245,19 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
 
         // 验证导入数据格式
         if (!importData.configs || !Array.isArray(importData.configs)) {
-          alert('导入文件格式不正确');
+          await dialog.alert({ title: '错误', message: '导入文件格式不正确', type: 'error' });
           return;
         }
 
         const importCount = importData.configs.length;
         const confirmMessage = `确定要导入 ${importCount} 个配置吗？\n\n导入的配置将与现有配置合并，ID 相同的配置将被覆盖。`;
 
-        if (!window.confirm(confirmMessage)) {
+        const confirmed = await dialog.confirm({
+          title: '确认导入',
+          message: confirmMessage,
+          type: 'info',
+        });
+        if (!confirmed) {
           event.target.value = '';
           return;
         }
@@ -271,10 +283,10 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
 
         await loadConfigs();
         triggerModelConfigChanged();
-        alert(`成功导入 ${importCount} 个配置`);
+        await dialog.alert({ title: '成功', message: `成功导入 ${importCount} 个配置`, type: 'success' });
       } catch (error) {
         console.error('导入失败:', error);
-        alert('导入文件解析失败，请检查文件格式');
+        await dialog.alert({ title: '错误', message: '导入文件解析失败，请检查文件格式', type: 'error' });
       }
     };
 
@@ -556,7 +568,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
                           <button
                             onClick={async () => {
                               if (!config.enabled && !config.apiKey) {
-                                alert('请先配置 API Key');
+                                await dialog.alert({ title: '错误', message: '请先配置 API Key', type: 'error' });
                                 return;
                               }
                               await toggleConfigEnabled(config.id);

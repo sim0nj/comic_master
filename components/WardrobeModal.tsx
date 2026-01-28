@@ -2,6 +2,7 @@ import { Loader2, Plus, RefreshCw, Shirt, User, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { Character, CharacterVariation, ProjectState } from '../types';
+import { useDialog } from './dialog';
 
 interface Props {
   character: Character | null;
@@ -14,16 +15,17 @@ interface Props {
   setPreviewImage: (image:string)=>void;
 }
 
-const WardrobeModal: React.FC<Props> = ({ 
-  character, 
-  project, 
-  localStyle, 
-  imageSize, 
+const WardrobeModal: React.FC<Props> = ({
+  character,
+  project,
+  localStyle,
+  imageSize,
   processingState,
   updateProject,
   onClose,
   setPreviewImage
 }) => {
+  const dialog = useDialog();
   // Variation Form State
   const [newVarName, setNewVarName] = useState("");
   const [newVarPrompt, setNewVarPrompt] = useState("");
@@ -90,7 +92,7 @@ const WardrobeModal: React.FC<Props> = ({
           updateProject({ scriptData: newData });
       } catch (e) {
           console.error(e);
-          alert("造型图生成失败");
+          await dialog.alert({ title: '错误', message: '造型图生成失败', type: 'error' });
       }
   };
 

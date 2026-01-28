@@ -6,6 +6,7 @@ import { getAllModelConfigs } from '../services/storageService';
 import { Character, ProjectState, Scene } from '../types';
 import SceneEditModal from './SceneEditModal';
 import ShotEditModal from './ShotEditModal';
+import { useDialog } from './dialog';
 
 interface Props {
   project: ProjectState;
@@ -75,8 +76,9 @@ const GENRE_OPTIONS = [
   */
 
 const StageScript: React.FC<Props> = ({ project, updateProject }) => {
+  const dialog = useDialog();
   const [activeTab, setActiveTab] = useState<TabMode>(project.scriptData ? 'script' : 'story');
-  
+
   const [localScript, setLocalScript] = useState(project.rawScript);
   const [localTitle, setLocalTitle] = useState(project.title);
   const [localDuration, setLocalDuration] = useState(project.targetDuration || '60s');
@@ -264,9 +266,14 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     setTempCharacter({});
   };
 
-  const deleteCharacter = (charId: string) => {
+  const deleteCharacter = async (charId: string) => {
     if (!project.scriptData) return;
-    if (!window.confirm('确定要删除这个角色吗？')) return;
+    const confirmed = await dialog.confirm({
+      title: '确认删除',
+      message: '确定要删除这个角色吗？',
+      type: 'warning',
+    });
+    if (!confirmed) return;
     const updatedCharacters = project.scriptData.characters.filter(c => c.id !== charId);
     updateProject({
       scriptData: {
@@ -331,9 +338,14 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     setTempScene({});
   };
 
-  const deleteScene = (sceneId: string) => {
+  const deleteScene = async (sceneId: string) => {
     if (!project.scriptData) return;
-    if (!window.confirm('确定要删除这个场景吗？')) return;
+    const confirmed = await dialog.confirm({
+      title: '确认删除',
+      message: '确定要删除这个场景吗？',
+      type: 'warning',
+    });
+    if (!confirmed) return;
     const updatedScenes = project.scriptData.scenes.filter(s => s.id !== sceneId);
     updateProject({
       scriptData: {
@@ -378,8 +390,13 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     }
   };
 
-  const deleteShot = (shotId: string) => {
-    if (!window.confirm('确定要删除这个分镜吗？')) return;
+  const deleteShot = async (shotId: string) => {
+    const confirmed = await dialog.confirm({
+      title: '确认删除',
+      message: '确定要删除这个分镜吗？',
+      type: 'warning',
+    });
+    if (!confirmed) return;
     const updatedShots = project.shots.filter(s => s.id !== shotId);
     updateProject({ shots: updatedShots });
   };
@@ -390,7 +407,12 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
     const scene = project.scriptData.scenes.find(s => s.id === sceneId);
     if (!scene) return;
 
-    if (!window.confirm('确定要重新生成该场景的分镜吗？这将替换该场景的所有分镜。')) return;
+    const confirmed = await dialog.confirm({
+      title: '确认重新生成',
+      message: '确定要重新生成该场景的分镜吗？这将替换该场景的所有分镜。',
+      type: 'warning',
+    });
+    if (!confirmed) return;
 
     setRegeneratingSceneId(sceneId);
     try {
@@ -418,7 +440,11 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
       });
     } catch (err: any) {
       console.error(err);
-      alert(`重新生成分镜失败: ${err.message || "AI 连接失败"}`);
+      await dialog.alert({
+        title: '错误',
+        message: `重新生成分镜失败: ${err.message || "AI 连接失败"}`,
+        type: 'error',
+      });
     } finally {
       setRegeneratingSceneId(null);
     }
