@@ -286,7 +286,7 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
                 <option value="">默认模型</option>
                 {modelConfigs.filter(c => c.modelType === 'llm' && c.apiKey).map(config => (
                   <option key={config.id} value={config.id}>
-                    {config.provider} - {config.model || config.description}
+                    {config.provider} - {config.description || config.model}
                   </option>
                 ))}
               </select>
@@ -311,7 +311,7 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
                 <option value="">默认模型</option>
                 {modelConfigs.filter(c => c.modelType === 'text2image' && c.apiKey).map(config => (
                   <option key={config.id} value={config.id}>
-                    {config.provider} - {config.model || config.description}
+                    {config.provider} - {config.description || config.model}
                   </option>
                 ))}
               </select>
@@ -336,7 +336,7 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
                 <option value="">默认模型</option>
                 {modelConfigs.filter(c => c.modelType === 'image2video' && c.apiKey).map(config => (
                   <option key={config.id} value={config.id}>
-                    {config.provider} - {config.model || config.description}
+                    {config.provider} - {config.description || config.model}
                   </option>
                 ))}
               </select>

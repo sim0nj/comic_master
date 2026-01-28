@@ -995,7 +995,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                                .filter(c => c.modelType === 'text2image' && c.apiKey)
                                                .map(config => (
                     <option key={config.id} value={config.id}>
-                      {config.provider} - {config.model || config.description}
+                      {config.provider} - {config.description || config.model}
                     </option>
                   ))}
                                        </select>
@@ -1028,7 +1028,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                                .filter(c => c.modelType === 'image2video' && c.apiKey)
                                                .map(config => (
                     <option key={config.id} value={config.id}>
-                      {config.provider} - {config.model || config.description}
+                      {config.provider} - {config.description || config.model}
                     </option>
                   ))}
                                        </select>

@@ -289,7 +289,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       model: '',
       apiKey: '',
       apiUrl: '',
-      enabled: true,
+      enabled: false,
       description: ''
     });
   };
