@@ -211,7 +211,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
   const handleGenerateKeyframe = async (shot: Shot, type: 'start' | 'end' | 'full') => {
     // Robustly handle missing keyframe object
-    const existingKf = shot.keyframes?.find(k => k.type === type);
+    let existingKf = shot.keyframes?.find(k => k.type === type);
     const kfId = existingKf?.id || `kf-${shot.id}-${type}-${Date.now()}`;
     let prompt = shot.actionSummary;
     if(type === 'full'){
@@ -222,6 +222,14 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
         }
     }else{
         prompt = existingKf?.visualPrompt || shot.actionSummary;
+    }
+    if(!existingKf){
+      existingKf = {
+        id: kfId,
+        type,
+        visualPrompt: prompt,
+        status: 'pending'
+      };
     }
 
     const processingType = type === 'full' ? 'kf_full' : (type === 'start' ? 'kf_start' : 'kf_end');
@@ -235,7 +243,6 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
       updateProject({ 
         shots: project.shots.map(s => {
            if (s.id !== shot.id) return s;
-           
            const newKeyframes = [...(s.keyframes || [])];
            const idx = newKeyframes.findIndex(k => k.type === type);
            const newKf: Keyframe = {
@@ -267,32 +274,37 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
     //console.log("Generating Video for Shot:", shot);
     if (!shot.interval) return;
     
-    let sKf = shot.keyframes?.find(k => k.type === 'start');
-    let prompt = "景别："+shot.shotSize+"；镜头运动："+shot.cameraMovement+""+(shot.interval.motionStrength?"；运动强度："+shot.interval.motionStrength:"")+"；剧情描述："+shot.actionSummary+"；角色："+shot.characters + (shot.dialogue?"; 对白："+shot.dialogue:"");
+    let prompt = "景别："+shot.shotSize+"；镜头运动："+shot.cameraMovement+""+(shot.interval.motionStrength?"；运动强度："+shot.interval.motionStrength:"")+"；剧情描述："+shot.actionSummary+""+ (shot.characters?" 角色："+shot.characters:"") + (shot.dialogue?" 对白："+shot.dialogue:"");
     //console.log("Generating Video for Shot:", shot, "with Prompt:", prompt);
+    let sImageiurl = null;
+    let eImageiurl = null;
     if(imageCount > 1){
-        sKf = shot.keyframes?.find(k => k.type === 'full');
-        if (!sKf?.imageUrl) return alert("请先生成连续图！");
-        prompt = "参考图片包含"+imageCount+"个连续的子图，请结合下面描述生成完整视频。"+prompt+"。视频详情："+sKf.visualPrompt;
+        const sKf = shot.keyframes?.find(k => k.type === 'full');
+        if(sKf){
+          if(sKf.imageUrl){
+            sImageiurl = sKf.imageUrl;
+            prompt = prompt+"\n参考图片包含"+imageCount+"个连续的子图，请结合下面描述生成完整视频。";
+          }
+          prompt = prompt+"\n"+sKf?.visualPrompt;
+        }
     }else{
-        if (!sKf?.imageUrl) return alert("请先生成起始帧！");
-        prompt = prompt+"。开始："+sKf.visualPrompt;
+        const sKf = shot.keyframes?.find(k => k.type === 'start');
+        sImageiurl = sKf?.imageUrl;
+        prompt = prompt+"\n "+sKf?.visualPrompt;
+        const eKf = shot.keyframes?.find(k => k.type === 'end');
+        eImageiurl = eKf?.imageUrl;
+        prompt = prompt+"\n "+eKf?.visualPrompt;
     }
-    const eKf = shot.keyframes?.find(k => k.type === 'end');
-    if(eKf?.visualPrompt){
-        prompt = prompt+"。结束："+eKf.visualPrompt;
-    }
-    prompt = prompt + "\n 按照上面描述生成视频！";
+    prompt = prompt+"\n 按照上面描述生成视频！";
     // Fix: Remove logic that auto-grabs next shot's frame.
     // Prevent morphing artifacts by defaulting to Image-to-Video unless an End Frame is explicitly generated.
-    let endImageUrl = eKf?.imageUrl;
     
     setProcessingState({ id: shot.interval.id, type: 'video' });
     try {
       const videoUrl = await ModelService.generateVideo(
           prompt,
-          sKf.imageUrl,
-          endImageUrl, // Only pass if it exists
+          sImageiurl,
+          eImageiurl, // Only pass if it exists
           shot.interval?.duration||5,
           imageCount>1,
           shot.modelProviders,
@@ -977,7 +989,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">文生图</label>
                                    <div className="relative">
                                        <select
-                                           value={activeShot.modelProviders?.text2image || ''}
+                                           value={activeShot.modelProviders?.text2image || project.modelProviders?.text2image}
                                            onChange={(e) => {
                                                const text2image = e.target.value || undefined;
                                                updateShot(activeShot.id, (s) => ({
@@ -1010,7 +1022,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">图生视频</label>
                                    <div className="relative">
                                        <select
-                                           value={activeShot.modelProviders?.image2video || ''}
+                                           value={activeShot.modelProviders?.image2video || project.modelProviders?.image2video}
                                            onChange={(e) => {
                                                const image2video = e.target.value || undefined;
                                                updateShot(activeShot.id, (s) => ({
@@ -1070,6 +1082,17 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                <div className="space-y-2">
                                    <div className="flex justify-between items-center">
                                        <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">宫格图 (Grid)</span>
+                                       <div className="flex items-center gap-2">
+                                            {fullKf?.imageUrl && (
+                                                   <button
+                                                       onClick={() => deleteKeyframeImage(activeShot.id, 'full')}
+                                                       disabled={!!processingState || !!batchProgress}
+                                                       className="text-[12px] text-red-400 hover:text-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                       title="删除起始帧图片"
+                                                   >
+                                                       <Trash className="w-3 h-3" />
+                                                   </button>
+                                               )}
                                        <button
                                            onClick={() => handleGenerateKeyframe(activeShot, 'full')}
                                            disabled={!!processingState || !!batchProgress}
@@ -1077,6 +1100,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                        >
                                            {processingState?.type === 'kf_full' && (processingState?.id === fullKf?.id || (!fullKf && processingState?.type === 'kf_full')) ? '生成中...' : fullKf?.imageUrl ? '重新生成' : '生成'}
                                        </button>
+                                       </div>
                                    </div>
                                    <div className="aspect-video bg-black rounded-lg border border-slate-800 overflow-hidden relative group">
                                        <button
@@ -1122,6 +1146,17 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                    <div className="space-y-2">
                                        <div className="flex justify-between items-center">
                                            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">起始帧 (Start)</span>
+                                            <div className="flex items-center gap-2">
+                                            {startKf?.imageUrl && (
+                                                   <button
+                                                       onClick={() => deleteKeyframeImage(activeShot.id, 'start')}
+                                                       disabled={!!processingState || !!batchProgress}
+                                                       className="text-[12px] text-red-400 hover:text-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                                       title="删除起始帧图片"
+                                                   >
+                                                       <Trash className="w-3 h-3" />
+                                                   </button>
+                                               )}
                                            <button
                                                onClick={() => handleGenerateKeyframe(activeShot, 'start')}
                                                disabled={!!processingState || !!batchProgress}
@@ -1129,6 +1164,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
                                            >
                                                {processingState?.type === 'kf_start' && (processingState?.id === startKf?.id || (!startKf && processingState?.type === 'kf_start')) ? '生成中...' : startKf?.imageUrl ? '重新生成' : '生成'}
                                            </button>
+                                           </div>
                                        </div>
                                        <div className="aspect-video bg-black rounded-lg border border-slate-800 overflow-hidden relative group">
                                            <button
@@ -1261,12 +1297,12 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
                            <button
                              onClick={() => handleGenerateVideo(activeShot)}
-                             disabled={(!startKf?.imageUrl && !endKf?.imageUrl && !fullKf?.imageUrl) || !!processingState || !!batchProgress}
+                             disabled={!!processingState || !!batchProgress}
                              className={`w-full py-3 rounded-lg font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${
                                activeShot.interval?.videoUrl
                                  ? 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                                  : 'bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20'
-                             } ${((!startKf?.imageUrl && !endKf?.imageUrl && !fullKf?.imageUrl) || !!processingState || !!batchProgress) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                             } ${(!!processingState || !!batchProgress) ? 'opacity-50 cursor-not-allowed' : ''}`}
                            >
                              {processingState?.type === 'video' ? (
                                 <>

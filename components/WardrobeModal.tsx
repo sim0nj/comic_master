@@ -90,7 +90,7 @@ const WardrobeModal: React.FC<Props> = ({
           updateProject({ scriptData: newData });
       } catch (e) {
           console.error(e);
-          alert("Variation generation failed");
+          alert("造型图生成失败");
       }
   };
 

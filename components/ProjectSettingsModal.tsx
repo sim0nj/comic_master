@@ -1,5 +1,6 @@
 import { ChevronRight, Film, Image as ImageIcon, Settings, Sparkles, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { getEnabledConfigByType } from '../services/modelConfigService';
 import { ModelService } from '../services/modelService';
 import { getAllModelConfigs } from '../services/storageService';
 
@@ -32,8 +33,8 @@ const STYLE_OPTIONS = [
 ];
 
 const IMAGE_SIZE_OPTIONS = [
-  { label: '竖屏 9:16 (1440x2560)', value: '1440x2560' },
-  { label: '横屏 16:9 (2560x1440)', value: '2560x1440' }
+  { label: '横屏 16:9 (2560x1440)', value: '2560x1440' },
+  { label: '竖屏 9:16 (1440x2560)', value: '1440x2560' }
 ];
 
 const IMAGE_COUNT_OPTIONS = [
@@ -68,6 +69,7 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
   useEffect(() => {
     if (isOpen) {
       loadModelConfigs();
+      initSystemModelProviders();
       // Reset local state when opening modal
       setLocalTitle(project.title);
       setLocalDuration(project.targetDuration || '60s');
@@ -76,12 +78,17 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
       setLocalImageSize(project.imageSize || '1440x2560');
       setLocalImageCount(project.imageCount || 1);
       setCustomDurationInput(project.targetDuration === 'custom' ? project.targetDuration : '');
-      setLocalLlmProvider(project.modelProviders?.llm || '');
-      setLocalText2imageProvider(project.modelProviders?.text2image || '');
-      setLocalImage2videoProvider(project.modelProviders?.image2video || '');
     }
   }, [isOpen, project]);
 
+  const initSystemModelProviders = async () => {
+    const llm = await getEnabledConfigByType('llm');
+    const text2image = await getEnabledConfigByType('text2image');
+    const image2video = await getEnabledConfigByType('image2video');
+    setLocalLlmProvider(project.modelProviders?.llm || llm.id);
+    setLocalText2imageProvider(project.modelProviders?.text2image || text2image.id);
+    setLocalImage2videoProvider(project.modelProviders?.image2video || image2video.id);
+  };
   const loadModelConfigs = async () => {
     try {
       const configs = await getAllModelConfigs();
@@ -216,7 +223,7 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
 
             {/* Image Count Selection */}
             <div className="space-y-2">
-              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">出图数量</label>
+              <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">参考图数</label>
               <div className="relative">
                 <select
                   value={localImageCount}
@@ -231,7 +238,6 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
                   <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
                 </div>
               </div>
-              <p className="text-[10px] text-slate-600">文生图模型一次生成的画面数</p>
             </div>
           </div>
 

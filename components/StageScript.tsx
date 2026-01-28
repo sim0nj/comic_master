@@ -1,5 +1,6 @@
 import { AlertCircle, Aperture, ArrowLeft, BookOpen, BrainCircuit, ChevronRight, Clock, Edit, Film, Image, List, MapPin, Plus, Sparkles, TextQuote, Trash, Users, Wand2 } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { getEnabledConfigByType } from '../services/modelConfigService';
 import { ModelService } from '../services/modelService';
 import { getAllModelConfigs } from '../services/storageService';
 import { Character, ProjectState, Scene } from '../types';
@@ -42,8 +43,8 @@ const STYLE_OPTIONS = [
 ];
 
 const IMAGE_SIZE_OPTIONS = [
-  { label: '竖屏 9:16 (1440x2560)', value: '1440x2560' },
-  { label: '横屏 16:9 (2560x1440)', value: '2560x1440' }
+  { label: '横屏 16:9 (2560x1440)', value: '2560x1440' },
+  { label: '竖屏 9:16 (1440x2560)', value: '1440x2560' }
 ];
 
 const IMAGE_COUNT_OPTIONS = [
@@ -109,6 +110,10 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
   const [editingSceneInMain, setEditingSceneInMain] = useState<Scene | null>(null);
   const [addingShotForSceneId, setAddingShotForSceneId] = useState<string | null>(null);
 
+  const [localLlmProvider, setLocalLlmProvider] = useState(project.modelProviders?.llm || '');
+  const [localText2imageProvider, setLocalText2imageProvider] = useState(project.modelProviders?.text2image || '');
+  const [localImage2videoProvider, setLocalImage2videoProvider] = useState(project.modelProviders?.image2video || '');
+
   const autoSaveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -125,8 +130,17 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
 
     // 加载模型配置
     loadModelConfigs();
+    initSystemModelProviders();
   }, [project.id, project.title, project.targetDuration, project.language, project.visualStyle, project.imageSize, project.imageCount]);
 
+  const initSystemModelProviders = async () => {
+      const llm = await getEnabledConfigByType('llm');
+      const text2image = await getEnabledConfigByType('text2image');
+      const image2video = await getEnabledConfigByType('image2video');
+      setLocalLlmProvider(project.modelProviders?.llm || llm.id);
+      setLocalText2imageProvider(project.modelProviders?.text2image || text2image.id);
+      setLocalImage2videoProvider(project.modelProviders?.image2video || image2video.id);
+  };
   const loadModelConfigs = async () => {
     try {
       const configs = await getAllModelConfigs();
@@ -677,7 +691,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
               </label>
               <div className="relative">
                 <select
-                  value={project.modelProviders?.llm || ''}
+                  value={project.modelProviders?.llm || localLlmProvider}
                   onChange={(e) => {
                     const currentProviders = project.modelProviders || {};
                     updateProject({
@@ -710,7 +724,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
               </label>
               <div className="relative">
                 <select
-                  value={project.modelProviders?.text2image || ''}
+                  value={project.modelProviders?.text2image || localText2imageProvider}
                   onChange={(e) => {
                     const currentProviders = project.modelProviders || {};
                     updateProject({
@@ -743,7 +757,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject }) => {
               </label>
               <div className="relative">
                 <select
-                  value={project.modelProviders?.image2video || ''}
+                  value={project.modelProviders?.image2video || localImage2videoProvider}
                   onChange={(e) => {
                     const currentProviders = project.modelProviders || {};
                     updateProject({

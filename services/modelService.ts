@@ -89,6 +89,10 @@ import {
   setModel as setKlingModel
 } from "./klingService";
 
+const IMAGE_X = [
+  '1','1x1','1x2','1x3','2x2','2x3','2x3','3x3','3x3','3x3'
+];
+
 /**
  * 模型包装服务
  * 根据启用的配置自动选择模型提供商
@@ -601,7 +605,7 @@ export class ModelService {
     const image_rate = imageSize=="2560x1440" ? "16:9" : "9:16";
     let new_prompt = prompt;
     if(imageType!='variation'){
-      new_prompt = prompt + (imageCount > 1 ? " 生成连续 "+imageCount+" 宫格，包含 "+imageCount+" 张风格统一的图片，每张长宽比 "+image_rate+"，间距 1px，白色背景，铺满整张图。" : "");
+      new_prompt = prompt + (imageCount > 1 ? " \n 连环画规格："+IMAGE_X[imageCount]+"连环画图，包含 "+imageCount+" 张连续且风格统一的图片，每张长宽比 "+image_rate+"，白色背景，铺满整张图。" : "");
       new_prompt = PROMPT_TEMPLATES.IMAGE_GENERATION_WITH_REFERENCE(new_prompt,localStyle);
     }
     let imageUrlOrBase64: string;

@@ -108,8 +108,8 @@ export const PROMPT_TEMPLATES = {
 
   // ============ 视觉提示词生成 ============
   GENERATE_VISUAL_PROMPT: (type: "character" | "scene", data: any, genre: string) => `
-    为${genre}的${type}生成高还原度视觉提示词。
-    内容: ${JSON.stringify(data)}.
+    为${genre}视频生成高还原度视觉提示词。
+    ${type=='character'?'角色':'场景'}: ${JSON.stringify(data)}
     中文输出提示词，以逗号分隔，聚焦视觉细节（光线、质感、外观）。
   `,
 
@@ -121,11 +121,10 @@ export const PROMPT_TEMPLATES = {
   // ============ 带参考图的图片生成 ============
   IMAGE_GENERATION_WITH_REFERENCE: (prompt: string,localStyle: string="写实") => `
     生成符合下面描述的电影级镜头，画面风为：${localStyle}。
-    
     任务描述：
       ${prompt}
 
-    参考图像附加说明：
+    如果有参考图像：
     - 所提供的第一张图片为场景 / 环境参考图。
     - 后续所有图片均为角色参考图（例如：基础形象，或特定变体造型）。
 
