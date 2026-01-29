@@ -8,7 +8,19 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
-        allowedHosts: ['3000.code.good365.net','4173.code.good365.net']
+        allowedHosts: ['3000.code.good365.net','4173.code.good365.net'],
+        watch: {
+          // 排除node_modules（依赖包无需热更新，占大量监视器）
+          // 排除dist（构建产物目录）、.git（版本控制目录）、*.log（日志文件）等
+          ignored: [
+            /node_modules/,
+            /dist/,
+            /\.git/,
+            /\.log$/,
+            /tmp/,
+            // 可根据项目情况添加其他无需监听的目录，如：/public/assets/large-files
+          ]
+        }
       },
       plugins: [react()],
       define: {

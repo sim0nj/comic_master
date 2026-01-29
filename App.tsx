@@ -61,15 +61,15 @@ function App() {
     });
 
       // 定义媒体查询
-    const mdQuery = window.matchMedia('(min-width: 768px)');
-    const lgQuery = window.matchMedia('(max-width: 1024px)');
+    const mdQuery = window.matchMedia('(max-width: 768px)');
+    console.log('width:'+mdQuery.matches);
+    const lgQuery = window.matchMedia('(min-width: 1280px)');
+    console.log('width:'+lgQuery.matches);
 
 
     // 更新状态的函数
     const updateBreakpoints = () => {
-      console.log('min-width: 1024px:'+mdQuery.matches);
-      console.log('max-width: 1024px:'+lgQuery.matches);
-      setIsMd(lgQuery.matches && mdQuery.matches);
+      setIsMd(!lgQuery.matches);
     };
 
     // 初始化执行+添加监听
@@ -265,9 +265,6 @@ function App() {
         </div>
       </main>
       
-      <div className="md:hidden fixed inset-0 bg-black z-[100] flex items-center justify-center p-8 text-center">
-        <p className="text-slate-500">为了获得最佳体验，请使用桌面浏览器访问。</p>
-      </div>
       </div>
     </DialogProvider>
   );
