@@ -210,9 +210,11 @@ function App() {
     return (
       <DialogProvider>
         <>
+        {!isMobile &&
           <button onClick={handleClearKey} className="fixed top-4 right-4 z-50 text-[12px] text-slate-600 hover:text-red-500 transition-colors uppercase font-mono tracking-widest">
-            Sign Out
+            退出
           </button>
+        }
           <Dashboard onOpenProject={handleOpenProject} isMobile={isMobile} />
         </>
       </DialogProvider>
