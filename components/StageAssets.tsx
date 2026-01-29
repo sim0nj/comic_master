@@ -1,4 +1,4 @@
-import { Check, Download, Expand, Loader2, MapPin, RefreshCw, Shirt, Sparkles, Upload, User, Users, X } from 'lucide-react';
+import { AlertCircle, Check, Download, Expand, Loader2, MapPin, RefreshCw, Shirt, Sparkles, Upload, User, Users, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { ProjectState } from '../types';
@@ -183,8 +183,9 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   };
 
   if (!project.scriptData) return (
-      <div className="h-full flex flex-col items-center justify-center bg-[#0e1229] text-slate-500">
-         <p>请先完成 Phase 01 剧本分析</p>
+      <div className="flex flex-col items-center justify-center h-full text-slate-500 bg-[#0e1229]">
+          <AlertCircle className="w-12 h-12 mb-4 opacity-50"/>
+          <p>暂无镜头数据，请先制作剧本并完成成分镜。</p>
       </div>
   );
   

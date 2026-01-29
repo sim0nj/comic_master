@@ -1,4 +1,4 @@
-import { BarChart3, Check, CheckCircle, Clock, Download, Film, Layers, Loader2, Share2, X } from 'lucide-react';
+import { AlertCircle, BarChart3, Check, CheckCircle, Clock, Download, Film, Layers, Loader2, Share2, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { initializeCozeConfig, submitWorkflow } from '../services/cozeService';
 import { ProjectState } from '../types';
@@ -111,6 +111,13 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
     link.click();
     document.body.removeChild(link);
   };
+
+    if (!project.shots.length) return (
+        <div className="flex flex-col items-center justify-center h-full text-slate-500 bg-[#0e1229]">
+            <AlertCircle className="w-12 h-12 mb-4 opacity-50"/>
+            <p>暂无镜头数据，请先制作剧本并完成成分镜。</p>
+        </div>
+    );
 
   return (
     <div className="flex flex-col h-full bg-[#0e1229] overflow-hidden">

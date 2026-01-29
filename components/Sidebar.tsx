@@ -1,4 +1,4 @@
-import { Aperture, ChevronLeft, ChevronRight, Clapperboard, FileText, Film, Github as GithubIcon, PanelLeft, PanelRight, Settings, Sparkles, Users } from 'lucide-react';
+import { Aperture, ChevronLeft, Clapperboard, FileText, Film, Github as GithubIcon, PanelLeft, PanelRight, Settings, Sparkles, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { ProjectState } from '../types';
 import ModalSettings from './ModalSettings';
@@ -24,6 +24,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpenSettings, onToggleSidebar, collapsed = false, projectName,project,updateProject }) => {
   const [showModelSettings, setShowModelSettings] = useState(false);
   const [showProjectSettings, setShowProjectSettings] = useState(false);
+
   const navItems = [
     { id: 'script', label: '剧本与故事', icon: FileText, sub: '制作脚本' },
     { id: 'assets', label: '角色与场景', icon: Users, sub: '角色布景' },
@@ -31,8 +32,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
     { id: 'export', label: '成片与导出', icon: Film, sub: '剪辑合成' },
   ];
 
+
   return (
-    <aside className={`${collapsed ? 'w-20' : 'w-72'} bg-[#0e1229] border-r border-slate-800 h-screen fixed left-0 top-0 flex flex-col z-50 select-none transition-all duration-300 ease-in-out`}>
+    <aside className={`${collapsed ? 'w-20' : 'xl:w-72 md:w-20'}  bg-[#0e1229] border-r border-slate-800 h-screen fixed left-0 top-0 flex flex-col z-50 select-none transition-all duration-300 ease-in-out`}>
       {/* Header */}
       <div className="p-6 border-b border-slate-900">
         {!collapsed ? (
@@ -57,13 +59,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
           onClick={onExit}
           className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs font-mono uppercase tracking-wide group w-full"
         >
-          <ChevronLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+          <ChevronLeft className="w-4 h-4 group-hover:-translate-1 transition-transform" />
           {!collapsed && <span>返回项目列表</span>}
         </button>
       </div>
 
       {/* Project Status */}
-      {!collapsed && (
+      {!collapsed ? (
         <div className="px-6 py-4 border-b border-slate-900">
            <div className="text-[12px] text-slate-600 uppercase tracking-widest mb-1">当前项目</div>
            <div className="text-sm font-medium flex items-center  text-slate-200 truncate font-mono">{projectName || '未命名项目'}
@@ -71,9 +73,18 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                 onClick={() => setShowProjectSettings(true)}
                 className="text-xs font-bold  text-slate-400 hover:text-white  items-center gap-2 px-4 py-2 "
                 >
-                <Settings className="w-3 h-3" />
+                <Settings className="w-4 h-4" />
            </button>
           </div>
+        </div>
+      ):(
+        <div className="px-6 border-b border-slate-900">
+          <button
+                onClick={() => setShowProjectSettings(true)}
+                className="text-xs font-bold text-slate-600 hover:text-white"
+                >
+                <Settings className="w-4 h-4 group-hover:-translate-1 transition-transform" />
+           </button>
         </div>
       )}
 
@@ -173,7 +184,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
       {/* Collapse Toggle Button */}
       <button
         onClick={onToggleSidebar}
-        className="absolute -right-3 top-20 bg-[#1a1a3e] border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-700 transition-all rounded-full p-1.5 z-50"
+        className="md:hidden lg:block absolute -right-3 top-20 bg-[#1a1a3e] border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-700 transition-all rounded-full p-1.5 z-50"
         title={collapsed ? '展开侧边栏' : '折叠侧边栏'}
       >
         {collapsed ? <PanelRight className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}

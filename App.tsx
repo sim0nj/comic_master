@@ -25,6 +25,7 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isMd, setIsMd] = useState(false);
 
   // Ref to hold debounce timer
   const saveTimeoutRef = useRef<any>(null);
@@ -58,6 +59,27 @@ function App() {
     ModelService.initialize().catch(err => {
       console.error('ModelService初始化失败:', err);
     });
+
+      // 定义媒体查询
+    const mdQuery = window.matchMedia('(min-width: 768px)');
+    const lgQuery = window.matchMedia('(max-width: 1024px)');
+
+
+    // 更新状态的函数
+    const updateBreakpoints = () => {
+      console.log('min-width: 1024px:'+mdQuery.matches);
+      console.log('max-width: 1024px:'+lgQuery.matches);
+      setIsMd(lgQuery.matches && mdQuery.matches);
+    };
+
+    // 初始化执行+添加监听
+    updateBreakpoints();
+    mdQuery.addListener(updateBreakpoints);
+
+    // 卸载移除监听
+    return () => {
+      mdQuery.removeListener(updateBreakpoints);
+    };
   }, []);
 
   // Auto-save logic
@@ -204,13 +226,13 @@ function App() {
           onExit={handleExitProject}
           onOpenSettings={() => setShowSettings(true)}
           onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
-          collapsed={sidebarCollapsed}
+          collapsed={isMd||sidebarCollapsed}
           projectName={project.title}
           project={project}
           updateProject={updateProject}
         />
 
-      <main className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'ml-20' : 'ml-72'} flex-1 h-screen overflow-hidden relative`}>
+      <main className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'ml-20' : 'xl:ml-72 md:ml-20'} flex-1 h-screen overflow-hidden relative`}>
         {renderStage()}
         {showSettings && (
   <ApiKeyModal
@@ -243,7 +265,7 @@ function App() {
         </div>
       </main>
       
-      <div className="lg:hidden fixed inset-0 bg-black z-[100] flex items-center justify-center p-8 text-center">
+      <div className="md:hidden fixed inset-0 bg-black z-[100] flex items-center justify-center p-8 text-center">
         <p className="text-slate-500">为了获得最佳体验，请使用桌面浏览器访问。</p>
       </div>
       </div>

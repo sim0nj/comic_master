@@ -712,7 +712,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
   if (!project.shots.length) return (
       <div className="flex flex-col items-center justify-center h-full text-slate-500 bg-[#0e1229]">
           <AlertCircle className="w-12 h-12 mb-4 opacity-50"/>
-          <p>暂无镜头数据，请先返回阶段 1 生成分镜表。</p>
+          <p>暂无镜头数据，请先制作剧本并完成成分镜。</p>
       </div>
   );
 
@@ -786,7 +786,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
           {/* Grid View - Responsive Logic */}
           <div className={`flex-1 overflow-y-auto p-6 transition-all duration-500 ease-in-out ${activeShotId ? 'border-r border-slate-800' : ''}`}>
-              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'}`}>
+              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4' : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'}`}>
                   {project.shots.map((shot, idx) => {
                       const sKf = shot.keyframes?.find(k => k.type === 'start');
                       const fKf = shot.keyframes?.find(k => k.type === 'full');
@@ -904,7 +904,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject }) => {
 
           {/* Right Workbench - Optimized Interaction */}
           {activeShotId && activeShot && (
-              <div className="w-[640px] bg-[#0f1225] flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20">
+              <div className="2xl:w-[640px] md:w-[460px] xl:w-[460px] bg-[#0f1225] flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20">
                   
                   {/* Workbench Header */}
                   <div className="h-16 px-6 border-b border-slate-800 flex items-center justify-between bg-[#0c0c2d] shrink-0">
