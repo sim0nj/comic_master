@@ -132,16 +132,16 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
           </div>
           <div className="flex items-center gap-2">
              <span className="text-[12px] text-slate-500 font-mono uppercase bg-slate-900 border border-slate-800 px-2 py-1 rounded">
-               Status: {progress === 100 ? 'READY' : 'IN PROGRESS'}
+               状态: {progress === 100 ? '完成' : '制作中'}
              </span>
           </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-8 md:p-12">
+      <div className="flex-1 overflow-y-auto p-6 md:p-12">
         <div className="max-w-6xl mx-auto space-y-8">
           
           {/* Main Status Panel */}
-          <div className="bg-[#0c0c2d] border border-slate-800 rounded-xl p-8 shadow-2xl relative overflow-hidden group">
+          <div className="bg-[#0c0c2d] border border-slate-800 rounded-xl p-6 sm:p-6 shadow-2xl relative overflow-hidden group">
              {/* Background Decoration */}
              <div className="absolute top-0 right-0 p-48 bg-indigo-900/5 blur-[120px] rounded-full pointer-events-none"></div>
              <div className="absolute bottom-0 left-0 p-32 bg-emerald-900/5 blur-[100px] rounded-full pointer-events-none"></div>
@@ -150,21 +150,20 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                <div>
                  <div className="flex items-center gap-3 mb-2">
                     <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">{project?.title || '未命名项目'}</h3>
-                    <span className="px-2 py-0.5 bg-slate-900 border border-slate-700 text-slate-400 text-[12px] rounded uppercase font-mono tracking-wider">Master Sequence</span>
                  </div>
                  <div className="flex items-center gap-6 mt-3">
                     <div className="flex flex-col">
-                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">Shots</span>
+                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">场景</span>
                         <span className="text-sm font-mono text-slate-300">{project.shots.length}</span>
                     </div>
                     <div className="w-px h-6 bg-slate-800"></div>
                     <div className="flex flex-col">
-                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">Est. Duration</span>
+                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">总时长</span>
                         <span className="text-sm font-mono text-slate-300">~{estimatedDuration}s</span>
                     </div>
                     <div className="w-px h-6 bg-slate-800"></div>
                     <div className="flex flex-col">
-                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">Target</span>
+                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">目标时长</span>
                         <span className="text-sm font-mono text-slate-300">{project.targetDuration}</span>
                     </div>
                  </div>
@@ -177,7 +176,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                  </div>
                  <div className="text-[12px] text-slate-500 uppercase tracking-widest flex items-center justify-end gap-2">
                     {progress === 100 ? <CheckCircle className="w-3 h-3 text-green-500" /> : <BarChart3 className="w-3 h-3" />}
-                    Render Status
+                    进度
                  </div>
                </div>
              </div>

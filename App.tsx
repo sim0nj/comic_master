@@ -224,7 +224,7 @@ function App() {
   // Workspace View
   return (
     <DialogProvider>
-      <div className="flex h-screen bg-[#0e1229] font-sans text-gray-100 selection:bg-indigo-500/30">
+      <div className="flex h-screen bg-[#0e1229] min-h-screen font-sans text-gray-100 selection:bg-indigo-500/30" style={{ paddingTop: 'env(safe-area-inset-top)'}}>
         {isMobile ? (
           <SidebarMobile
             currentStage={project.stage}
@@ -248,9 +248,10 @@ function App() {
           />
         )}
 
-      <main className={`transition-all duration-300 ease-in-out ${isMobile ? 'pt-32 ml-0' : (sidebarCollapsed ? 'ml-20' : 'xl:ml-72 md:ml-20')} flex-1 h-screen overflow-hidden relative`}>
+      <main className={`transition-all min-h-screen duration-300 ease-in-out ${isMobile ? 'pt-12 ml-0 pb-16' : (sidebarCollapsed ? 'ml-20' : 'xl:ml-72 md:ml-20')} flex-1 h-screen overflow-hidden relative`}>
         {renderStage()}
         {showSettings && (
+          <>
   <ApiKeyModal
             isOpen={showSettings}
             onClose={() => setShowSettings(false)}
@@ -264,7 +265,6 @@ function App() {
     providerDescription="本应用需要火山引擎的 API 访问权限。请确保您的 API Key 已开通相应的服务权限。"
     documentationUrl="https://www.volcengine.com/docs/82379"
           />
-        )}
         {/* Save Status Indicator */}
         <div className="relative top-4 right-6 pointer-events-none opacity-50 flex items-center gap-2 text-xs font-mono text-slate-400 bg-black/50 px-2 py-1 rounded-full backdrop-blur-sm z-50">
            {saveStatus === 'saving' ? (
@@ -279,6 +279,8 @@ function App() {
              </>
            )}
         </div>
+        </>
+        )}
       </main>
       
       </div>

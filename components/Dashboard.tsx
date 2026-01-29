@@ -1,9 +1,10 @@
-import { AlertTriangle, Calendar, Check, ChevronRight, Copy, Download, Edit, Loader2, Plus, Settings, Trash2, Upload } from 'lucide-react';
+import { AlertTriangle, Calendar, Check, ChevronRight, Copy, Download, Edit, Loader2, Plus, Settings, Sparkles, Trash2, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { createNewProjectState, deleteProjectFromDB, exportProjectToFile, getAllProjectsMetadata, importProjectFromFile, saveProjectToDB } from '../services/storageService';
 import { ProjectState } from '../types';
 import ApiKeyModal from './ApiKeyModal';
 import { useDialog } from './dialog';
+import ModalSettings from './ModalSettings';
 
 interface Props {
   onOpenProject: (project: ProjectState) => void;
@@ -24,6 +25,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
   const [currentCozeApiKey, setCurrentCozeApiKey] = useState('');
   const [currentFileUploadServiceUrl, setCurrentFileUploadServiceUrl] = useState('');
   const [currentFileAccessDomain, setCurrentFileAccessDomain] = useState('');
+  const [showModelSettings, setShowModelSettings] = useState(false);
 
   const loadProjects = async () => {
     setIsLoading(true);
@@ -275,12 +277,11 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
           </div>
           <div className="flex gap-3 flex-end justify-end">
             <button
-              onClick={() => setApiKeyModalOpen(true)}
-              className="group flex items-center gap-3 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
-              title="系统设置"
+              onClick={handleCreate}
+              className="group flex items-center gap-3 px-6 py-3 bg-white text-black hover:bg-slate-200 transition-colors"
             >
-              <Settings className="w-4 h-4" />
-              {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">设置</span>}
+              <Plus className="w-4 h-4" />
+              {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">新建项目</span>}
             </button>
             <button
               onClick={handleImport}
@@ -291,11 +292,20 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
               {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">{importing ? '导入中...' : '导入项目'}</span>}
             </button>
             <button
-              onClick={handleCreate}
-              className="group flex items-center gap-3 px-6 py-3 bg-white text-black hover:bg-slate-200 transition-colors"
+              onClick={() => setShowModelSettings(true)}
+              className="group flex items-center gap-3 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+              title="模型管理"
             >
-              <Plus className="w-4 h-4" />
-              {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">新建项目</span>}
+              <Sparkles className="w-4 h-4" />
+              {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">模型</span>}
+            </button>
+            <button
+              onClick={() => setApiKeyModalOpen(true)}
+              className="group flex items-center gap-3 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+              title="系统设置"
+            >
+              <Settings className="w-4 h-4" />
+              {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">设置</span>}
             </button>
           </div>
         </header>
@@ -308,7 +318,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             
             {/* Create New Card */}
-            {!isMobile && 
+            {(!isMobile || projects.length == 0) && 
             <div 
               onClick={handleCreate}
               className="group cursor-pointer border border-slate-800 hover:border-slate-500 bg-[#0e0e28] flex flex-col items-center justify-center min-h-[280px] transition-all"
@@ -492,6 +502,12 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
           </div>
         )}
       </div>
+      {/* Model Settings Modal */}
+      <ModalSettings
+        isOpen={showModelSettings}
+        onClose={() => setShowModelSettings(false)}
+        isMobile={true}
+      />
 
       {/* API Key Modal */}
       <ApiKeyModal
@@ -503,8 +519,8 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
         cozeApiKey={currentCozeApiKey}
         currentFileUploadServiceUrl={currentFileUploadServiceUrl}
         currentFileAccessDomain={currentFileAccessDomain}
-        providerName="CineGen"
-        providerDescription="CineGen 是一个 AI 视频生成工具，需要配置 API 密钥才能使用。请前往相关提供商获取 API Key。"
+        providerName="豆包"
+        providerDescription="AI漫剧工场是一个 AI 视频生成工具，需要配置 API 密钥才能使用。请前往相关提供商获取 API Key。"
         documentationUrl="#"
       />
     </div>

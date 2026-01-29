@@ -770,7 +770,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                   }`}
               >
                   <Sparkles className="w-3 h-3" />
-                  {allStartFramesGenerated ? '重新生成所有帧图片' : '批量生成帧图片'}
+                  {allStartFramesGenerated ? '重新生图' : '批量生图'}
               </button>
               <button
                   onClick={handleBatchGenerateVideos}
@@ -778,7 +778,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                   className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
               >
                   <Video className="w-3 h-3" />
-                  {project.shots.every(s => s.interval?.videoUrl) ? '重新生成所有视频' : '批量生成视频'}
+                  {project.shots.every(s => s.interval?.videoUrl) ? '重新生成' : '批量视频'}
               </button>
           </div>
       </div>

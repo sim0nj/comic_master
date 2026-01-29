@@ -25,9 +25,10 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
   ];
 
   return (
-    <aside className="fixed top-0 left-0 right-0 h-auto z-50 select-none bg-[#0e1229] border-b border-slate-800 flex flex-col">
+    <aside className="select-none bg-[#0e1229] border-b border-slate-800 flex flex-col"
+    style={{ paddingTop: 'env(safe-area-inset-top)'}}>
       {/* 顶部栏 */}
-      <div className="flex items-center justify-between px-4 py-2">
+      <div className="fixed top-0 left-0 right-0 h-30 z-50 flex items-center justify-between px-4 py-2">
         {/* 左侧：Logo 和 返回按钮 */}
         <div className="flex items-center gap-3">
           <button
@@ -67,7 +68,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
       </div>
 
       {/* 导航 */}
-      <nav className="flex items-center justify-around px-4 py-2 overflow-x-auto">
+      <nav className="fixed bottom-0 left-0 right-0 h-30 z-50 flex items-center justify-around px-4 py-2 overflow-x-auto select-none bg-[#0e1229] border-b border-slate-800">
         {navItems.map((item) => {
           const isActive = currentStage === item.id;
           return (
