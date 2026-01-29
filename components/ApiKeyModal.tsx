@@ -90,6 +90,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
 
         {/* Content */}
         <div className="space-y-6">
+          <div className="max-h-[60vh] overflow-y-auto rounded-lg"> 
            <div>
              <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
                {providerName} API Key
@@ -197,7 +198,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                </span>
              </div>
            )}
-
+          </div>
            <button
              onClick={handleSave}
              disabled={!inputKey.trim()}

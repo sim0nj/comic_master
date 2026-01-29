@@ -357,7 +357,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               }`}
             >
               {allCharactersReady ? <RefreshCw className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
-              {allCharactersReady ? '重新生成所有角色' : '一键生成所有角色'}
+              {allCharactersReady ? '批量生成' : '批量生成'}
             </button>
           </div>
 
