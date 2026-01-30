@@ -1,4 +1,4 @@
-import { AlertCircle, Check, Download, Expand, Group, Loader2, MapPin, RefreshCw, Shirt, Sparkles, Upload, User, X } from 'lucide-react';
+import { AlertCircle, AudioLines, Check, Download, Expand, FileMusic, Group, Loader2, MapPin, Mic, RefreshCw, Shirt, Sparkles, Speaker, Speech, Upload, User, Waves, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { VOICE_LIBRARY } from '../config/voiceLibrary';
 import { ModelService } from '../services/modelService';
@@ -675,11 +675,11 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
             <div className="bg-[#0e1229] border border-slate-800 rounded-xl p-5 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <AudioLines className="w-3.5 h-3.5 text-amber-400" />
                   语音合成参数
                 </h4>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 {/* SPD - 语速 */}
                 <div className="space-y-2">
                   <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold block">语速 (SPD)</label>
@@ -694,7 +694,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       ))}
                     </select>
                     <div className="absolute right-3 top-3 pointer-events-none">
-                      <MapPin className="w-3 h-3 text-slate-600 rotate-90" />
+                      <Waves className="w-4 h-4 text-slate-600" />
                     </div>
                   </div>
                 </div>
@@ -713,7 +713,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       ))}
                     </select>
                     <div className="absolute right-3 top-3 pointer-events-none">
-                      <MapPin className="w-3 h-3 text-slate-600 rotate-90" />
+                      <Mic className="w-4 h-4 text-slate-600" />
                     </div>
                   </div>
                 </div>
@@ -732,7 +732,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       ))}
                     </select>
                     <div className="absolute right-3 top-3 pointer-events-none">
-                      <MapPin className="w-3 h-3 text-slate-600 rotate-90" />
+                      <Speaker className="w-4 h-4 text-slate-600" />
                     </div>
                   </div>
                 </div>
@@ -751,10 +751,11 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       ))}
                     </select>
                     <div className="absolute right-3 top-3 pointer-events-none">
-                      <MapPin className="w-3 h-3 text-slate-600 rotate-90" />
+                      <Speech className="w-4 h-4 text-slate-600" />
                     </div>
                   </div>
                 </div>
+
 
                 {/* AUE - 音频格式 */}
                 <div className="space-y-2">
@@ -771,14 +772,14 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       <option value={6}>WAV</option>
                     </select>
                     <div className="absolute right-3 top-3 pointer-events-none">
-                      <MapPin className="w-3 h-3 text-slate-600 rotate-90" />
+                      <FileMusic className="w-4 h-4 text-slate-600" />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {project.shots.map((shot, shotIndex) => (
                 <div key={shot.id} className="bg-[#0e1229] border border-slate-800 rounded-xl overflow-hidden hover:border-slate-600 transition-all flex flex-col">
                   <div className="p-4 space-y-3">
@@ -806,39 +807,24 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
                     {/* Dialogue Content */}
                     <div className="space-y-2">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                          对话文本
-                        </span>
-                        {editingShotDialogue?.shotId !== shot.id && shot.dialogue && (
-                          <button
-                            onClick={() => handleEditDialogue(shot.id, shot.dialogue || '')}
-                            className="text-[11px] text-emerald-400 hover:text-emerald-300 font-bold uppercase tracking-wider"
-                          >
-                            编辑
-                          </button>
-                        )}
-                      </div>
-
                       {editingShotDialogue?.shotId === shot.id ? (
                         <div className="space-y-2">
                           <textarea
                             value={editingShotDialogue.dialogue}
                             onChange={(e) => setEditingShotDialogue({ ...editingShotDialogue, dialogue: e.target.value })}
                             placeholder="输入对话内容..."
-                            className="w-full bg-[#0e1229] border border-slate-700 rounded-lg px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-24 font-mono"
+                            className="w-full bg-[#0e1229] border border-slate-700 rounded-lg px-3 py-3 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-14 font-mono"
                           />
                           <div className="flex gap-2">
                             <button
                               onClick={handleSaveDialogue}
-                              className="flex-1 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-[12px] font-bold uppercase tracking-wide rounded transition-colors"
+                              className="flex-1 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-[12px] font-bold uppercase tracking-wide rounded transition-colors"
                             >
                               保存
                             </button>
                             <button
                               onClick={handleCancelEditDialogue}
-                              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[12px] font-bold uppercase tracking-wide rounded transition-colors"
+                              className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-[12px] font-bold uppercase tracking-wide rounded transition-colors"
                             >
                               取消
                             </button>
@@ -847,7 +833,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       ) : (
                         <div className="bg-slate-900/30 border border-slate-700/50 rounded-lg p-3">
                           {shot.dialogue ? (
-                            <p className="text-sm text-slate-300 font-mono leading-relaxed">{shot.dialogue}</p>
+                            <p className="text-sm text-slate-300 h-12 font-mono leading-relaxed">{shot.dialogue}</p>
                           ) : (
                             <div className="text-center py-4 text-slate-600">
                               <p className="text-xs text-slate-500 mb-2">暂无对话</p>
@@ -861,15 +847,17 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                           )}
                         </div>
                       )}
-                    </div>
-
-                    {/* Audio Player */}
-                    {shot.dialogue && (
-                      <div className="space-y-2 pt-3 border-t border-slate-800/50">
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="text-xs flex-1 font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                          {shot.audioUrl && (
-                          <div className="bg-slate-900/50 rounded-lg pr-3 w-full">
+                      <div className="flex items-center justify-between mb-2 gap-2">
+                        {editingShotDialogue?.shotId !== shot.id && shot.dialogue && (
+                          <button
+                            onClick={() => handleEditDialogue(shot.id, shot.dialogue || '')}
+                            className="text-[11px] text-emerald-400 hover:text-emerald-300 font-bold uppercase tracking-wider flex-shrink-0"
+                          >
+                            编辑
+                          </button>
+                        )}
+                          {editingShotDialogue?.shotId !== shot.id && shot.audioUrl && (
+                          <div className="flex-1 bg-slate-900/50 rounded-lg pr-3 pl-3 min-w-0">
                             <audio
                               controls
                               className="w-full h-6"
@@ -877,11 +865,11 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                             />
                           </div>
                         )}
-                          </div>
+                            {editingShotDialogue?.shotId !== shot.id && shot.dialogue && (
                             <button
                               onClick={() => handleGenerateAudio(shot.id, shot.dialogue || '')}
                               disabled={generatingAudio?.shotId === shot.id}
-                              className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-[11px] font-bold uppercase tracking-wide rounded transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-[11px] font-bold uppercase tracking-wide rounded transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                             >
                               {generatingAudio?.shotId === shot.id ? (
                                 <>
@@ -894,10 +882,9 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                                   生成语音
                                 </>
                               )}
-                            </button>
-                        </div>
+                            </button>)}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               ))}
