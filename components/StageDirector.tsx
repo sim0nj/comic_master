@@ -684,9 +684,9 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                              <select
                                                 value={activeShot.characterVariations?.[String(char.id)] || ""}
                                                 onChange={(e) => handleVariationChange(activeShot.id, String(char.id), e.target.value)}
-                                                className="bg-black text-[12px] text-slate-400 border border-slate-700 rounded px-1.5 py-0.5 max-w-[100px] outline-none focus:border-indigo-500"
+                                                className="bg-black text-[12px] text-slate-400 border border-slate-700 rounded px-1.5 py-0.5 max-w-[60px] outline-none focus:border-indigo-500"
                                              >
-                                                 <option value="">默认造型</option>
+                                                 <option value="">默认</option>
                                                  {char.variations.map(v => (
                                                      <option key={v.id} value={v.id}>{v.name}</option>
                                                  ))}
