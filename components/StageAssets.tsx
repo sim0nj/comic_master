@@ -345,7 +345,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                  <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
                  角色定妆
                </h3>
-               <p className="text-xs text-slate-500 mt-1 pl-3.5">为剧本中的角色生成一致的参考形象</p>
+               <p className="text-xs text-slate-500 mt-1 pl-3.5">为剧本角色生成一致参考图</p>
             </div>
             <button 
               onClick={() => handleBatchGenerate('character')}
