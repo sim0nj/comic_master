@@ -229,7 +229,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                           <div
                             key={shot.id}
                             onClick={() => isDone && toggleShotSelection(shot.id)}
-                            className={`h-14 min-w-[4px] flex-1 rounded-[2px] transition-all relative group flex flex-col justify-end overflow-hidden cursor-pointer ${
+                            className={`h-14 min-w-[28px] flex-1 rounded-[2px] transition-all relative group flex flex-col justify-end overflow-hidden cursor-pointer ${
                               isSelected
                                 ? 'bg-indigo-600/60 border-2 border-indigo-400'
                                 : isDone

@@ -49,10 +49,14 @@ function processFileUrl(originalUrl: string): string {
 
     if (targetDomain) {
       // 使用配置的域名
-      return `https://${targetDomain}${path}`;
+      if(targetDomain.startsWith('http')){
+        return `${targetDomain}${path}`;
+      }else{
+        return `//${targetDomain}${path}`;
+      }
     } else {
       // 默认使用 ofs.good365.net:6443
-      return `https://ofs.good365.net:6443${path}`;
+      return `//ofs.good365.net:6443${path}`;
     }
   } catch (error) {
     console.error('处理URL失败:', error);

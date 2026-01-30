@@ -1,4 +1,4 @@
-import { AlertCircle, Check, Download, Expand, Loader2, MapPin, RefreshCw, Shirt, Sparkles, Upload, User, Users, X } from 'lucide-react';
+import { AlertCircle, Check, Download, Expand, Loader2, MapPin, RefreshCw, Shirt, Sparkles, Upload, User, Group, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { ProjectState } from '../types';
@@ -320,7 +320,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       <div className="h-16 border-b border-slate-800 bg-[#0a0f29] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
-                  <Users className="w-5 h-5 text-indigo-500" />
+                  <Group className="w-5 h-5 text-indigo-500" />
                   角色与场景
               </h2>
           </div>
