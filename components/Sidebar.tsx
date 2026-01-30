@@ -33,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
   ];
 
   return (
-    <aside className={`${collapsed ? 'w-20' : 'xl:w-72 md:w-20'} bg-[#0e1229] border-r border-slate-800 h-screen fixed left-0 top-0 flex flex-col z-50 select-none transition-all duration-300 ease-in-out`}>
+    <aside className={`${collapsed ? 'w-20' : 'xl:w-72 md:w-20'} bg-[#0c1022] border-r border-slate-800 h-screen fixed left-0 top-0 flex flex-col z-50 select-none transition-all duration-300 ease-in-out`}>
       {/* Header */}
       <div className="p-6 border-b border-slate-900">
         {!collapsed ? (

@@ -566,7 +566,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
     <div className={`flex h-full bg-[#0e1229] text-slate-300 ${isMobile ? 'flex-col overflow-y-auto' : 'flex-row'}`}>
       
       {/* Middle Column: Config Panel - Adjusted Width to w-96 */}
-      <div className={`${isMobile ? 'w-full' : 'w-96'} border-r border-slate-800 flex flex-col bg-[#0e1230]`}>
+      <div className={`${isMobile ? 'w-full' : 'w-96'} border-r border-slate-800 flex flex-col bg-[#0a0f29]`}>
         {/* Header - Fixed Height 56px */}
         <div className="h-16 px-6 border-b border-slate-800 flex items-center justify-between shrink-0">
             <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-3">
@@ -576,9 +576,9 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
 {isMobile && (
             <button
                onClick={() => setActiveTab('script')}
-               className="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
+               className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-bold text-slate-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
              >
-               <ArrowLeft className="w-3 h-3" />
+               <List className="w-3 h-3" />
                分镜
             </button>
 )}
@@ -853,7 +853,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
 
       {/* Right: Text Editor - Optimized */}
       <div className="flex-1 flex flex-col bg-[#0e1229] relative">
-        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-8 bg-[#0e1230] shrink-0">
+        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-8 bg-[#0a0f29] shrink-0">
            <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 rounded-full bg-slate-700"></div>
               <span className="text-xs font-bold text-slate-400">剧本编辑器</span>
@@ -940,7 +940,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
     return (
       <div className="flex flex-col h-full bg-[#0e1229] animate-in fade-in duration-500">
         {/* Header */}
-        <div className="h-16 px-6 border-b border-slate-800 bg-[#0e1230] flex items-center justify-between shrink-0 z-20">
+        <div className="h-16 px-6 border-b border-slate-800 bg-[#0a0f29] flex items-center justify-between shrink-0 z-20">
            <div className="flex items-center gap-6">
               <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-3">
                  <List className="w-5 h-5 text-indigo-500" />
@@ -962,9 +962,9 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
            <div className="flex gap-2">
              <button
                onClick={() => setActiveTab('story')}
-               className="text-xs font-bold text-slate-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
+               className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-bold text-slate-400 hover:text-white flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
              >
-               <ArrowLeft className="w-3 h-3" />
+               <BookOpen className="w-3 h-3" />
                剧本
              </button>
            </div>
@@ -974,7 +974,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
         <div className="flex-1 overflow-hidden flex">
            
            {/* Sidebar: Index */}
-           <div className="w-96 border-r border-slate-800 bg-[#0e1230] flex flex-col hidden lg:flex">
+           <div className="w-96 border-r border-slate-800 bg-[#0a0f29] flex flex-col hidden lg:flex">
               <div className="p-6 border-b border-slate-900">
                  {/* Genre Selection */}
                  <div>

@@ -1,4 +1,4 @@
-import { Aperture, ChevronLeft, Clapperboard, FileText, Film, Settings, Sparkles, Users } from 'lucide-react';
+import { Aperture, ChevronLeft, Clapperboard, List, Film, Settings, Sparkles, Group } from 'lucide-react';
 import React, { useState } from 'react';
 import { ProjectState } from '../types';
 import ModalSettings from './ModalSettings';
@@ -18,14 +18,14 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
   const [showProjectSettings, setShowProjectSettings] = useState(false);
 
   const navItems = [
-    { id: 'script', label: '剧本', icon: FileText },
-    { id: 'assets', label: '角色', icon: Users },
+    { id: 'script', label: '分镜', icon: List },
+    { id: 'assets', label: '素材', icon: Group },
     { id: 'director', label: '导演', icon: Clapperboard },
     { id: 'export', label: '成片', icon: Film },
   ];
 
   return (
-    <aside className="top-0 z-50 left-0 right-0 z-50 select-none bg-[#0e1229] border-b border-slate-800 flex flex-col">
+    <aside className="top-0 z-50 left-0 right-0 z-50 select-none bg-[#0c1022] border-b border-slate-800 flex flex-col">
       {/* 顶部栏 */}
       <div className="flex items-center justify-between px-4 py-2">
         {/* 左侧：Logo 和 返回按钮 */}
@@ -41,8 +41,8 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
               <Aperture className="w-4 h-4" />
             </div>
             <div className="overflow-hidden">
-              <h1 className="text-xs font-bold text-white tracking-wider uppercase">AI漫剧工场</h1>
-              <p className="text-[10px] text-slate-500 uppercase tracking-widest">{projectName || '未命名项目'}</p>
+              <h1 className="text-xs font-bold text-white tracking-wider uppercase">{projectName || '未命名项目'}</h1>
+              <p className="text-[10px] text-slate-500 uppercase tracking-widest">AI漫剧工场</p>
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
       </div>
 
       {/* 导航 */}
-      <nav className="fixed bottom-0 left-0 right-0 h-30 z-50 flex border-t border-slate-800 items-center justify-around px-4 py-2 overflow-x-auto select-none bg-[#0e1229] border-b border-slate-800">
+      <nav className="fixed bottom-0 left-0 right-0 h-30 z-50 flex border-t border-slate-800 items-center justify-around px-4 py-2 overflow-x-auto select-none bg-[#0c1022] border-b border-slate-800">
         {navItems.map((item) => {
           const isActive = currentStage === item.id;
           return (

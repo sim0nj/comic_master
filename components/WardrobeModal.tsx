@@ -161,7 +161,7 @@ const WardrobeModal: React.FC<Props> = ({
                                 )}
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold">视觉提示（Visual Prompt）</label>
+                                <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold">视觉提示</label>
                                 <textarea
                                     value={editingVisualPrompt}
                                     onChange={(e) => setEditingVisualPrompt(e.target.value)}

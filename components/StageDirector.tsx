@@ -1,4 +1,4 @@
-import { AlertCircle, Aperture, ChevronLeft, ChevronRight, Clock, Edit, Film, Image as ImageIcon, LayoutGrid, Loader2, MapPin, MessageSquare, RefreshCw, Shirt, Sparkles, Trash, Upload, Video, X } from 'lucide-react';
+import { AlertCircle, Aperture, ChevronLeft, ChevronRight, Clock, Edit, Film, Image as ImageIcon, Clapperboard, Loader2, MapPin, MessageSquare, RefreshCw, Shirt, Sparkles, Trash, Upload, Video, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { modelConfigEventBus } from '../services/modelConfigEvents';
 import { ModelService } from '../services/modelService';
@@ -626,7 +626,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
               <div className="flex items-center justify-between mb-2">
                  <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-slate-500" />
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">场景环境 (Scene Context)</h4>
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">场景环境</h4>
                  </div>
                  <button
                     onClick={() => setEditingSceneInMain(scene!)}
@@ -746,10 +746,10 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       )}
 
       {/* Toolbar */}
-      <div className="h-16 border-b border-slate-800 bg-[#0e1230] px-6 flex items-center justify-between shrink-0">
+      <div className="h-16 border-b border-slate-800 bg-[#0a0f29] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
-                  <LayoutGrid className="w-5 h-5 text-indigo-500" />
+                  <Clapperboard className="w-5 h-5 text-indigo-500" />
                   导演台
               </h2>
           </div>
@@ -801,15 +801,15 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                               key={shot.id}
                               onClick={() => setActiveShotId(shot.id)}
                               className={`
-                                  group relative flex flex-col bg-[#0e1230] border rounded-xl overflow-hidden cursor-pointer transition-all duration-200
+                                  group relative flex flex-col bg-[#0a0f29] border rounded-xl overflow-hidden cursor-pointer transition-all duration-200
                                   ${isActive ? 'border-indigo-500 ring-1 ring-indigo-500/50 shadow-xl scale-[1.02]' : 'border-slate-800 hover:border-slate-600 hover:shadow-lg'}
                               `}
                           >
                               {/* Header */}
-                              <div className="px-3 py-2 bg-[#060624] border-b border-slate-800 flex justify-between items-center">
-                                  <span className={`font-mono text-[12px] font-bold ${isActive ? 'text-indigo-400' : 'text-slate-500'}`}>镜头 {String(idx + 1).padStart(2, '0')}</span>
-                                  <div className="flex items-center gap-2">
-                                        <span className="text-[11px] px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded uppercase">{shot.cameraMovement} {shot.interval?.duration}s</span>
+                              <div className="px-2 py-2 bg-[#060624] border-b border-slate-800 flex justify-between items-center">
+                                  <span className={`font-mono text-[12px] font-bold ${isActive ? 'text-indigo-400' : 'text-slate-500'}`}>镜头{String(idx + 1).padStart(2, '0')}</span>
+                                  <div className="flex items-center gap-1">
+                                      <span className="text-[11px] px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded uppercase">{shot.cameraMovement} {shot.interval?.duration}s</span>
                                       <button
                                         onClick={(e) => { e.stopPropagation(); startEditShot(shot); }}
                                         className="p-1.5 hover:bg-slate-700 text-slate-500 hover:text-white rounded transition-colors"
@@ -945,7 +945,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                            <div className="flex items-center justify-between mb-2">
                            <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
                                <Film className="w-4 h-4 text-slate-500" />
-                               <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">叙事动作 (Action & Dialogue)</h4>
+                               <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">叙事动作</h4>
                            </div>
                             <button
                                 onClick={(e) => { e.stopPropagation(); startEditShot(activeShot); }}
@@ -978,7 +978,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                                <div className="flex items-center gap-2">
                                    <Sparkles className="w-4 h-4 text-slate-500" />
-                                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">模型供应商 (Model Providers)</h4>
+                                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">模型供应商</h4>
                                </div>
                                <button
                                    onClick={async () => {
@@ -1071,7 +1071,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                                <div className="flex items-center gap-2">
                                    <Aperture className="w-4 h-4 text-slate-500" />
-                                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">视觉制作 (Visual Production)</h4>
+                                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">视觉制作</h4>
                                </div>
                                <button
                                    onClick={() => handleOneClickProduction(activeShot)}
@@ -1095,7 +1095,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                            {imageCount > 1 ? (
                                <div className="space-y-2">
                                    <div className="flex justify-between items-center">
-                                       <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">宫格图 (Grid)</span>
+                                       <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">宫格图</span>
                                        <div className="flex items-center gap-2">
                                             {fullKf?.imageUrl && (
                                                    <button
@@ -1159,7 +1159,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                    {/* Start Frame */}
                                    <div className="space-y-2">
                                        <div className="flex justify-between items-center">
-                                           <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">起始帧 (Start)</span>
+                                           <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">起始帧</span>
                                             <div className="flex items-center gap-2">
                                             {startKf?.imageUrl && (
                                                    <button
@@ -1222,7 +1222,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                    {/* End Frame */}
                                    <div className="space-y-2">
                                        <div className="flex justify-between items-center">
-                                           <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">结束帧 (End)</span>
+                                           <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">结束帧</span>
                                            <div className="flex items-center gap-2">
                                                {endKf?.imageUrl && (
                                                    <button
@@ -1260,7 +1260,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                                />
                                            ) : (
                                                <div className="absolute inset-0 flex items-center justify-center">
-                                                   <span className="text-[11px] text-slate-700 uppercase">Optional</span>
+                                                   <div className="w-2 h-2 rounded-full bg-slate-800"></div>
                                                </div>
                                            )}
                                            {/* Loading State matching ID */}
@@ -1305,7 +1305,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                </div>
                            ) : (
                                <div className="w-full aspect-video bg-slate-900/50 rounded-lg border border-dashed border-slate-800 flex items-center justify-center">
-                                   <span className="text-xs text-slate-600 font-mono">PREVIEW AREA</span>
+                                   <span className="text-xs text-slate-600 font-mono">预览</span>
                                </div>
                            )}
 

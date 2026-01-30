@@ -123,7 +123,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
     <div className="flex flex-col h-full bg-[#0e1229] overflow-hidden">
       
       {/* Header - Consistent with Director */}
-      <div className="h-16 border-b border-slate-800 bg-[#0e1230] px-6 flex items-center justify-between shrink-0">
+      <div className="h-16 border-b border-slate-800 bg-[#0a0f29] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
                   <Film className="w-5 h-5 text-indigo-500" />
@@ -184,7 +184,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
              {/* Timeline Visualizer Strip */}
              <div className="mb-10">
                 <div className="flex justify-between items-center text-[12px] text-slate-600 font-mono uppercase tracking-widest mb-2 px-1">
-                    <span>Sequence Map</span>
+                    <span>分镜序列图</span>
                     <span>~{selectedDuration}s</span>
                 </div>
 
@@ -292,7 +292,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                <button
                   onClick={handleDownload}
                   disabled={!project.mergedVideoUrl}
-                  className={`h-12 bg-[#0e1230] hover:bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${
+                  className={`h-12 bg-[#0a0f29] hover:bg-slate-800 text-slate-300 border border-slate-700 hover:border-slate-500 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${
                     !project.mergedVideoUrl ? 'cursor-not-allowed opacity-50' : ''
                   }`}>
                  <Download className="w-4 h-4" />
@@ -326,31 +326,6 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                  {mergeError}
                </div>
              )}
-          </div>
-
-          {/* Secondary Options */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-5 bg-[#0c0c2d] border border-slate-800 rounded-xl hover:border-slate-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
-                  <Layers className="w-5 h-5 text-slate-600 group-hover:text-indigo-400 mb-4 transition-colors" />
-                  <div>
-                    <h4 className="text-sm font-bold text-white mb-1">Source Assets</h4>
-                    <p className="text-[12px] text-slate-500">Download all generated images and raw video clips.</p>
-                  </div>
-              </div>
-              <div className="p-5 bg-[#0c0c2d] border border-slate-800 rounded-xl hover:border-slate-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
-                  <Share2 className="w-5 h-5 text-slate-600 group-hover:text-indigo-400 mb-4 transition-colors" />
-                  <div>
-                    <h4 className="text-sm font-bold text-white mb-1">Share Project</h4>
-                    <p className="text-[12px] text-slate-500">Create a view-only link for client review.</p>
-                  </div>
-              </div>
-              <div className="p-5 bg-[#0c0c2d] border border-slate-800 rounded-xl hover:border-slate-600 transition-colors group cursor-pointer flex flex-col justify-between h-32">
-                  <Clock className="w-5 h-5 text-slate-600 group-hover:text-indigo-400 mb-4 transition-colors" />
-                  <div>
-                    <h4 className="text-sm font-bold text-white mb-1">Render Logs</h4>
-                    <p className="text-[12px] text-slate-500">View generation history and token usage.</p>
-                  </div>
-              </div>
           </div>
         </div>
       </div>

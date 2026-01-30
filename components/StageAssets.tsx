@@ -241,7 +241,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           <div className="absolute inset-0 z-40 bg-black/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
             <div className="bg-[#0c0c2d] border border-slate-800 w-full max-h-[80vh] max-w-2xl rounded-2xl flex flex-col shadow-2xl overflow-hidden">
               {/* Modal Header */}
-              <div className="h-16 px-8 border-b border-slate-800 flex items-center justify-between shrink-0 bg-[#0e1230]">
+              <div className="h-16 px-8 border-b border-slate-800 flex items-center justify-between shrink-0 bg-[#0a0f29]">
                 <div className="flex items-center gap-4">
                   <MapPin className="w-10 h-10 rounded-full bg-slate-800 p-2.5 text-emerald-500" />
                   <div>
@@ -298,7 +298,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                 {/* Visual Prompt */}
                 <div className="mt-6">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4" /> 视觉提示（Visual Prompt）
+                    <Sparkles className="w-4 h-4" /> 视觉提示
                   </h4>
                   <div className="bg-[#0e0e28] p-4 rounded-xl border border-slate-800">
                     <textarea
@@ -317,7 +317,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       })()}
 
       {/* Header - Consistent with Director */}
-      <div className="h-16 border-b border-slate-800 bg-[#0e1230] px-6 flex items-center justify-between shrink-0">
+      <div className="h-16 border-b border-slate-800 bg-[#0a0f29] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
                   <Users className="w-5 h-5 text-indigo-500" />
@@ -343,7 +343,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
             <div>
                <h3 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
                  <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
-                 角色定妆 (Casting)
+                 角色定妆
                </h3>
                <p className="text-xs text-slate-500 mt-1 pl-3.5">为剧本中的角色生成一致的参考形象</p>
             </div>
@@ -364,16 +364,16 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-7 gap-6">
             {project.scriptData.characters.map((char) => (
               <div key={char.id} className="bg-[#0c0c2d] border border-slate-800 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
-                <div className="aspect-[3/4] bg-slate-900 relative">
+                <div className="aspect-[3/4] bg-slate-900 relative overflow-hidden">
                   {char.referenceImage ? (
                     <>
-                      <img src={char.referenceImage} alt={char.name} className="w-full h-full object-cover" />
+                      <img src={char.referenceImage} alt={char.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                       {processingState?.type === 'character' && processingState?.id === char.id ? (
                         <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
                           <Loader2 className="w-8 h-8 text-white animate-spin" />
                         </div>
                       ) : (
-                        <div className={`absolute inset-0 bg-black/60 opacity-0 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm ${batchProgress || processingState ? 'pointer-events-none opacity-50' : 'group-hover:opacity-100'}`}>
+                        <div className={`absolute inset-0 bg-black/60 opacity-0 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm ${batchProgress || processingState ? 'pointer-events-none opacity-50' : 'group-hover:opacity-80'}`}>
                           <button
                             onClick={() => handleGenerateAsset('character', char.id)}
                             disabled={!!batchProgress || !!processingState}
@@ -401,7 +401,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                        </button>
                      </div>
                   )}
-                  <div className="absolute bottom-0 right-0 flex items-center justify-center gap-2 p-2"> 
+                  <div className="absolute bottom-0 right-0 flex items-center justify-center gap-1 p-1"> 
                   {/* Action Buttons */}
                   {char.referenceImage && (
                     <>
@@ -465,7 +465,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
             <div>
                <h3 className="text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
-                 场景概念 (Scenes)
+                 场景概念
                </h3>
                <p className="text-xs text-slate-500 mt-1 pl-3.5">为剧本场景生成环境参考图</p>
             </div>
@@ -489,13 +489,13 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                 <div className="aspect-[16/9] bg-slate-900 relative overflow-hidden">
                   {scene.referenceImage ? (
                     <>
-                      <img src={scene.referenceImage} alt={scene.location} className="w-full h-full object-cover" />
+                      <img src={scene.referenceImage} alt={scene.location} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                       {processingState?.type === 'scene' && processingState?.id === scene.id ? (
                         <div className="absolute inset-0 bg-black/70 flex items-center justify-center backdrop-blur-sm">
                           <Loader2 className="w-8 h-8 text-white animate-spin" />
                         </div>
                       ) : (
-                        <div className={`absolute inset-0 bg-black/60 opacity-0 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm ${batchProgress || processingState ? 'pointer-events-none opacity-50' : 'group-hover:opacity-100'}`}>
+                        <div className={`absolute inset-0 bg-black/60 opacity-0 transition-opacity flex items-center justify-center gap-2 backdrop-blur-sm ${batchProgress || processingState ? 'pointer-events-none opacity-50' : 'group-hover:opacity-80'}`}>
                           <button
                             onClick={(e) => {handleGenerateAsset('scene', scene.id); }}
                             disabled={!!batchProgress || !!processingState}
@@ -524,7 +524,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                      </div>
                   )}
                       {/* Preview Button */}
-                      <div className="absolute bottom-0 right-0 flex items-center justify-center gap-2 p-2"> 
+                      <div className="absolute bottom-0 right-0 flex items-center justify-center gap-1 p-1"> 
                       {scene.referenceImage && (
                           <>
                       <button
