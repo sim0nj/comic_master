@@ -230,6 +230,7 @@ function App() {
             currentStage={project.stage}
             setStage={setStage}
             onExit={handleExitProject}
+            onOpenSettings={() => setShowSettings(true)}
             projectName={project.title}
             project={project}
             updateProject={updateProject}

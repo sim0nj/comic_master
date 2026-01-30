@@ -1,4 +1,4 @@
-import { Aperture, ChevronLeft, Clapperboard, FileText, Film, Github as GithubIcon, PanelLeft, PanelRight, Settings, Sparkles, Users } from 'lucide-react';
+import { Aperture, ChevronLeft, Clapperboard, Edit, FileText, Film, Github as GithubIcon, PanelLeft, PanelRight, Settings, Sparkles, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { ProjectState } from '../types';
 import ModalSettings from './ModalSettings';
@@ -65,24 +65,24 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
 
       {/* Project Status */}
       {!collapsed ? (
-        <div className="px-6 py-4 border-b border-slate-900">
+        <div className="px-6 py-2 border-b border-slate-900">
            <div className="text-[12px] text-slate-600 uppercase tracking-widest mb-1">当前项目</div>
            <div className="text-sm font-medium flex items-center  text-slate-200 truncate font-mono">{projectName || '未命名项目'}
            <button
                 onClick={() => setShowProjectSettings(true)}
-                className="text-xs font-bold  text-slate-400 hover:text-white  items-center gap-2 px-4 py-2 "
+                className="text-xs font-bold  text-slate-400 hover:text-white  items-center gap-2 px-2 py-2 "
                 >
-                <Settings className="w-4 h-4" />
+                <Edit className="w-4 h-4" />
            </button>
           </div>
         </div>
       ):(
-        <div className="px-6 border-b border-slate-900">
+        <div className="px-6 py-2 border-b border-slate-900">
           <button
                 onClick={() => setShowProjectSettings(true)}
                 className="text-xs font-bold text-slate-600 hover:text-white"
                 >
-                <Settings className="w-4 h-4 group-hover:-translate-1 transition-transform" />
+                <Edit className="w-4 h-4 group-hover:-translate-1 transition-transform" />
            </button>
         </div>
       )}

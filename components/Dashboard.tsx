@@ -5,6 +5,7 @@ import { ProjectState } from '../types';
 import ApiKeyModal from './ApiKeyModal';
 import { useDialog } from './dialog';
 import ModalSettings from './ModalSettings';
+import ProjectSettingsModal from './ProjectSettingsModal';
 
 interface Props {
   onOpenProject: (project: ProjectState) => void;
@@ -26,6 +27,8 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
   const [currentFileUploadServiceUrl, setCurrentFileUploadServiceUrl] = useState('');
   const [currentFileAccessDomain, setCurrentFileAccessDomain] = useState('');
   const [showModelSettings, setShowModelSettings] = useState(false);
+  const [showProjectSettings, setShowProjectSettings] = useState(false);
+  const [currentProject, setCurrentProject] = useState<ProjectState | null>(null);
 
   const loadProjects = async () => {
     setIsLoading(true);
@@ -203,6 +206,30 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
     }
   };
 
+  const openProjectSettings = (e: React.MouseEvent, proj: ProjectState) => {
+    e.stopPropagation();
+    setCurrentProject(proj);
+    setShowProjectSettings(true);
+  };
+
+  const closeProjectSettings = () => {
+    setShowProjectSettings(false);
+    setCurrentProject(null);
+  };
+
+  const handleUpdateProject = async (updates: any) => {
+    if (!currentProject) return;
+    try {
+      const updatedProject = { ...currentProject, ...updates, lastModified: Date.now() };
+      await saveProjectToDB(updatedProject);
+      await loadProjects();
+      setCurrentProject(updatedProject);
+    } catch (error) {
+      console.error('Failed to update project:', error);
+      await dialog.alert({ title: '错误', message: '更新项目失败', type: 'error' });
+    }
+  };
+
   // 从项目中收集所有可用的图片
   const getProjectImages = (proj: ProjectState): string[] => {
     const images: string[] = [];
@@ -371,9 +398,9 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                      {/* Edit Button */}
                      {editingProjectId !== proj.id ? (
                      <button
-                        onClick={(e) => startEditing(e, proj)}
+                        onClick={(e) => openProjectSettings(e, proj)}
                         className="absolute top-4 right-20 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-600 hover:text-indigo-400 transition-all rounded-sm z-10"
-                        title="编辑项目名"
+                        title="编辑项目"
                      >
                         <Edit className="w-4 h-4" />
                      </button>
@@ -522,6 +549,14 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
         providerName="豆包"
         providerDescription="AI漫剧工场是一个 AI 视频生成工具，需要配置 API 密钥才能使用。请前往相关提供商获取 API Key。"
         documentationUrl="#"
+      />
+
+      {/* Project Settings Modal */}
+      <ProjectSettingsModal
+        isOpen={showProjectSettings}
+        onClose={closeProjectSettings}
+        project={currentProject}
+        updateProject={handleUpdateProject}
       />
     </div>
   );

@@ -53,17 +53,17 @@ interface ProjectSettingsModalProps {
 }
 
 const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onClose, project, updateProject }) => {
-  const [localTitle, setLocalTitle] = useState(project.title);
-  const [localDuration, setLocalDuration] = useState(project.targetDuration || '60s');
-  const [localLanguage, setLocalLanguage] = useState(project.language || '中文');
-  const [localStyle, setLocalStyle] = useState(project.visualStyle || '写实');
-  const [localImageSize, setLocalImageSize] = useState(project.imageSize || '1440x2560');
-  const [localImageCount, setLocalImageCount] = useState(project.imageCount || 1);
+  const [localTitle, setLocalTitle] = useState(project?.title || '');
+  const [localDuration, setLocalDuration] = useState(project?.targetDuration || '60s');
+  const [localLanguage, setLocalLanguage] = useState(project?.language || '中文');
+  const [localStyle, setLocalStyle] = useState(project?.visualStyle || '写实');
+  const [localImageSize, setLocalImageSize] = useState(project?.imageSize || '1440x2560');
+  const [localImageCount, setLocalImageCount] = useState(project?.imageCount || 1);
   const [customDurationInput, setCustomDurationInput] = useState('');
   const [modelConfigs, setModelConfigs] = useState<any[]>([]);
-  const [localLlmProvider, setLocalLlmProvider] = useState(project.modelProviders?.llm || '');
-  const [localText2imageProvider, setLocalText2imageProvider] = useState(project.modelProviders?.text2image || '');
-  const [localImage2videoProvider, setLocalImage2videoProvider] = useState(project.modelProviders?.image2video || '');
+  const [localLlmProvider, setLocalLlmProvider] = useState(project?.modelProviders?.llm || '');
+  const [localText2imageProvider, setLocalText2imageProvider] = useState(project?.modelProviders?.text2image || '');
+  const [localImage2videoProvider, setLocalImage2videoProvider] = useState(project?.modelProviders?.image2video || '');
 
   // Load model configs when modal opens
   useEffect(() => {

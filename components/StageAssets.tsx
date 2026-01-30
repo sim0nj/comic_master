@@ -357,7 +357,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               }`}
             >
               {allCharactersReady ? <RefreshCw className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
-              {allCharactersReady ? '批量生成' : '批量生成'}
+              {allCharactersReady ? '重新生成所有角色' : '生成所有角色'}
             </button>
           </div>
 
@@ -479,7 +479,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               }`}
             >
               {allScenesReady ? <RefreshCw className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
-              {allScenesReady ? '重新生成所有场景' : '一键生成所有场景'}
+              {allScenesReady ? '重新生成所有场景' : '生成所有场景'}
             </button>
           </div>
 

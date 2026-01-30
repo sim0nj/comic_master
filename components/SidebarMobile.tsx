@@ -1,4 +1,4 @@
-import { Aperture, ChevronLeft, Clapperboard, List, Film, Settings, Sparkles, Group } from 'lucide-react';
+import { Aperture, ChevronLeft, Clapperboard, Edit, Film, Group, List, Settings, Sparkles } from 'lucide-react';
 import React, { useState } from 'react';
 import { ProjectState } from '../types';
 import ModalSettings from './ModalSettings';
@@ -8,12 +8,13 @@ interface SidebarMobileProps {
   currentStage: string;
   setStage: (stage: 'script' | 'assets' | 'director' | 'export') => void;
   onExit: () => void;
+  onOpenSettings : () => void;
   projectName?: string;
   project?: ProjectState;
   updateProject?: (updates: Partial<ProjectState>) => void;
 }
 
-const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, onExit, projectName, project, updateProject }) => {
+const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, onExit, onOpenSettings, projectName, project, updateProject }) => {
   const [showModelSettings, setShowModelSettings] = useState(false);
   const [showProjectSettings, setShowProjectSettings] = useState(false);
 
@@ -41,7 +42,16 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
               <Aperture className="w-4 h-4" />
             </div>
             <div className="overflow-hidden">
+              <div className="flex items-center gap-2">
               <h1 className="text-xs font-bold text-white tracking-wider uppercase">{projectName || '未命名项目'}</h1>
+          <button
+            onClick={() => setShowProjectSettings(true)}
+            className="text-xs font-bold  text-slate-400 hover:text-white  items-center"
+            title="项目设置"
+          >
+            <Edit className="w-4 h-4" />
+          </button>
+              </div>
               <p className="text-[10px] text-slate-500 uppercase tracking-widest">AI漫剧工场</p>
             </div>
           </div>
@@ -50,18 +60,18 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
         {/* 右侧：设置和项目设置按钮 */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setShowProjectSettings(true)}
-            className="text-slate-400 hover:text-white transition-colors p-1"
-            title="项目设置"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
-          <button
             onClick={() => setShowModelSettings(true)}
             className="text-slate-400 hover:text-white transition-colors p-1"
             title="模型管理"
           >
             <Sparkles className="w-4 h-4" />
+          </button>
+          <button
+             onClick={onOpenSettings}
+            className="text-slate-400 hover:text-white transition-colors p-1"
+            title="模型管理"
+          >
+            <Settings className="w-4 h-4" />
           </button>
         </div>
       </div>
