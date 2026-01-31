@@ -1,7 +1,7 @@
 // services/modelService.ts
 // 模型调用包装类，根据启用的配置动态选择模型提供商
 
-import { ScriptData, Shot } from "../types";
+import { ScriptData, Shot, AIModelConfig } from "../types";
 import { uploadFileToService } from "../utils/fileUploadUtils";
 import { imageUrlToBase64 } from "../utils/imageUtils";
 import { getEnabledConfigByType } from "./modelConfigService";
@@ -247,7 +247,7 @@ export class ModelService {
    * 获取当前启用的 LLM 提供商
    * @param projectModelProviders - 项目级别的模型供应商配置
    */
-  private static async getEnabledLLMProvider(projectModelProviders?: { llm?: string }): Promise<'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu'> {
+  private static async getEnabledLLMProvider(projectModelProviders?: { llm?: string }): Promise<AIModelConfig> {
     let config;
 
     // 优先使用项目级别的供应商配置
@@ -264,20 +264,29 @@ export class ModelService {
 
     if (!config) {
       console.warn('未找到 LLM 配置，使用默认的 doubao');
-      return 'doubao';
+      return {
+        id: 'doubao-llm',
+        provider: 'doubao',
+        modelType: 'llm',
+        model: '',
+        apiKey: '',
+        apiUrl: '',
+        enabled: false,
+        description: 'Doubao LLM'
+      }
     }
 
     // 立即更新对应服务的配置参数
     await this.updateServiceConfig(config);
 
-    return config.provider as 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu';
+    return config;
   }
 
   /**
    * 获取当前启用的文生图提供商
    * @param projectModelProviders - 项目级别的模型供应商配置
    */
-  private static async getEnabledImageProvider(projectModelProviders?: { text2image?: string }): Promise<'doubao' | 'gemini' | 'openai' | 'yunwu'> {
+  private static async getEnabledImageProvider(projectModelProviders?: { text2image?: string }): Promise<AIModelConfig> {
     let config;
 
     // 优先使用项目级别的供应商配置
@@ -294,20 +303,29 @@ export class ModelService {
 
     if (!config) {
       console.warn('未找到文生图配置，使用默认的 doubao');
-      return 'doubao';
+      return {
+        id: 'doubao-text2image',
+        provider: 'doubao',
+        modelType: 'text2image',
+        model: '',
+        apiKey: '',
+        apiUrl: '',
+        enabled: false,
+        description: 'Doubao text2image'
+      };
     }
 
     // 立即更新对应服务的配置参数
     await this.updateServiceConfig(config);
 
-    return config.provider as 'doubao' | 'gemini' | 'openai';
+    return config;
   }
 
   /**
    * 获取当前启用的图生视频提供商
    * @param projectModelProviders - 项目级别的模型供应商配置
    */
-  private static async getEnabledVideoProvider(projectModelProviders?: { image2video?: string }): Promise<'doubao' | 'gemini' | 'openai' | 'yunwu' | 'minimax' | 'kling'> {
+  private static async getEnabledVideoProvider(projectModelProviders?: { image2video?: string }): Promise<AIModelConfig> {
     let config;
 
     // 优先使用项目级别的供应商配置
@@ -326,13 +344,22 @@ export class ModelService {
       console.warn('未找到图生视频配置，使用默认的 doubao');
       const storedApiKey = localStorage.getItem('cinegen_api_key') || '';
       setDoubaoApiKey(storedApiKey);
-      return 'doubao';
+      return {
+        id: 'doubao-image2video',
+        provider: 'doubao',
+        modelType: 'image2video',
+        model: '',
+        apiKey: '',
+        apiUrl: '',
+        enabled: false,
+        description: 'Doubao image2video'
+      };
     }
 
     // 立即更新对应服务的配置参数
     await this.updateServiceConfig(config);
 
-    return config.provider as 'doubao' | 'gemini' | 'openai';
+    return config;
   }
 
   /**
@@ -344,7 +371,7 @@ export class ModelService {
     const provider = await this.getEnabledLLMProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 进行剧本分析`);
 
-    switch (provider) {
+    switch (provider.provider) {
       case 'deepseek':
         return await parseScriptToDataDeepseek(rawText, language);
       case 'doubao':
@@ -368,7 +395,7 @@ export class ModelService {
     const provider = await this.getEnabledLLMProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成镜头清单`);
 
-    switch (provider) {
+    switch (provider.provider) {
       case 'deepseek':
         return await generateShotListDeepseek(scriptData);
       case 'doubao':
@@ -401,7 +428,7 @@ export class ModelService {
     if(scene.referenceImage){
       scene.referenceImage=null;
     }
-    switch (provider) {
+    switch (provider.provider) {
       case 'deepseek':
         return await generateShotListDeepseekForScene(scriptData, scene, sceneIndex);
       case 'doubao':
@@ -433,7 +460,7 @@ export class ModelService {
     const provider = await this.getEnabledLLMProvider(this.currentProjectModelProviders);
     console.log(`使用 ${provider} 生成剧本`);
 
-    switch (provider) {
+    switch (provider.provider) {
       case 'deepseek':
         return await generateScriptDeepseek(prompt, genre, targetDuration, language);
       case 'doubao':
@@ -470,7 +497,7 @@ export class ModelService {
       data.variations=[];
     }
 
-    switch (provider) {
+    switch (provider.provider) {
       case 'deepseek':
         return await generateVisualPromptsDeepseek(type, data, genre);
       case 'doubao':
@@ -491,7 +518,7 @@ export class ModelService {
    * @param provider - 提供商
    * @param apiKey - API 密钥
    */
-  static setApiKey(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling', apiKey: string): void {
+  static setApiKey(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'baidu', apiKey: string): void {
     switch (provider) {
       case 'deepseek':
         setDeepseekApiKey(apiKey);
@@ -524,7 +551,7 @@ export class ModelService {
    * @param provider - 提供商
    * @param apiUrl - API 端点
    */
-  static setApiUrl(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling', apiUrl: string): void {
+  static setApiUrl(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'baidu', apiUrl: string): void {
     switch (provider) {
       case 'deepseek':
         setDeepseekApiUrl(apiUrl);
@@ -555,7 +582,7 @@ export class ModelService {
    * 获取当前使用的提供商信息
    */
   static async getProviderInfo(): Promise<{
-    provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling';
+    provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'baidu';
     enabled: boolean;
   }> {
     const config = await getEnabledConfigByType('llm');
@@ -611,7 +638,7 @@ export class ModelService {
     let imageUrlOrBase64: string;
 
     // 调用各个模型服务生成图片
-    switch (provider) {
+    switch (provider.provider) {
       case 'doubao':
         imageUrlOrBase64 = await generateImageDoubao(new_prompt, processedReferenceImages, imageType, localStyle, imageSize,imageCount);
         break;
@@ -698,9 +725,10 @@ export class ModelService {
     let videoUrl: string;
 
     // 调用各个模型服务生成视频
-    switch (provider) {
+    switch (provider.provider) {
       case 'doubao':
-        videoUrl = await generateVideoDoubao(prompt, processedStartImageBase64, processedEndImageBase64, duration,full_frame);
+        const generate_audio = provider.description.indexOf("sound")>-1;
+        videoUrl = await generateVideoDoubao(prompt, processedStartImageBase64, processedEndImageBase64, duration,full_frame,generate_audio);
         break;
       case 'gemini':
         videoUrl = await generateVideoGemini(prompt, processedStartImageBase64, processedEndImageBase64,full_frame);
