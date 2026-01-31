@@ -11,9 +11,6 @@ interface ApiKeyModalProps {
   cozeApiKey?: string;
   currentFileUploadServiceUrl?: string;
   currentFileAccessDomain?: string;
-  providerName: string;
-  providerDescription: string;
-  documentationUrl: string;
 }
 
 const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
@@ -25,9 +22,6 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
   cozeApiKey = '',
   currentFileUploadServiceUrl = '',
   currentFileAccessDomain = '',
-  providerName,
-  providerDescription,
-  documentationUrl
 }) => {
   const [inputKey, setInputKey] = React.useState(currentKey);
   const [inputCozeWorkflowId, setInputCozeWorkflowId] = React.useState(cozeWorkflowId);
@@ -84,16 +78,15 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
            </div>
            <div>
               <h1 className="text-xl font-bold text-white tracking-wide">API 配置</h1>
-              <p className="text-[12px] text-slate-500 uppercase tracking-widest font-mono">Authentication</p>
            </div>
         </div>
 
         {/* Content */}
         <div className="space-y-6">
-          <div className="max-h-[60vh] overflow-y-auto rounded-lg"> 
+          <div className="max-h-[60vh] overflow-y-auto rounded-lg px-4"> 
            <div>
              <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
-               {providerName} API Key
+               火山引擎 / 豆包 API Key
              </label>
              <input
                type="password"
@@ -103,9 +96,9 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                className="w-full bg-[#0f0f23] border border-slate-800 text-white px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
              />
              <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
-               {providerDescription}
+               本应用默认使用火山引擎的大模型 API 。请确保您的 API Key 已开通相应的服务权限。
                <a
-                 href={documentationUrl}
+                 href="https://www.volcengine.com/docs/82379"
                  target="_blank"
                  rel="noreferrer"
                  className="text-indigo-400 hover:underline ml-1"
@@ -114,9 +107,17 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                </a>
              </p>
            </div>
-
+           {/* Current Key Status */}
+           {currentKey && (
+            <>
+            <div className="flex items-center gap-2 text-[12px] text-slate-500 bg-slate-900/50 p-3 rounded-lg">
+               <ShieldCheck className="w-3 h-3 text-green-500" />
+               <span className="font-mono">
+                 API Key 已配置: {currentKey.substring(0, 8)}...
+               </span>
+             </div>
            <div>
-             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2 mt-2">
                Coze 工作流 ID
              </label>
              <input
@@ -132,7 +133,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
            </div>
 
            <div>
-             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2 mt-2">
                Coze API Key
              </label>
              <input
@@ -156,7 +157,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
            </div>
 
            <div>
-             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2 mt-2">
                文件上传服务地址
              </label>
              <input
@@ -173,7 +174,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
            </div>
 
            <div>
-             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
+             <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2 mt-2">
                文件访问域名
              </label>
              <input
@@ -188,15 +189,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                <span className="text-slate-700">（可选）</span>
              </p>
            </div>
-
-           {/* Current Key Status */}
-           {currentKey && (
-             <div className="flex items-center gap-2 text-[12px] text-slate-500 bg-slate-900/50 p-3 rounded-lg">
-               <ShieldCheck className="w-3 h-3 text-green-500" />
-               <span className="font-mono">
-                 API Key 已配置: {currentKey.substring(0, 8)}...
-               </span>
-             </div>
+             </>
            )}
           </div>
            <button

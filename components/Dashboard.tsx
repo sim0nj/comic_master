@@ -546,9 +546,6 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
         cozeApiKey={currentCozeApiKey}
         currentFileUploadServiceUrl={currentFileUploadServiceUrl}
         currentFileAccessDomain={currentFileAccessDomain}
-        providerName="豆包"
-        providerDescription="AI漫剧工场是一个 AI 视频生成工具，需要配置 API 密钥才能使用。请前往相关提供商获取 API Key。"
-        documentationUrl="#"
       />
 
       {/* Project Settings Modal */}

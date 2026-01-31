@@ -200,9 +200,6 @@ function App() {
             cozeApiKey={cozeApiKey}
             currentFileUploadServiceUrl={fileUploadServiceUrl}
             currentFileAccessDomain={fileAccessDomain}
-            providerName="火山引擎 / 豆包"
-            providerDescription="本应用需要火山引擎的 API 访问权限。请确保您的 API Key 已开通相应的服务权限。"
-            documentationUrl="https://www.volcengine.com/docs/82379"
           />
         </div>
       </DialogProvider>
@@ -267,9 +264,6 @@ function App() {
     cozeApiKey={cozeApiKey}
     currentFileUploadServiceUrl={fileUploadServiceUrl}
     currentFileAccessDomain={fileAccessDomain}
-    providerName="火山引擎 / 豆包"
-    providerDescription="本应用需要火山引擎的 API 访问权限。请确保您的 API Key 已开通相应的服务权限。"
-    documentationUrl="https://www.volcengine.com/docs/82379"
           />
         {/* Save Status Indicator */}
         <div className="relative top-4 right-6 pointer-events-none opacity-50 flex items-center gap-2 text-xs font-mono text-slate-400 bg-black/50 px-2 py-1 rounded-full backdrop-blur-sm z-50">
