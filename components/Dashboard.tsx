@@ -298,8 +298,6 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
           <div>
             <h1 className="text-3xl font-light text-white tracking-tight mb-2 flex items-center gap-3">
               剧集库
-              <span className="text-slate-800 text-lg">/</span>
-              <span className="text-slate-600 text-sm font-mono tracking-widest uppercase">Episodes Database</span>
             </h1>
           </div>
           <div className="flex gap-3 flex-end justify-end">
