@@ -564,11 +564,10 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
 
   const renderStoryInput = () => (
     <div className={`flex h-full bg-[#0e1229] text-slate-300 ${isMobile ? 'flex-col overflow-y-auto' : 'flex-row'}`}>
-      
       {/* Middle Column: Config Panel - Adjusted Width to w-96 */}
       <div className={`${isMobile ? 'w-full' : 'w-96'} border-r border-slate-800 flex flex-col bg-[#101326]`}>
         {/* Header - Fixed Height 56px */}
-        <div className="h-16 px-6 border-b border-slate-800 flex items-center justify-between shrink-0">
+        <div className="h-14 px-6 border-b border-slate-800 flex items-center justify-between shrink-0">
             <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-3">
               <BookOpen className="w-5 h-5 text-indigo-500" />
               项目配置
@@ -853,7 +852,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
 
       {/* Right: Text Editor - Optimized */}
       <div className="flex-1 flex flex-col bg-[#0e1229] relative">
-        <div className="h-16 border-b border-slate-800 flex items-center justify-between px-8 bg-[#101326] shrink-0">
+        <div className="h-14 border-b border-slate-800 flex items-center justify-between px-8 bg-[#101326] shrink-0">
            <div className="flex items-center gap-3">
               <div className="w-1.5 h-1.5 rounded-full bg-slate-700"></div>
               <span className="text-xs font-bold text-slate-400">剧本编辑器</span>
@@ -940,7 +939,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
     return (
       <div className="flex flex-col h-full bg-[#0e1229] animate-in fade-in duration-500">
         {/* Header */}
-        <div className="h-16 px-6 border-b border-slate-800 bg-[#101326] flex items-center justify-between shrink-0 z-20">
+        <div className="h-14 px-6 border-b border-slate-800 bg-[#101326] flex items-center justify-between shrink-0 z-20">
            <div className="flex items-center gap-6">
               <h2 className="text-lg font-bold text-white tracking-tight flex items-center gap-3">
                  <List className="w-5 h-5 text-indigo-500" />

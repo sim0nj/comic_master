@@ -83,7 +83,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
 
         {/* Content */}
         <div className="space-y-6">
-          <div className="max-h-[60vh] overflow-y-auto rounded-lg px-4"> 
+          <div className="max-h-[50vh] overflow-y-auto rounded-lg px-4"> 
            <div>
              <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
                火山引擎 / 豆包 API Key

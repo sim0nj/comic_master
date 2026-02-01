@@ -377,7 +377,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       })()}
 
       {/* Header - Consistent with Director */}
-      <div className="h-16 border-b border-slate-800 bg-[#101326] px-6 flex items-center justify-between shrink-0">
+      <div className="h-14 border-b border-slate-800 bg-[#101326] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
                   <Group className="w-5 h-5 text-indigo-500" />
@@ -617,8 +617,8 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                 </div>
                 <div className="p-3 border-t border-slate-800 bg-[#0e1229]">
                   <div className="flex justify-between items-center mb-1">
-                     <h3 className="font-bold text-slate-200 text-sm truncate ">{scene.location}</h3>
-                     <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-800 uppercase font-mono">{scene.time}</span>
+                     <h3 className="font-bold text-slate-200 text-sm truncate">{scene.location}</h3>
+                     <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-800 uppercase font-mono whitespace-nowrap">{scene.time}</span>
                   </div>
                   <p className="text-[12px] text-slate-500 line-clamp-1 mb-2">{scene.atmosphere}</p>
                   {scene.visualPrompt && (
@@ -828,7 +828,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       ) : (
                         <div className="bg-slate-900/30 border border-slate-700/50 rounded-lg p-3">
                           {shot.dialogue ? (
-                            <p className="text-sm text-slate-300 h-12 font-mono leading-relaxed">{shot.dialogue}</p>
+                            <p className="text-sm text-slate-300 h-12 font-mono leading-relaxed line-clamp-2">{shot.dialogue}</p>
                           ) : (
                             <div className="text-center py-4 text-slate-600">
                               <p className="text-xs text-slate-500 mb-2">暂无对话</p>

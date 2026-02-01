@@ -804,8 +804,8 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       )}
 
       {/* Toolbar */}
-      {!activeShotId && isMobile && (
-      <div className="h-16 border-b border-slate-800 bg-[#101326] px-6 flex items-center justify-between shrink-0">
+      {(!isMobile || !activeShotId) && (
+      <div className="h-14 border-b border-slate-800 bg-[#101326] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
                   <Clapperboard className="w-5 h-5 text-indigo-500" />
@@ -814,11 +814,11 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
           </div>
 
           <div className="flex items-center gap-3">
-            {!isMobile &&
+            {!isMobile && (
               <span className="text-xs text-slate-500 mr-4 font-mono">
                   {project.shots.filter(s => s.interval?.videoUrl).length} / {project.shots.length} 完成
               </span>
-          }
+            )}
               <button
                   onClick={handleBatchGenerateImages}
                   disabled={!!batchProgress || !!batchVideoProgress}

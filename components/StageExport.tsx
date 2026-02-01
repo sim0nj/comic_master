@@ -124,7 +124,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
     <div className="flex flex-col h-full bg-[#0e1229] overflow-hidden">
       
       {/* Header - Consistent with Director */}
-      <div className="h-16 border-b border-slate-800 bg-[#101326] px-6 flex items-center justify-between shrink-0">
+      <div className="h-14 border-b border-slate-800 bg-[#101326] px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-white flex items-center gap-3">
                   <Film className="w-5 h-5 text-indigo-500" />
