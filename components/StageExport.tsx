@@ -377,7 +377,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                    <video
                      ref={videoRef}
                      controls={!isPlayingSelected}
-                     className="w-full"
+                     className="w-full h-full object-cover"
                      src={isPlayingSelected ? selectedShots[currentPlayingShotIndex]?.interval?.videoUrl : project.mergedVideoUrl}
                      onEnded={isPlayingSelected ? handleVideoEnded : undefined}
                      key={isPlayingSelected ? selectedShots[currentPlayingShotIndex]?.id : 'merged'}
