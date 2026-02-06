@@ -1,6 +1,6 @@
 // services/yunwuService.ts
 
-import { Character, Scene, ScriptData, Shot } from "../types";
+import { ScriptData, Shot } from "../types";
 import { PROMPT_TEMPLATES } from "./promptTemplates";
 
 // 云雾API配置
@@ -430,14 +430,9 @@ export const generateScript = async (
  * Agent 3: Visual Design (Prompt Generation)
  */
 export const generateVisualPrompts = async (
-  type: "character" | "scene",
-  data: Character | Scene,
-  genre: string
+  prompt: string
 ): Promise<string> => {
-  const prompt = PROMPT_TEMPLATES.GENERATE_VISUAL_PROMPT(type, data, genre);
-
   const endpoint = `${runtimeApiUrl}/v1beta/models/${runtimeTextModel}:generateContent`;
-
   const requestBody = {
     systemInstruction: {
       parts: [

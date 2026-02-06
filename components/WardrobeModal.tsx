@@ -1,5 +1,6 @@
 import { Loader2, Plus, RefreshCw, Shirt, User, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { PROMPT_TEMPLATES } from '../services/promptTemplates';
 import { ModelService } from '../services/modelService';
 import { Character, CharacterVariation, ProjectState } from '../types';
 import { useDialog } from './dialog';
@@ -70,17 +71,12 @@ const WardrobeModal: React.FC<Props> = ({
           const prompt = character.visualPrompt || await ModelService.generateVisualPrompts('character', character, project.scriptData?.genre || '剧情片');
 
           // Enhance prompt to emphasize character consistency
-          const enhancedPrompt = `
-            生成角色：${character.name} 的新造型图，画面风为：${localStyle}，符合下面描述。
-            造型描述：
-                ${variation.visualPrompt}
-            要求：
-                - 画面尺寸为：1728x2304
-                - 画面风为：${localStyle}
-                - 画面内容为角色的一张图
-                - 如果有参考图，参考图为角色的三视图加大头照，必须保持面部特征与参考图一致。
-                - 如果没有，角色原来是这样的：${prompt}
-        `
+          const enhancedPrompt = PROMPT_TEMPLATES.GENERATE_CHARACTER_VARIATION(
+            character.name,
+            localStyle,
+            variation.visualPrompt,
+            prompt
+          );
 
           const imageUrl = await ModelService.generateImage(enhancedPrompt, refImages, "variation", localStyle, '1728x2304',1,{},project.id);
 

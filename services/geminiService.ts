@@ -1,5 +1,5 @@
 import { GenerateContentResponse, GoogleGenAI, Type } from "@google/genai";
-import { Character, Scene, ScriptData, Shot } from "../types";
+import { Scene, ScriptData, Shot } from "../types";
 import { PROMPT_TEMPLATES } from "./promptTemplates";
 
 // Module-level variable to store the key at runtime
@@ -285,10 +285,8 @@ export const generateScript = async (
 /**
  * Agent 3: Visual Design (Prompt Generation)
  */
-export const generateVisualPrompts = async (type: 'character' | 'scene', data: Character | Scene, genre: string): Promise<string> => {
+export const generateVisualPrompts = async (prompt: string): Promise<string> => {
    const ai = getAiClient();
-    const prompt = PROMPT_TEMPLATES.GENERATE_VISUAL_PROMPT(type, data, genre);
-
    const response = await retryOperation<GenerateContentResponse>(() => ai.models.generateContent({
      model: 'gemini-2.5-flash',
      contents: prompt,

@@ -1,6 +1,6 @@
 // services/deepseekService.ts
 
-import { Character, Scene, ScriptData, Shot } from "../types";
+import { ScriptData, Shot } from "../types";
 import { getEnabledConfigByType } from "./modelConfigService";
 import { PROMPT_TEMPLATES } from "./promptTemplates";
 
@@ -343,18 +343,18 @@ export const generateScript = async (
  * 生成视觉提示词
  */
 export const generateVisualPrompts = async (
-  type: "character" | "scene",
-  data: Character | Scene,
-  genre: string
+  prompt: string
 ): Promise<string> => {
-  const prompt = PROMPT_TEMPLATES.GENERATE_VISUAL_PROMPT(type, data, genre);
-
   const endpoint = `${runtimeApiUrl}/chat/completions`;
   const response = await fetchWithRetry(endpoint, {
     method: "POST",
     body: JSON.stringify({
       model: runtimeTextModel,
       messages: [
+        {
+            role: "system",
+            content: PROMPT_TEMPLATES.SYSTEM_VISUAL_DESIGNER,
+        },
         {
           role: "user",
           content: prompt,

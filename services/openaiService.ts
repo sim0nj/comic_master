@@ -1,6 +1,6 @@
 // services/openaiService.ts
 
-import { Character, Scene, ScriptData, Shot } from "../types";
+import { ScriptData, Shot } from "../types";
 import { PROMPT_TEMPLATES } from "./promptTemplates";
 
 // OpenAI 配置
@@ -345,12 +345,8 @@ export const generateScript = async (
  * Agent 3: Visual Design (Prompt Generation)
  */
 export const generateVisualPrompts = async (
-  type: "character" | "scene",
-  data: Character | Scene,
-  genre: string
+  prompt: string
 ): Promise<string> => {
-  const prompt = PROMPT_TEMPLATES.GENERATE_VISUAL_PROMPT(type, data, genre);
-
   const endpoint = `${runtimeApiUrl}/chat/completions`;
   const response = await fetchWithRetry(endpoint, {
     method: "POST",

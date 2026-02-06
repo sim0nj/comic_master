@@ -546,17 +546,19 @@ export class ModelService {
       data.variations=[];
     }
 
+    const prompt = PROMPT_TEMPLATES.GENERATE_VISUAL_PROMPT(type, data, genre);
+
     switch (provider.provider) {
       case 'deepseek':
-        return await generateVisualPromptsDeepseek(type, data, genre);
+        return await generateVisualPromptsDeepseek(prompt);
       case 'doubao':
-        return await generateVisualPromptsDoubao(type, data, genre);
+        return await generateVisualPromptsDoubao(prompt);
       case 'gemini':
-        return await generateVisualPromptsGemini(type, data, genre);
+        return await generateVisualPromptsGemini(prompt);
       case 'yunwu':
-        return await generateVisualPromptsYunwu(type, data, genre);
+        return await generateVisualPromptsYunwu(prompt);
       case 'openai':
-        return await generateVisualPromptsOpenai(type, data, genre);
+        return await generateVisualPromptsOpenai(prompt);
       default:
         throw new Error(`暂不支持 ${provider} 提供商的视觉提示词生成`);
     }
@@ -749,12 +751,12 @@ export class ModelService {
     }
 
     if(imageType=='character'){
-      new_prompt = "生成符合下面要求的角色图片。\n" + new_prompt;
-      new_prompt = new_prompt + "\n 生成三视图加大头照，在同一张图中生成丰富细节的角色展示风格图片，图片比例3:4，具体要求：排版布局左上1/4为从头部到肩膀的清晰正面大头照，右上和下部3/4为人物的站立全身三视图（正视、侧视、背视）；所有视图必须为同一角色，五官、发型、服装、体型、风格、比例与细节完全一致，不改变人物特征；三视图比例统一、姿态自然；纯白色背景、无阴影、无道具、无文字。"
+      new_prompt = "以"+localStyle+"的风格生成符合下面要求的角色图片。\n" + new_prompt;
+      new_prompt = new_prompt + "\n 生成角色三视图加大头照，在同一张图中生成丰富细节的角色展示风格图片，图片比例3:4，具体要求：排版布局左上1/4为从头部到肩膀的清晰正面大头照，右上1/4为人物站立的全身正视图， 下部左边人物的站立全身侧视图，右边人物的站立全身背视图；所有视图必须为同一角色，五官、发型、服装、体型、风格、比例与细节完全一致，不改变人物特征；三视图比例统一、姿态自然；纯白色背景、无阴影、无道具、无文字。"
     }
 
     if(imageType=='scene'){
-      new_prompt = "生成符合下面要求的场景图片。\n" + new_prompt;
+      new_prompt = "以"+localStyle+"的风格生成符合下面要求的场景图片。\n" + new_prompt;
       new_prompt += "\n 图片比例16:9，具体要求：图中无角色、无文字";
     }
 

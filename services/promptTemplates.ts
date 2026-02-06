@@ -108,9 +108,9 @@ export const PROMPT_TEMPLATES = {
 
   // ============ 视觉提示词生成 ============
   GENERATE_VISUAL_PROMPT: (type: "character" | "scene", data: any, genre: string) => `
-    为${genre}视频生成高还原度视觉提示词。
-    ${type=='character'?'角色':'场景'}: ${JSON.stringify(data)}
-    场景要描述时间、地点、景色、光线、氛围等，不要出现角色。
+    为${genre}视频的${type=='character'?'角色':'场景'}生成高还原度视觉提示词。
+    ${type=='character'?'角色':'场景'}的JSON格式信息如下: ${JSON.stringify(data)}
+    ${type=='character'?'角色要体现出年龄、性别、性格、外貌、动作、衣着、神态等，不要出现场景。':'场景要描述时间、地点、景色、光线、氛围等，不要出现角色。'}
     中文输出提示词，以逗号分隔，聚焦视觉细节（光线、质感、外观）。
   `,
 
@@ -121,7 +121,7 @@ export const PROMPT_TEMPLATES = {
 
   // ============ 带参考图的图片生成 ============
   IMAGE_GENERATION_WITH_REFERENCE: (prompt: string,localStyle: string="写实") => `
-    生成符合下面描述的电影级镜头，画面风为：${localStyle}。
+    生成符合下面描述的电影级镜头，画面风格为：${localStyle}。
     任务描述：
       ${prompt}
 
@@ -133,5 +133,23 @@ export const PROMPT_TEMPLATES = {
     - 画面风为：${localStyle}。
     - 严格保持与场景参考图一致的视觉风格、光影效果和环境氛围。
     - 若画面中出现角色，必须与所提供的角色参考图高度相似。
+  `,
+
+  // ============ 角色造型变体生成 ============
+  GENERATE_CHARACTER_VARIATION: (
+    characterName: string,
+    localStyle: string,
+    variationPrompt: string,
+    baseCharacterPrompt: string
+  ) => `
+    生成角色：${characterName} 的新造型图，画面风为：${localStyle}，符合下面描述。
+    造型描述：
+        ${variationPrompt}
+    要求：
+        - 画面尺寸为：1728x2304
+        - 画面风为：${localStyle}
+        - 画面内容为角色的一张图
+        - 如果有参考图，参考图为角色的三视图加大头照，必须保持面部特征与参考图一致。
+        - 如果没有，角色原来是这样的：${baseCharacterPrompt}
   `,
 };
