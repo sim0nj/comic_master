@@ -423,7 +423,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-7 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 xl:grid-cols-7 gap-6">
             {project.scriptData.characters.map((char) => (
               <div key={char.id} className="bg-[#0e1229] border border-slate-800 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
                 <div className="aspect-[3/4] bg-slate-900 relative overflow-hidden">
@@ -545,7 +545,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
             {project.scriptData.scenes.map((scene) => (
               <div key={scene.id} className="bg-[#0e1229] border border-slate-800 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
                 <div className="aspect-[16/9] bg-slate-900 relative overflow-hidden">
@@ -681,7 +681,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                   语音合成参数
                 </h4>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
                 {/* SPD - 语速 */}
                 <div className="space-y-2">
                   <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold block">语速 (SPD)</label>
@@ -781,7 +781,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6">
               {project.shots.map((shot, shotIndex) => (
                 <div key={shot.id} className="bg-[#0e1229] border border-slate-800 rounded-xl overflow-hidden hover:border-slate-600 transition-all flex flex-col">
                   <div className="p-4 space-y-3">

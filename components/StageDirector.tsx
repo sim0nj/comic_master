@@ -847,7 +847,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       <div className="flex-1 overflow-hidden flex">
           {/* Grid View - Responsive Logic */}
           <div className={`flex-1 overflow-y-auto transition-all duration-500 ease-in-out ${activeShotId ? (isMobile?'hidden':'p-6 border-r border-slate-800') : 'p-6'}`}>
-              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-4': 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'}`}>
+              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-1 xl:grid-cols-2 xl:grid-cols-4': 'grid-cols-2 md:grid-cols-3 xl:grid-cols-4 xl:grid-cols-5'}`}>
                   {project.shots.map((shot, idx) => {
                       const sKf = shot.keyframes?.find(k => k.type === 'start');
                       const fKf = shot.keyframes?.find(k => k.type === 'full');

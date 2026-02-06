@@ -973,7 +973,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
         <div className="flex-1 overflow-hidden flex">
            
            {/* Sidebar: Index */}
-           <div className="w-96 border-r border-slate-800 bg-[#101326] flex flex-col hidden lg:flex">
+           <div className="w-96 border-r border-slate-800 bg-[#101326] flex flex-col hidden xl:flex">
               <div className="p-6 border-b border-slate-900">
                  {/* Genre Selection */}
                  <div>
@@ -1307,7 +1307,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                              <div key={shot.id} className="group bg-[#13172b] hover:bg-[#1a2648] transition-colors p-6 py-4 gap-4 md:p-8 flex md:gap-8" >
 
                                 {/* Shot ID & Tech Data */}
-                                <div className="lg:w-32 flex-shrink-0 flex flex-col">
+                                <div className="xl:w-32 flex-shrink-0 flex flex-col">
                                    <div className="flex py-1 items-center justify-between flex-col pb-4">
                                      <div className="flex gap-1 items-center justify-between w-full">
                                        <div className="text-xs font-mono text-slate-500 group-hover:text-white transition-colors">
