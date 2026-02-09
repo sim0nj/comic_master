@@ -423,7 +423,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 xl:grid-cols-7 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             {project.scriptData.characters.map((char) => (
               <div key={char.id} className="bg-[#0e1229] border border-slate-800 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
                 <div className="aspect-[3/4] bg-slate-900 relative overflow-hidden">
