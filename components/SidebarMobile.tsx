@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ProjectState } from '../types';
 import ModalSettings from './ModalSettings';
 import ProjectSettingsModal from './ProjectSettingsModal';
+import { ThemeToggle } from './ThemeToggle';
 
 interface SidebarMobileProps {
   currentStage: string;
@@ -26,14 +27,14 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
   ];
 
   return (
-    <aside className="top-0 z-50 left-0 right-0 z-50 select-none bg-[#0c1022] border-b border-slate-800 flex flex-col">
+    <aside className="top-0 z-50 left-0 right-0 z-50 select-none bg-bg-primary border-b border-slate-800 flex flex-col">
       {/* 顶部栏 */}
       <div className="flex items-center justify-between px-4 py-2">
         {/* 左侧：Logo 和 返回按钮 */}
         <div className="flex items-center gap-3">
           <button
             onClick={onExit}
-            className="text-slate-400 hover:text-white transition-colors"
+            className="text-slate-400 hover:text-text-primary transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -43,10 +44,10 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
             </div>
             <div className="overflow-hidden">
               <div className="flex items-center gap-2">
-              <h1 className="text-xs font-bold text-white tracking-wider uppercase">{projectName || '未命名项目'}</h1>
+              <h1 className="text-xs font-bold text-text-primary tracking-wider uppercase">{projectName || '未命名项目'}</h1>
           <button
             onClick={() => setShowProjectSettings(true)}
-            className="text-[11px] font-medium font-bold text-slate-400 hover:text-white items-center"
+            className="text-[11px] font-medium font-bold text-slate-400 hover:text-text-primary items-center"
             title="项目设置"
           >
             <Edit className="w-3.5 h-3.5" />
@@ -61,23 +62,24 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowModelSettings(true)}
-            className="text-slate-400 hover:text-white transition-colors p-1"
+            className="text-slate-400 hover:text-text-primary transition-colors p-1"
             title="模型管理"
           >
             <Sparkles className="w-4 h-4" />
           </button>
           <button
              onClick={onOpenSettings}
-            className="text-slate-400 hover:text-white transition-colors p-1"
+            className="text-slate-400 hover:text-text-primary transition-colors p-1"
             title="模型管理"
           >
             <Settings className="w-4 h-4" />
           </button>
+          <ThemeToggle size="sm" />
         </div>
       </div>
 
       {/* 导航 */}
-      <nav className="fixed bottom-0 left-0 right-0 py-2 h-16 z-50 flex border-t border-slate-800 items-center justify-around px-4 py-0 overflow-hidden select-none bg-[#0c1022] border-b border-slate-800">
+      <nav className="fixed bottom-0 left-0 right-0 py-2 h-16 z-50 flex border-t border-slate-800 items-center justify-around px-4 py-0 overflow-hidden select-none bg-bg-primary border-b border-slate-800">
         {navItems.map((item) => {
           const isActive = currentStage === item.id;
           return (
@@ -87,12 +89,12 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
               className={`
                 flex flex-col items-center px-2 min-w-[60px] rounded-lg transition-all duration-200
                 ${isActive
-                  ? 'text-white'
+                  ? 'text-text-primary'
                   : 'text-slate-500 hover:text-slate-300'
                 }
               `}
             >
-              <item.icon className={`w-5 h-5 ${isActive ? 'text-white' : ''}`} />
+              <item.icon className={`w-5 h-5 ${isActive ? 'text-text-primary' : ''}`} />
               <span className="text-[10px] font-medium tracking-wider uppercase mt-1">
                 {item.label}
               </span>

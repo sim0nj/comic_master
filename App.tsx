@@ -8,6 +8,7 @@ import StageAssets from './components/StageAssets';
 import StageDirector from './components/StageDirector';
 import StageExport from './components/StageExport';
 import StageScript from './components/StageScript';
+import { ThemeToggle } from './components/ThemeToggle';
 import { DialogProvider } from './components/dialog';
 
 import { initializeCozeConfig } from './services/cozeService';
@@ -178,7 +179,7 @@ function App() {
       case 'export':
         return <StageExport project={project} updateProject={updateProject} />;
       default:
-        return <div className="text-white">未知阶段</div>;
+        return <div className="text-text-primary">未知阶段</div>;
     }
   };
 
@@ -186,7 +187,7 @@ function App() {
   if (!apiKey) {
     return (
       <DialogProvider>
-        <div className="h-screen bg-[#0e1229] flex items-center justify-center p-8 relative overflow-hidden">
+        <div className="h-screen bg-bg-secondary flex items-center justify-center p-8 relative overflow-hidden">
           {/* Background Accents */}
           <div className="absolute top-0 right-0 p-64 bg-indigo-900/5 blur-[150px] rounded-full pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 p-48 bg-slate-900/10 blur-[120px] rounded-full pointer-events-none"></div>
@@ -211,11 +212,14 @@ function App() {
     return (
       <DialogProvider>
         <>
-        {!isMobile &&
-          <button onClick={handleClearKey} className="fixed top-4 right-4 z-50 text-[12px] text-slate-600 hover:text-red-500 transition-colors uppercase font-mono tracking-widest">
-            退出
-          </button>
-        }
+        {!isMobile && (
+          <>
+            <button onClick={handleClearKey} className="fixed top-4 right-16 z-50 text-[12px] text-slate-600 hover:text-red-500 transition-colors uppercase font-mono tracking-widest">
+              退出
+            </button>
+            <ThemeToggle size="sm" className="fixed top-2 right-24 z-50 text-[12px] text-slate-600 hover:text-red-500 transition-colors uppercase font-mono tracking-widest"/>
+          </>
+        )}
           <Dashboard onOpenProject={handleOpenProject} isMobile={isMobile} />
         </>
       </DialogProvider>
@@ -225,29 +229,33 @@ function App() {
   // Workspace View
   return (
     <DialogProvider>
-      <div className={`${isMobile?'':'flex'} h-screen overflow-hidden bg-[#0c1022] min-h-screen font-sans text-gray-100 selection:bg-indigo-500/30`} style={{paddingTop: 'env(safe-area-inset-top)'}}>
+      <div className={`${isMobile?'':'flex'} h-screen overflow-hidden bg-bg-primary min-h-screen font-sans text-text-primary selection:bg-selection-bg`} style={{paddingTop: 'env(safe-area-inset-top)'}}>
         {isMobile ? (
-          <SidebarMobile
-            currentStage={project.stage}
-            setStage={setStage}
-            onExit={handleExitProject}
-            onOpenSettings={() => setShowSettings(true)}
-            projectName={project.title}
-            project={project}
-            updateProject={updateProject}
-          />
+          <>
+            <SidebarMobile
+              currentStage={project.stage}
+              setStage={setStage}
+              onExit={handleExitProject}
+              onOpenSettings={() => setShowSettings(true)}
+              projectName={project.title}
+              project={project}
+              updateProject={updateProject}
+            />
+          </>
         ) : (
-          <Sidebar
-            currentStage={project.stage}
-            setStage={setStage}
-            onExit={handleExitProject}
-            onOpenSettings={() => setShowSettings(true)}
-            onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
-            collapsed={isMd||sidebarCollapsed}
-            projectName={project.title}
-            project={project}
-            updateProject={updateProject}
-          />
+          <>
+            <Sidebar
+              currentStage={project.stage}
+              setStage={setStage}
+              onExit={handleExitProject}
+              onOpenSettings={() => setShowSettings(true)}
+              onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+              collapsed={isMd||sidebarCollapsed}
+              projectName={project.title}
+              project={project}
+              updateProject={updateProject}
+            />
+          </>
         )}
 
       <main className={`transition-allduration-300 ease-in-out ${isMobile ? 'ml-0' : (sidebarCollapsed ? 'ml-20' : 'xl:ml-72 md:ml-20')} flex-1 h-screen overflow-hidden relative`}

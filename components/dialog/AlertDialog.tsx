@@ -31,18 +31,18 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       <div
-        className="relative bg-[#1a1d2e] border border-slate-700/50 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6"
+        className="relative bg-bg-panel border border-slate-700/50 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col items-center text-center">
           <div className={`p-3 rounded-full ${config.bgColor} mb-4`}>
             <Icon className={`w-8 h-8 ${config.iconColor}`} />
           </div>
-          {title && <h3 className="text-lg font-semibold text-white mb-2">{title}</h3>}
+          {title && <h3 className="text-lg font-semibold text-text-primary mb-2">{title}</h3>}
           <p className="text-slate-300 mb-6">{message}</p>
           <button
             onClick={onClose}
-            className="w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors"
+            className="w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-text-primary font-medium rounded-lg transition-colors"
           >
             确定
           </button>

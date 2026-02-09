@@ -102,10 +102,10 @@ const FileUploadModal: React.FC<Props> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
-      <div className="bg-[#0f0f23] border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
+      <div className="bg-bg-input border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="h-16 px-6 border-b border-slate-800 flex items-center justify-between bg-[#0e1230]">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+        <div className="h-16 px-6 border-b border-slate-800 flex items-center justify-between bg-bg-secondary">
+          <h3 className="text-lg font-bold text-text-primary flex items-center gap-2">
             <Upload className="w-5 h-5 text-indigo-500" />
             {title}
           </h3>
@@ -151,16 +151,16 @@ const FileUploadModal: React.FC<Props> = ({
                   />
                   {uploadSuccess && (
                     <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
-                      <div className="bg-green-500 text-white p-3 rounded-full">
+                      <div className="bg-green-500 text-text-primary p-3 rounded-full">
                         <Check className="w-8 h-8" />
                       </div>
                     </div>
                   )}
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-[#0e0e28] rounded-lg border border-slate-800">
+                <div className="flex items-center justify-between p-3 bg-bg-panel rounded-lg border border-slate-800">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-white font-medium truncate">
+                    <p className="text-sm text-text-primary font-medium truncate">
                       {selectedFile?.name}
                     </p>
                     <p className="text-xs text-slate-500">
@@ -185,11 +185,11 @@ const FileUploadModal: React.FC<Props> = ({
         </div>
 
         {/* Footer */}
-        <div className="h-16 px-6 border-t border-slate-800 flex items-center justify-between bg-[#0e1230]">
+        <div className="h-16 px-6 border-t border-slate-800 flex items-center justify-between bg-bg-secondary">
           <button
             onClick={handleRemoveFile}
             disabled={!previewUrl || uploadSuccess || uploading}
-            className="px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 text-sm text-slate-400 hover:text-text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             重新选择
           </button>
@@ -205,7 +205,7 @@ const FileUploadModal: React.FC<Props> = ({
               <button
                 onClick={handleUpload}
                 disabled={uploading}
-                className="px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-text-primary rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {uploading ? (
                   <>

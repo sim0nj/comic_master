@@ -1,0 +1,125 @@
+@import 'tailwindcss';
+
+@theme {
+  /* 深色主题背景色 */
+  --color-dark-bg-primary: #0c1022;
+  --color-dark-bg-secondary: #0e1229;
+  --color-dark-bg-panel: #0e0e28;
+  --color-dark-bg-input: #0f0f23;
+  --color-dark-bg-footer: #090923;
+  --color-dark-bg-modal: #0A0A0A;
+  --color-dark-bg-selected: #141414;
+  --color-dark-bg-sidebar: #0f0f23;
+  --color-dark-bg-header: #101326;
+  --color-dark-bg-card: #0f1225;
+  --color-dark-bg-button: #060624;
+  --color-dark-bg-progress: #1a1d2d;
+  
+  /* 浅色主题背景色 */
+  --color-light-bg-primary: #ffffff;
+  --color-light-bg-secondary: #f8fafc;
+  --color-light-bg-panel: #f1f5f9;
+  --color-light-bg-input: #ffffff;
+  --color-light-bg-footer: #f1f5f9;
+  --color-light-bg-modal: #ffffff;
+  --color-light-bg-selected: #e2e8f0;
+  --color-light-bg-sidebar: #ffffff;
+  --color-light-bg-header: #f8fafc;
+  --color-light-bg-card: #ffffff;
+  --color-light-bg-button: #f1f5f9;
+  --color-light-bg-progress: #e2e8f0;
+  
+  /* 磨砂玻璃效果 */
+  --color-glass-bg: rgb(20 20 20 / 0.6);
+  --color-glass-light-bg: rgb(255 255 255 / 0.8);
+  
+  /* 文字颜色 - 深色主题 */
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #64748b;
+  
+  /* 文字颜色 - 浅色主题 */
+  --color-text-light-primary: #1e293b;
+  --color-text-light-secondary: #64748b;
+  --color-text-light-muted: #94a3b8;
+  
+  /* 选择高亮 */
+  --color-selection-bg: rgb(99 102 241 / 0.3);
+  --color-selection-light-bg: rgb(99 102 241 / 0.2);
+}
+
+@layer base {
+  /* 默认深色主题 */
+  :root {
+    --bg-primary: var(--color-dark-bg-primary);
+    --bg-secondary: var(--color-dark-bg-secondary);
+    --bg-panel: var(--color-dark-bg-panel);
+    --bg-input: var(--color-dark-bg-input);
+    --bg-footer: var(--color-dark-bg-footer);
+    --bg-modal: var(--color-dark-bg-modal);
+    --bg-selected: var(--color-dark-bg-selected);
+    --bg-sidebar: var(--color-dark-bg-sidebar);
+    --bg-header: var(--color-dark-bg-header);
+    --bg-card: var(--color-dark-bg-card);
+    --bg-button: var(--color-dark-bg-button);
+    --bg-progress: var(--color-dark-bg-progress);
+    --text-primary: var(--color-text-primary);
+    --text-secondary: var(--color-text-secondary);
+    --text-muted: var(--color-text-muted);
+    --selection-bg: var(--color-selection-bg);
+    --glass-bg: var(--color-glass-bg);
+  }
+
+  /* 浅色主题 */
+  :root[data-theme="light"] {
+    --bg-primary: var(--color-light-bg-primary);
+    --bg-secondary: var(--color-light-bg-secondary);
+    --bg-panel: var(--color-light-bg-panel);
+    --bg-input: var(--color-light-bg-input);
+    --bg-footer: var(--color-light-bg-footer);
+    --bg-modal: var(--color-light-bg-modal);
+    --bg-selected: var(--color-light-bg-selected);
+    --bg-sidebar: var(--color-light-bg-sidebar);
+    --bg-header: var(--color-light-bg-header);
+    --bg-card: var(--color-light-bg-card);
+    --bg-button: var(--color-light-bg-button);
+    --bg-progress: var(--color-light-bg-progress);
+    --text-primary: var(--color-text-light-primary);
+    --text-secondary: var(--color-text-light-secondary);
+    --text-muted: var(--color-text-light-muted);
+    --selection-bg: var(--color-selection-light-bg);
+    --glass-bg: var(--color-glass-light-bg);
+  }
+
+  /* 跟随系统主题 */
+  @media (prefers-color-scheme: light) {
+    :root[data-theme="system"] {
+      --bg-primary: var(--color-light-bg-primary);
+      --bg-secondary: var(--color-light-bg-secondary);
+      --bg-panel: var(--color-light-bg-panel);
+      --bg-input: var(--color-light-bg-input);
+      --bg-footer: var(--color-light-bg-footer);
+      --bg-modal: var(--color-light-bg-modal);
+      --bg-selected: var(--color-light-bg-selected);
+      --bg-sidebar: var(--color-light-bg-sidebar);
+      --bg-header: var(--color-light-bg-header);
+      --bg-card: var(--color-light-bg-card);
+      --bg-button: var(--color-light-bg-button);
+      --bg-progress: var(--color-light-bg-progress);
+      --text-primary: var(--color-text-light-primary);
+      --text-secondary: var(--color-text-light-secondary);
+      --text-muted: var(--color-text-light-muted);
+      --selection-bg: var(--color-selection-light-bg);
+      --glass-bg: var(--color-glass-light-bg);
+    }
+  }
+
+  * {
+    @apply border-slate-800;
+  }
+  
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+}

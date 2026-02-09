@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ProjectState } from '../types';
 import ModalSettings from './ModalSettings';
 import ProjectSettingsModal from './ProjectSettingsModal';
+import { ThemeToggle } from './ThemeToggle';
 
 interface Props {
   project: ProjectState;
@@ -33,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
   ];
 
   return (
-    <aside className={`${collapsed ? 'w-20' : 'xl:w-72 md:w-20'} bg-[#0c1022] border-r border-slate-800 h-screen fixed left-0 top-0 flex flex-col z-50 select-none transition-all duration-300 ease-in-out`}>
+    <aside className={`${collapsed ? 'w-20' : 'xl:w-72 md:w-20'} bg-bg-primary border-r border-slate-800 h-screen fixed left-0 top-0 flex flex-col z-50 select-none transition-all duration-300 ease-in-out`}>
       {/* Header */}
       <div className="p-6 border-b border-slate-900">
         {!collapsed ? (
@@ -42,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
               <Aperture className="w-5 h-5" />
             </div>
             <div className="overflow-hidden">
-              <h1 className="text-sm font-bold text-white tracking-wider uppercase">AI漫剧工场</h1>
+              <h1 className="text-sm font-bold text-text-primary tracking-wider uppercase">AI漫剧工场</h1>
               <p className="text-[12px] text-slate-500 uppercase tracking-widest">Studio Pro</p>
             </div>
           </div>
@@ -56,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
 
         <button
           onClick={onExit}
-          className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-xs font-mono uppercase tracking-wide group w-full"
+          className="flex items-center gap-2 text-slate-500 hover:text-text-primary transition-colors text-xs font-mono uppercase tracking-wide group w-full"
         >
           <ChevronLeft className="w-4 h-4 group-hover:-translate-1 transition-transform" />
           {!collapsed && <span>返回项目列表</span>}
@@ -70,7 +71,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
            <div className="text-sm font-medium flex items-center  text-slate-200 truncate font-mono">{projectName || '未命名项目'}
            <button
                 onClick={() => setShowProjectSettings(true)}
-                className="text-xs font-bold  text-slate-400 hover:text-white  items-center gap-2 px-2 py-2 "
+                className="text-xs font-bold  text-slate-400 hover:text-text-primary  items-center gap-2 px-2 py-2 "
                 >
                 <Edit className="w-4 h-4" />
            </button>
@@ -80,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
         <div className="px-6 py-2 border-b border-slate-900">
           <button
                 onClick={() => setShowProjectSettings(true)}
-                className="text-xs font-bold text-slate-600 hover:text-white"
+                className="text-xs font-bold text-slate-600 hover:text-text-primary"
                 >
                 <Edit className="w-4 h-4 group-hover:-translate-1 transition-transform" />
            </button>
@@ -97,13 +98,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
               onClick={() => setStage(item.id as any)}
               className={`w-full flex items-center justify-between px-6 py-4 transition-all duration-200 group relative border-l-2 ${
                 isActive
-                  ? 'border-white bg-slate-800 text-white'
+                  ? 'border-white bg-slate-800 text-text-primary'
                   : 'border-transparent text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
               }`}
               title={collapsed ? item.label : ''}
             >
               <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-                <item.icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-400'}`} />
+                <item.icon className={`w-4 h-4 ${isActive ? 'text-text-primary' : 'text-slate-600 group-hover:text-slate-400'}`} />
                 {!collapsed && <span className="font-medium text-xs tracking-wider uppercase">{item.label}</span>}
               </div>
               {!collapsed && <span className={`text-[12px] font-mono ${isActive ? 'text-slate-400' : 'text-slate-700'}`}>{item.sub}</span>}
@@ -118,14 +119,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
           <>
             <button
               onClick={() => setShowModelSettings(true)}
-              className="flex items-center justify-between text-slate-600 hover:text-white cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
+              className="flex items-center justify-between text-slate-600 hover:text-text-primary cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
             >
               <span className="font-mono text-[12px] uppercase tracking-widest">模型管理</span>
               <Sparkles className="w-4 h-4" />
             </button>
             <button
               onClick={onOpenSettings}
-              className="flex items-center justify-between text-slate-600 hover:text-white cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
+              className="flex items-center justify-between text-slate-600 hover:text-text-primary cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
             >
               <span className="font-mono text-[12px] uppercase tracking-widest">系统设置</span>
               <Settings className="w-4 h-4" />
@@ -138,11 +139,12 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                   href="https://github.com/3dudu/comic_master/issues"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                  className="text-slate-600 hover:text-text-primary transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
                   title="GitHub"
                 >
                   <GithubIcon className="w-4 h-4" />
                 </a>
+                <ThemeToggle size="sm"  />
               </div>
             </div>
           </>
@@ -150,14 +152,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
           <>
           <button
             onClick={() => setShowModelSettings(true)}
-            className="flex justify-center text-slate-600 hover:text-white cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
+            className="flex justify-center text-slate-600 hover:text-text-primary cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
             title="模型管理"
           >
             <Sparkles className="w-4 h-4" />
           </button>
           <button
               onClick={onOpenSettings} title="系统设置"
-              className="flex justify-center text-slate-600 hover:text-white cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
+              className="flex justify-center text-slate-600 hover:text-text-primary cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
             >
             <Settings className="w-4 h-4" />
           </button>
@@ -169,11 +171,12 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                 href="https://github.com/3dudu/comic_master/issues"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-600 hover:text-white transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                className="text-slate-600 hover:text-text-primary transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
                 title="GitHub"
               >
                 <GithubIcon className="w-4 h-4" />
               </a>
+              <ThemeToggle size="sm" />
             </div>
           </div>
           </>
@@ -183,7 +186,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
       {/* Collapse Toggle Button */}
       <button
         onClick={onToggleSidebar}
-        className="md:hidden xl:block absolute -right-3 top-20 bg-[#1a1a3e] border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-700 transition-all rounded-full p-1.5 z-50"
+        className="md:hidden xl:block absolute -right-3 top-20 bg-slate-800 border border-slate-700 text-slate-400 hover:text-text-primary hover:bg-slate-700 transition-all rounded-full p-1.5 z-50"
         title={collapsed ? '展开侧边栏' : '折叠侧边栏'}
       >
         {collapsed ? <PanelRight className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
