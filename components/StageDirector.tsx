@@ -696,7 +696,8 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
 
               </div>
               
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-4 items-start">
+                  {/* 左侧：场景图片 */}
                   <div className="w-28 h-20 bg-slate-800/50 rounded-lg overflow-hidden flex-shrink-0 border border-slate-600 relative">
                     {scene?.referenceImage ? (
                         <img src={scene.referenceImage} className="w-full h-full object-cover cursor-pointer hover:ring-2 hover:ring-indigo-500" onClick={() => setPreviewImageUrl(scene.referenceImage)}/>
@@ -706,7 +707,8 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                       </div>
                     )}
                   </div>
-                  <div className="flex-1 space-y-2">
+                  {/* 右侧：场景信息 */}
+                  <div className="flex-1 space-y-2 min-w-0">
                     <div className="flex items-center justify-between">
                         <span className="text-slate-50 text-sm font-bold">{scene?.location || '未知场景'}</span>
                     </div>
@@ -717,7 +719,9 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                         </span>
                     </div>
                     <p className="text-xs text-slate-500 line-clamp-2">{scene?.atmosphere}</p>
-                    
+                  </div>
+                  {/* 整行：角色列表 */}
+                  <div className="w-full space-y-2">
                     {/* Character List with Variation Selector */}
                     <div className="flex flex-col gap-2 pt-2">
                          {activeCharacters.map(char => {
@@ -742,7 +746,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                              <select
                                                 value={activeShot.characterVariations?.[String(char.id)] || ""}
                                                 onChange={(e) => handleVariationChange(activeShot.id, String(char.id), e.target.value)}
-                                                className="bg-slate-700 text-[12px] text-slate-400 border border-slate-600 rounded px-1.5 py-0.5 max-w-[60px] outline-none focus:border-indigo-500"
+                                                className="bg-slate-700 text-[12px] text-slate-400 border border-slate-600 rounded px-1.5 py-0.5 min-w-[60px] outline-none focus:border-indigo-500"
                                              >
                                                  <option value="">默认</option>
                                                  {char.variations.map(v => (
