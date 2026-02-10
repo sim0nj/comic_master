@@ -1,4 +1,4 @@
-import { Moon, Sun, Monitor } from 'lucide-react';
+import { Monitor, Moon, Sun } from 'lucide-react';
 import { useTheme, type Theme } from '../hooks/useTheme';
 
 interface ThemeToggleProps {
@@ -70,7 +70,7 @@ export function ThemeToggle({ className = '', size = 'md' }: ThemeToggleProps) {
       onClick={handleToggle}
       className={`
         bg-bg-button rounded-lg
-        hover:bg-bg-selected hover:border-slate-600
+        hover:bg-bg-selected hover:border-slate-500
         transition-all duration-200 ease-in-out
         flex items-center justify-center text-text-secondary
         hover:bg-slate-900/30

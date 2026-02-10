@@ -252,7 +252,7 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
                   className={`px-2 py-2.5 text-[11px] font-medium rounded-md transition-all text-center border ${
                     localDuration === opt.value
                       ? 'bg-slate-200/50 text-black border-slate-100 shadow-sm'
-                      : 'bg-transparent border-slate-600 text-slate-400 hover:border-slate-600 hover:text-slate-200'
+                      : 'bg-transparent border-slate-600 text-slate-400 hover:border-slate-500 hover:text-slate-200'
                   }`}
                 >
                   {opt.label}

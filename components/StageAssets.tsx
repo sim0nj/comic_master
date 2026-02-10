@@ -425,7 +425,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             {project.scriptData.characters.map((char) => (
-              <div key={char.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
+              <div key={char.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-500 transition-all hover:shadow-lg">
                 <div className="aspect-[3/4] bg-slate-900 relative overflow-hidden">
                   {char.referenceImage ? (
                     <>
@@ -536,7 +536,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allScenesReady
-                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-600'
+                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-500'
                     : 'bg-white text-black hover:bg-slate-600 shadow-lg shadow-white/5'
               }`}
             >
@@ -547,7 +547,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
             {project.scriptData.scenes.map((scene) => (
-              <div key={scene.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
+              <div key={scene.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-500 transition-all hover:shadow-lg">
                 <div className="aspect-[16/9] bg-slate-800/50 relative overflow-hidden">
                   {scene.referenceImage ? (
                     <>
@@ -783,7 +783,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6">
               {project.shots.map((shot, shotIndex) => (
-                <div key={shot.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden hover:border-slate-600 transition-all flex flex-col">
+                <div key={shot.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden hover:border-slate-500 transition-all flex flex-col">
                   <div className="p-4 space-y-3">
                     {/* Shot Info */}
                     <div className="flex items-start gap-3 pb-3 border-b border-slate-600/50">

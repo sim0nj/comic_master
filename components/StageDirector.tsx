@@ -861,7 +861,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                               onClick={() => setActiveShotId(shot.id)}
                               className={`
                                   group relative flex flex-col bg-bg-header border rounded-xl overflow-hidden cursor-pointer transition-all duration-200
-                                  ${isActive ? 'border-indigo-500 ring-1 ring-indigo-500/50 shadow-xl scale-[1.02]' : 'border-slate-600 hover:border-slate-600 hover:shadow-lg'}
+                                  ${isActive ? 'border-indigo-500 ring-1 ring-indigo-500/50 shadow-xl scale-[1.02]' : 'border-slate-600 hover:border-slate-500 hover:shadow-lg'}
                               `}
                           >
                               {/* Header */}
