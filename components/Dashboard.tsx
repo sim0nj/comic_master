@@ -54,8 +54,8 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
     const apiKey = localStorage.getItem('cinegen_api_key');
     const cozeWorkflowId = localStorage.getItem('cinegen_coze_workflow_id');
     const cozeApiKey = localStorage.getItem('cinegen_coze_api_key');
-    const fileUploadServiceUrl = localStorage.getItem('cinegen_file_upload_service_url');
-    const fileAccessDomain = localStorage.getItem('cinegen_file_access_domain');
+    const fileUploadServiceUrl = localStorage.getItem('cinegen_file_upload_service_url') || process.env.OSS_UP_ENDPOINT;
+    const fileAccessDomain = localStorage.getItem('cinegen_file_access_domain') || process.env.OSS_ACCESS_ENDPOINT;
 
     if (apiKey) setCurrentApiKey(apiKey);
     if (cozeWorkflowId) setCurrentCozeWorkflowId(cozeWorkflowId);

@@ -3,7 +3,7 @@ import { Scene, ScriptData, Shot } from "../types";
 import { PROMPT_TEMPLATES } from "./promptTemplates";
 
 // Module-level variable to store the key at runtime
-let runtimeApiKey: string = process.env.API_KEY || "";
+let runtimeApiKey: string = "";
 
 export const setApiKey = (key: string) => {
   runtimeApiKey = key;

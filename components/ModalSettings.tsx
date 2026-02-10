@@ -1,4 +1,4 @@
-import { Check, ChevronRight, Download, Edit, Film, Globe, Image, Key, Music, Plus, Sparkles, Tags, Trash2, Upload, X } from 'lucide-react';
+import { Check, ChevronRight, Download, Edit, Film, Globe, Image, Key, Link, Music, Plus, Sparkles, Tags, Trash2, Upload, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { triggerModelConfigChanged } from '../services/modelConfigEvents';
 import { createDefaultModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
@@ -13,14 +13,14 @@ interface Props {
 }
 
 const PROVIDER_OPTIONS = [
-  { value: 'doubao', label: 'Doubao (火山引擎)' },
-  { value: 'deepseek', label: 'DeepSeek' },
-  { value: 'openai', label: 'OpenAI' },
-  { value: 'gemini', label: 'Gemini (Google)' },
-  { value: 'yunwu', label: 'Yunwu (云雾)' },
-  { value: 'minimax', label: 'Minimax (海螺)'},
-  { value: 'kling', label: 'Kling (可灵)'},
-  { value: 'baidu', label: 'Baidu (百度)'},
+  { value: 'doubao', label: 'Doubao (火山引擎)', apiUrl: 'https://www.volcengine.com/product/doubao' },
+  { value: 'deepseek', label: 'DeepSeek', apiUrl: 'https://platform.deepseek.com/' },
+  { value: 'openai', label: 'OpenAI', apiUrl: 'https://platform.openai.com/' },
+  { value: 'gemini', label: 'Gemini (Google)', apiUrl: 'https://ai.google.dev/' },
+  { value: 'yunwu', label: 'Yunwu (云雾)', apiUrl: 'https://yunwu.ai/' },
+  { value: 'minimax', label: 'Minimax (海螺)', apiUrl: 'https://www.minimaxi.com/' },
+  { value: 'kling', label: 'Kling (可灵)', apiUrl: 'https://klingai.com/' },
+  { value: 'baidu', label: 'Baidu (百度)', apiUrl: 'https://cloud.baidu.com/' },
 ] as const;
 
 const MODEL_TYPE_OPTIONS = [
@@ -382,6 +382,22 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
                     <ChevronRight className="w-4 h-4 text-slate-600 rotate-90" />
                   </div>
                 </div>
+                {/* API Key 申请链接 */}
+                {(() => {
+                  const selectedProvider = PROVIDER_OPTIONS.find(p => p.value === formData.provider);
+                  return selectedProvider?.apiUrl ? (
+                    <a
+                      href={selectedProvider.apiUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 transition-colors mt-1"
+                    >
+                      <Globe className="w-3 h-3" />
+                      申请 {selectedProvider.label} API Key
+                      <Link className="w-3 h-3" />
+                    </a>
+                  ) : null;
+                })()}
               </div>
 
               {/* Model Type Selection */}

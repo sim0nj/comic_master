@@ -128,7 +128,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                className="w-full bg-bg-input border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-600"
              />
              <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
-               配置 Coze 工作流 ID 用于智能剧本分析等功能。
+               配置 Coze 工作流 ID 用于等功能。
              </p>
            </div>
 

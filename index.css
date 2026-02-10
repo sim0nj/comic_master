@@ -161,7 +161,10 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--border-primary); 
   }
-  
+  ::selection {
+    background-color: #6366f1;  /* 选中背景色 */
+    color: #ffffff;              /* 选中文字颜色 */
+  }
   .font-mono {
     font-family: 'JetBrains Mono', monospace;
   }

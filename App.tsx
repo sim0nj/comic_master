@@ -47,11 +47,11 @@ function App() {
     if (storedCozeApiKey) {
       setCozeApiKey(storedCozeApiKey);
     }
-    const storedFileUploadServiceUrl = localStorage.getItem('cinegen_file_upload_service_url');
+    const storedFileUploadServiceUrl = localStorage.getItem('cinegen_file_upload_service_url') || process.env.OSS_UP_ENDPOINT;
     if (storedFileUploadServiceUrl) {
       setFileUploadServiceUrl(storedFileUploadServiceUrl);
     }
-    const storedFileAccessDomain = localStorage.getItem('cinegen_file_access_domain');
+    const storedFileAccessDomain = localStorage.getItem('cinegen_file_access_domain') || process.env.OSS_ACCESS_ENDPOINT;
     if (storedFileAccessDomain) {
       setFileAccessDomain(storedFileAccessDomain);
     }

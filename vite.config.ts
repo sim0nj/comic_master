@@ -66,9 +66,9 @@ export default defineConfig(({ mode }) => {
         })
       ],
       define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.VOLCENGINE_API_KEY': JSON.stringify(env.VOLCENGINE_API_KEY),
+        'process.env.OSS_UP_ENDPOINT': JSON.stringify(env.OSS_UP_ENDPOINT),
+        'process.env.OSS_ACCESS_ENDPOINT': JSON.stringify(env.OSS_ACCESS_ENDPOINT),
       },
       resolve: {
         alias: {
