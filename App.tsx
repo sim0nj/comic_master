@@ -19,10 +19,6 @@ import { ProjectState } from './types';
 function App() {
   const [project, setProject] = useState<ProjectState | null>(null);
   const [apiKey, setApiKey] = useState<string>('');
-  const [cozeWorkflowId, setCozeWorkflowId] = useState('');
-  const [cozeApiKey, setCozeApiKey] = useState('');
-  const [fileUploadServiceUrl, setFileUploadServiceUrl] = useState('');
-  const [fileAccessDomain, setFileAccessDomain] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -38,22 +34,6 @@ function App() {
     if (storedKey) {
       setApiKey(storedKey);
       setGlobalApiKey(storedKey);
-    }
-    const storedCozeWorkflowId = localStorage.getItem('cinegen_coze_workflow_id');
-    if (storedCozeWorkflowId) {
-      setCozeWorkflowId(storedCozeWorkflowId);
-    }
-    const storedCozeApiKey = localStorage.getItem('cinegen_coze_api_key');
-    if (storedCozeApiKey) {
-      setCozeApiKey(storedCozeApiKey);
-    }
-    const storedFileUploadServiceUrl = localStorage.getItem('cinegen_file_upload_service_url') || process.env.OSS_UP_ENDPOINT;
-    if (storedFileUploadServiceUrl) {
-      setFileUploadServiceUrl(storedFileUploadServiceUrl);
-    }
-    const storedFileAccessDomain = localStorage.getItem('cinegen_file_access_domain') || process.env.OSS_ACCESS_ENDPOINT;
-    if (storedFileAccessDomain) {
-      setFileAccessDomain(storedFileAccessDomain);
     }
     // Initialize Coze service config
     initializeCozeConfig();
@@ -111,27 +91,10 @@ function App() {
     };
   }, [project]);
 
-  const handleSaveKey = (newKey: string, newCozeWorkflowId?: string, newCozeApiKey?: string, newFileUploadServiceUrl?: string, newFileAccessDomain?: string) => {
+  const handleSaveKey = (newKey: string) => {
     if (!newKey.trim()) return;
     setApiKey(newKey);
     setGlobalApiKey(newKey);
-    localStorage.setItem('cinegen_api_key', newKey);
-    if (newCozeWorkflowId !== undefined) {
-      setCozeWorkflowId(newCozeWorkflowId);
-      localStorage.setItem('cinegen_coze_workflow_id', newCozeWorkflowId);
-    }
-    if (newCozeApiKey !== undefined) {
-      setCozeApiKey(newCozeApiKey);
-      localStorage.setItem('cinegen_coze_api_key', newCozeApiKey);
-    }
-    if (newFileUploadServiceUrl !== undefined) {
-      setFileUploadServiceUrl(newFileUploadServiceUrl);
-      localStorage.setItem('cinegen_file_upload_service_url', newFileUploadServiceUrl);
-    }
-    if (newFileAccessDomain !== undefined) {
-      setFileAccessDomain(newFileAccessDomain);
-      localStorage.setItem('cinegen_file_access_domain', newFileAccessDomain);
-    }
   };
 
   const updateProject = (updates: Partial<ProjectState>) => {
@@ -147,6 +110,13 @@ function App() {
     // 设置项目的模型供应商配置
     ModelService.setCurrentProjectProviders(proj.modelProviders);
     setProject(proj);
+  };
+
+  const handleClearKey = () => {
+      localStorage.removeItem('cinegen_api_key');
+      setApiKey('');
+      setGlobalApiKey('');
+      setProject(null);
   };
 
   const handleExitProject = async () => {
@@ -188,11 +158,6 @@ function App() {
             isOpen={true}
             onClose={() => {}}
             onSave={handleSaveKey}
-            currentKey={''}
-            cozeWorkflowId={cozeWorkflowId}
-            cozeApiKey={cozeApiKey}
-            currentFileUploadServiceUrl={fileUploadServiceUrl}
-            currentFileAccessDomain={fileAccessDomain}
           />
         </div>
       </DialogProvider>
@@ -203,7 +168,7 @@ function App() {
   if (!project) {
     return (
       <DialogProvider>
-        <Dashboard onOpenProject={handleOpenProject} isMobile={isMobile} />
+        <Dashboard onOpenProject={handleOpenProject} isMobile={isMobile} onClearKey={handleClearKey} />
       </DialogProvider>
     );
   }
@@ -248,12 +213,7 @@ function App() {
   <ApiKeyModal
             isOpen={showSettings}
             onClose={() => setShowSettings(false)}
-    onSave={handleSaveKey}
-    currentKey={apiKey}
-    cozeWorkflowId={cozeWorkflowId}
-    cozeApiKey={cozeApiKey}
-    currentFileUploadServiceUrl={fileUploadServiceUrl}
-    currentFileAccessDomain={fileAccessDomain}
+            onSave={handleSaveKey}
           />
         {/* Save Status Indicator */}
         <div className="relative top-4 right-6 pointer-events-none opacity-50 flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-700/50 px-2 py-1 rounded-full backdrop-blur-sm z-50">

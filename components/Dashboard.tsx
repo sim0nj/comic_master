@@ -1,6 +1,5 @@
 import { AlertTriangle, Calendar, Check, ChevronRight, Copy, Download, Edit, Loader2, Plus, Power, Settings, Sparkles, Trash2, Upload } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { setGlobalApiKey } from '../services/doubaoService';
 import { createNewProjectState, deleteProjectFromDB, exportProjectToFile, getAllProjectsMetadata, importProjectFromFile, saveProjectToDB } from '../services/storageService';
 import { ProjectState } from '../types';
 import ApiKeyModal from './ApiKeyModal';
@@ -12,9 +11,10 @@ import { ThemeToggle } from './ThemeToggle';
 interface Props {
   onOpenProject: (project: ProjectState) => void;
   isMobile: boolean;
+  onClearKey: () => void;
 }
 
-const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
+const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey }) => {
   const dialog = useDialog();
   const [projects, setProjects] = useState<ProjectState[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,11 +23,6 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [editingTitle, setEditingTitle] = useState('');
   const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
-  const [currentApiKey, setCurrentApiKey] = useState('');
-  const [currentCozeWorkflowId, setCurrentCozeWorkflowId] = useState('');
-  const [currentCozeApiKey, setCurrentCozeApiKey] = useState('');
-  const [currentFileUploadServiceUrl, setCurrentFileUploadServiceUrl] = useState('');
-  const [currentFileAccessDomain, setCurrentFileAccessDomain] = useState('');
   const [showModelSettings, setShowModelSettings] = useState(false);
   const [showProjectSettings, setShowProjectSettings] = useState(false);
   const [currentProject, setCurrentProject] = useState<ProjectState | null>(null);
@@ -49,40 +44,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
     loadProjects();
   }, []);
 
-  // 加载保存的 API 配置
-  useEffect(() => {
-    const apiKey = localStorage.getItem('cinegen_api_key');
-    const cozeWorkflowId = localStorage.getItem('cinegen_coze_workflow_id');
-    const cozeApiKey = localStorage.getItem('cinegen_coze_api_key');
-    const fileUploadServiceUrl = localStorage.getItem('cinegen_file_upload_service_url') || process.env.OSS_UP_ENDPOINT;
-    const fileAccessDomain = localStorage.getItem('cinegen_file_access_domain') || process.env.OSS_ACCESS_ENDPOINT;
 
-    if (apiKey) setCurrentApiKey(apiKey);
-    if (cozeWorkflowId) setCurrentCozeWorkflowId(cozeWorkflowId);
-    if (cozeApiKey) setCurrentCozeApiKey(cozeApiKey);
-    if (fileUploadServiceUrl) setCurrentFileUploadServiceUrl(fileUploadServiceUrl);
-    if (fileAccessDomain) setCurrentFileAccessDomain(fileAccessDomain);
-  }, []);
-
-  // 保存 API 配置
-  const handleApiKeySave = (key: string, cozeWorkflowId?: string, cozeApiKey?: string, fileUploadServiceUrl?: string, fileAccessDomain?: string) => {
-    localStorage.setItem('cinegen_api_key', key);
-    if (cozeWorkflowId) localStorage.setItem('cinegen_coze_workflow_id', cozeWorkflowId);
-    if (cozeApiKey) localStorage.setItem('cinegen_coze_api_key', cozeApiKey);
-    if (fileUploadServiceUrl) localStorage.setItem('cinegen_file_upload_service_url', fileUploadServiceUrl);
-    if (fileAccessDomain) localStorage.setItem('cinegen_file_access_domain', fileAccessDomain);
-
-    setCurrentApiKey(key);
-    setCurrentCozeWorkflowId(cozeWorkflowId || '');
-    setCurrentCozeApiKey(cozeApiKey || '');
-    setCurrentFileUploadServiceUrl(fileUploadServiceUrl || '');
-    setCurrentFileAccessDomain(fileAccessDomain || '');
-
-    // 初始化 Coze 配置
-    if (typeof window !== 'undefined' && (window as any).initializeCozeConfig) {
-      (window as any).initializeCozeConfig();
-    }
-  };
 
   const handleCreate = () => {
     const newProject = createNewProjectState();
@@ -148,10 +110,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
   };
   
   const handleClearKey = () => {
-      localStorage.removeItem('cinegen_api_key');
-      setApiKey('');
-      setGlobalApiKey('');
-      setProject(null);
+      onClearKey();
   };
 
   const handleDuplicate = async (e: React.MouseEvent, proj: ProjectState) => {
@@ -554,12 +513,6 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
       <ApiKeyModal
         isOpen={apiKeyModalOpen}
         onClose={() => setApiKeyModalOpen(false)}
-        onSave={handleApiKeySave}
-        currentKey={currentApiKey}
-        cozeWorkflowId={currentCozeWorkflowId}
-        cozeApiKey={currentCozeApiKey}
-        currentFileUploadServiceUrl={currentFileUploadServiceUrl}
-        currentFileAccessDomain={currentFileAccessDomain}
       />
 
       {/* Project Settings Modal */}

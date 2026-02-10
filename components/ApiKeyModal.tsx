@@ -1,53 +1,68 @@
 // components/ApiKeyModal.tsx
 import { ArrowRight, Key, ShieldCheck, X } from 'lucide-react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface ApiKeyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (key: string, cozeWorkflowId?: string, cozeApiKey?: string, fileUploadServiceUrl?: string, fileAccessDomain?: string) => void;
-  currentKey: string;
-  cozeWorkflowId?: string;
-  cozeApiKey?: string;
-  currentFileUploadServiceUrl?: string;
-  currentFileAccessDomain?: string;
+  onSave?: (key: string, cozeWorkflowId?: string, cozeApiKey?: string, fileUploadServiceUrl?: string, fileAccessDomain?: string) => void;
 }
 
 const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
   isOpen,
   onClose,
   onSave,
-  currentKey,
-  cozeWorkflowId = '',
-  cozeApiKey = '',
-  currentFileUploadServiceUrl = '',
-  currentFileAccessDomain = '',
 }) => {
-  const [inputKey, setInputKey] = React.useState(currentKey);
-  const [inputCozeWorkflowId, setInputCozeWorkflowId] = React.useState(cozeWorkflowId);
-  const [inputCozeApiKey, setInputCozeApiKey] = React.useState(cozeApiKey);
-  const [inputFileUploadServiceUrl, setInputFileUploadServiceUrl] = React.useState(currentFileUploadServiceUrl);
-  const [inputFileAccessDomain, setInputFileAccessDomain] = React.useState(currentFileAccessDomain);
+  const [inputKey, setInputKey] = useState('');
+  const [inputCozeWorkflowId, setInputCozeWorkflowId] = useState('');
+  const [inputCozeApiKey, setInputCozeApiKey] = useState('');
+  const [inputFileUploadServiceUrl, setInputFileUploadServiceUrl] = useState('');
+  const [inputFileAccessDomain, setInputFileAccessDomain] = useState('');
 
-  React.useEffect(() => {
-    setInputKey(currentKey);
-    setInputCozeWorkflowId(cozeWorkflowId);
-    setInputCozeApiKey(cozeApiKey);
-    setInputFileUploadServiceUrl(currentFileUploadServiceUrl);
-    setInputFileAccessDomain(currentFileAccessDomain);
-  }, [currentKey, cozeWorkflowId, cozeApiKey, currentFileUploadServiceUrl, currentFileAccessDomain, isOpen]);
+  // 从 localStorage 加载配置
+  useEffect(() => {
+    if (isOpen) {
+      const apiKey = localStorage.getItem('cinegen_api_key') || '';
+      const cozeWorkflowId = localStorage.getItem('cinegen_coze_workflow_id') || '';
+      const cozeApiKey = localStorage.getItem('cinegen_coze_api_key') || '';
+      const fileUploadServiceUrl = localStorage.getItem('cinegen_file_upload_service_url') || process.env.OSS_UP_ENDPOINT || '';
+      const fileAccessDomain = localStorage.getItem('cinegen_file_access_domain') || process.env.OSS_ACCESS_ENDPOINT || '';
+
+      setInputKey(apiKey);
+      setInputCozeWorkflowId(cozeWorkflowId);
+      setInputCozeApiKey(cozeApiKey);
+      setInputFileUploadServiceUrl(fileUploadServiceUrl);
+      setInputFileAccessDomain(fileAccessDomain);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   const handleSave = () => {
     if (inputKey.trim()) {
-      onSave(
-        inputKey.trim(),
-        inputCozeWorkflowId.trim(),
-        inputCozeApiKey.trim(),
-        inputFileUploadServiceUrl.trim(),
-        inputFileAccessDomain.trim()
-      );
+      // 保存到 localStorage
+      localStorage.setItem('cinegen_api_key', inputKey.trim());
+      if (inputCozeWorkflowId.trim()) localStorage.setItem('cinegen_coze_workflow_id', inputCozeWorkflowId.trim());
+      if (inputCozeApiKey.trim()) localStorage.setItem('cinegen_coze_api_key', inputCozeApiKey.trim());
+      if (inputFileUploadServiceUrl.trim()) localStorage.setItem('cinegen_file_upload_service_url', inputFileUploadServiceUrl.trim());
+      if (inputFileAccessDomain.trim()) localStorage.setItem('cinegen_file_access_domain', inputFileAccessDomain.trim());
+
+      // 初始化 Coze 配置
+      if (typeof window !== 'undefined' && (window as any).initializeCozeConfig) {
+        (window as any).initializeCozeConfig();
+      }
+
+      // 调用外部回调（如果有）
+      if (onSave) {
+        onSave(
+          inputKey.trim(),
+          inputCozeWorkflowId.trim(),
+          inputCozeApiKey.trim(),
+          inputFileUploadServiceUrl.trim(),
+          inputFileAccessDomain.trim()
+        );
+      }
+
       onClose();
     }
   };
@@ -108,12 +123,12 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
              </p>
            </div>
            {/* Current Key Status */}
-           {currentKey && (
+           {inputKey && (
             <>
             <div className="flex items-center gap-2 text-[12px] text-slate-500 bg-slate-900/50 p-3 rounded-lg">
                <ShieldCheck className="w-3 h-3 text-green-500" />
                <span className="font-mono">
-                 API Key 已配置: {currentKey.substring(0, 8)}...
+                 API Key 已配置: {inputKey.substring(0, 8)}...
                </span>
              </div>
            <div>
@@ -195,7 +210,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
            <button
              onClick={handleSave}
              disabled={!inputKey.trim()}
-             className="w-full py-3 bg-slate-700 text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-slate-400 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+             className="w-full py-3 bg-slate-700 text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-decor-light transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
            >
              保存配置 <ArrowRight className="w-3 h-3" />
            </button>
