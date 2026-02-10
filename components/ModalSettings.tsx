@@ -1,4 +1,4 @@
-import { Check, ChevronRight, Download, Edit, Film, Globe, Image, Key, Music, Plus, Sparkles, Trash2, Upload, X, Tags } from 'lucide-react';
+import { Check, ChevronRight, Download, Edit, Film, Globe, Image, Key, Music, Plus, Sparkles, Tags, Trash2, Upload, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { triggerModelConfigChanged } from '../services/modelConfigEvents';
 import { createDefaultModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
@@ -328,7 +328,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
         if (e.target === e.currentTarget && !showAddModal) onClose();
       }}
     >
-      <div className="bg-bg-modal border border-slate-600 rounded-lg w-[800px] max-w-[90vw] max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
+      <div className="bg-bg-panel border border-slate-600 rounded-lg w-[800px] max-w-[90vw] max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
         {/* Header */}
         <div className="p-6 border-b border-slate-600 flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-50 tracking-wide flex items-center gap-2">
@@ -618,7 +618,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
             <div className="flex gap-3">
               <button
                 onClick={handleExport}
-                className="flex-1 py-3 border border-slate-600 bg-slate-900 text-slate-400 hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-3 border border-slate-600 bg-slate-600 text-slate-400 hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 <Download className="w-4 h-4" />
                 导出配置
@@ -631,7 +631,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
                 <button
-                  className="w-full py-3 border border-slate-600 bg-slate-900 text-slate-400 hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 border border-slate-600 bg-slate-600/50 text-slate-400 hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
                 >
                   <Upload className="w-4 h-4" />
                   导入配置
@@ -639,7 +639,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
               </div>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex-1 py-3 border border-slate-600 bg-white text-black hover:bg-slate-200 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-white/5 flex items-center justify-center gap-2"
+                className="flex-1 py-3 border border-slate-600 bg-slate-700 text-black hover:bg-slate-400 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-white/5 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 添加新配置

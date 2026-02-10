@@ -1336,14 +1336,14 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                      <div className="flex gap-1 group-hover:opacity-100 transition-opacity">
                                        <button
                                          onClick={() => startEditShot(shot)}
-                                         className="p-1.5 hover:bg-slate-800 text-slate-600 group-hover:text-slate-50 rounded transition-colors"
+                                         className="p-1.5 hover:bg-slate-800 text-slate-400 group-hover:text-slate-500 rounded transition-colors"
                                          title="编辑"
                                        >
                                          <Edit className="w-3.5 h-3.5" />
                                        </button>
                                        <button
                                          onClick={() => deleteShot(shot.id)}
-                                         className="p-1.5 hover:bg-red-900/20 text-slate-600 group-hover:text-red-400 rounded transition-colors"
+                                         className="p-1.5 hover:bg-red-900/20 text-slate-400 group-hover:text-red-400 rounded transition-colors"
                                          title="删除"
                                        >
                                          <Trash className="w-3.5 h-3.5" />

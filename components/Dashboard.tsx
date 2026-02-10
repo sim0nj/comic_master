@@ -319,7 +319,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
           <div className="flex gap-3 flex-end justify-end">
             <button
               onClick={handleCreate}
-              className="group flex items-center gap-3 px-6 py-3 bg-white text-black hover:bg-slate-200 transition-colors"
+              className="group flex items-center gap-3 px-6 py-3 bg-white text-black hover:bg-slate-400 transition-colors"
             >
               <Plus className="w-4 h-4" />
               {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">新建项目</span>}
@@ -367,7 +367,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
               <div className="w-12 h-12 border border-slate-600 flex items-center justify-center mb-6 group-hover:bg-slate-800 transition-colors">
                 <Plus className="w-5 h-5 text-slate-500 group-hover:text-slate-50" />
               </div>
-              <span className="text-slate-600 font-mono text-[12px] uppercase tracking-widest group-hover:text-slate-300">新建项目</span>
+              <span className="text-slate-400 font-mono text-[12px] uppercase tracking-widest group-hover:text-slate-300">新建项目</span>
             </div>
           }
             {/* Project List */}
@@ -413,7 +413,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                      {editingProjectId !== proj.id ? (
                      <button
                         onClick={(e) => openProjectSettings(e, proj)}
-                        className="absolute top-4 right-20 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-600 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-20 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-indigo-400 transition-all rounded-sm z-10"
                         title="编辑项目"
                      >
                         <Edit className="w-4 h-4" />
@@ -424,7 +424,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                      {editingProjectId === null ? (
                      <button
                         onClick={(e) => handleDuplicate(e, proj)}
-                        className="absolute top-4 right-28 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-600 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-28 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-indigo-400 transition-all rounded-sm z-10"
                         title="复制项目"
                      >
                         <Copy className="w-4 h-4" />
@@ -435,7 +435,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                      {editingProjectId === null ? (
                      <button
                         onClick={(e) => handleExport(e, proj)}
-                        className="absolute top-4 right-12 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-600 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-12 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-indigo-400 transition-all rounded-sm z-10"
                         title="导出项目"
                      >
                         <Download className="w-4 h-4" />
@@ -446,7 +446,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                      {editingProjectId === null ? (
                      <button
                         onClick={(e) => requestDelete(e, proj.id)}
-                        className="absolute top-4 right-4 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-600 hover:text-red-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-4 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-red-400 transition-all rounded-sm z-10"
                         title="删除项目"
                      >
                         <Trash2 className="w-4 h-4" />
@@ -501,7 +501,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                             )}
                         </div>
                         {proj.scriptData?.logline && (
-                            <p className="text-[12px] text-slate-50-600 line-clamp-2 leading-relaxed font-mono border-l border-slate-600 pl-2">
+                            <p className="text-[12px] text-slate-500 line-clamp-2 leading-relaxed font-mono border-l border-slate-600 pl-2">
                             {proj.scriptData.logline}
                             </p>
                         )}
@@ -532,11 +532,11 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                   </div>
 
                   <div className="px-6 py-3 border-t border-slate-900 flex items-center justify-between bg-bg-footer">
-                    <div className="flex items-center gap-2 text-[11px] text-slate-600 font-mono uppercase tracking-widest">
+                    <div className="flex items-center gap-2 text-[11px] text-slate-500/50 font-mono uppercase tracking-widest group-hover:text-slate-50 ">
                         <Calendar className="w-3 h-3" />
                         {formatDate(proj.lastModified)}
                     </div>
-                    <ChevronRight className="w-3 h-3 text-slate-600 group-hover:text-slate-50 transition-colors" />
+                    <ChevronRight className="w-3 h-3 text-slate-500/50 group-hover:text-slate-50 transition-colors" />
                   </div>
               </div>
             ))}

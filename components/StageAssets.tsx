@@ -415,7 +415,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allCharactersReady
                     ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-500 hover:bg-indigo-500'
-                    : 'bg-white text-black hover:bg-slate-200 shadow-lg shadow-white/5'
+                    : 'bg-white text-black hover:bg-slate-400 shadow-lg shadow-white/5'
               }`}
             >
               {allCharactersReady ? <RefreshCw className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}

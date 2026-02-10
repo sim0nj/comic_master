@@ -430,7 +430,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 py-3 bg-white text-black hover:bg-slate-200 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors"
+            className="flex-1 py-3 bg-slate-700 text-black hover:bg-slate-400 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors"
           >
             保存
           </button>

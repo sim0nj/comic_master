@@ -195,7 +195,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
            <button
              onClick={handleSave}
              disabled={!inputKey.trim()}
-             className="w-full py-3 bg-white text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+             className="w-full py-3 bg-slate-700 text-black font-bold uppercase tracking-widest text-xs rounded-lg hover:bg-slate-400 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
            >
              保存配置 <ArrowRight className="w-3 h-3" />
            </button>
