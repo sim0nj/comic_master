@@ -259,7 +259,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
       {/* Header - Consistent with Director */}
       <div className="h-14 border-b border-slate-800 bg-bg-footer px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
-              <h2 className="text-lg font-bold text-text-primary flex items-center gap-3">
+              <h2 className="text-lg font-bold text-slate-50 flex items-center gap-3">
                   <Film className="w-5 h-5 text-indigo-500" />
                   成片与导出
               </h2>
@@ -283,7 +283,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
              <div className="flex flex-row md:flex-row justify-between items-start md:items-center mb-4 relative z-10 gap-6">
                <div className='flex-1'>
                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">{project?.title || '未命名项目'}</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-slate-50 tracking-tight">{project?.title || '未命名项目'}</h3>
                  </div>
                  <div className="flex items-center gap-4 mt-3">
                     <div className="flex flex-col">
@@ -303,7 +303,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                  </div>
                </div>
 
-               <div className="text-right bg-black/20 p-4 rounded-lg border border-white/5 backdrop-blur-sm min-w-[60px]">
+               <div className="text-right bg-slate-700/20 p-4 rounded-lg border border-white/5 backdrop-blur-sm min-w-[60px]">
                   <div className="flex items-baseline justify-end gap-1 mb-1">
                       <span className="text-3xl font-mono font-bold text-indigo-400">{progress}</span>
                       <span className="text-sm text-slate-500">%</span>
@@ -370,7 +370,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                                 ? 'bg-indigo-600/60 border-2 border-indigo-400'
                                 : isDone
                                   ? 'bg-indigo-900/40 border border-indigo-500/30 hover:bg-indigo-500/40'
-                                  : 'bg-slate-900 border border-slate-800 cursor-not-allowed opacity-50'
+                                  : 'bg-slate-400 border border-slate-800 cursor-not-allowed opacity-50'
                             }`}
                             title={`镜头 ${idx+1}: ${shot.actionSummary}`}
                           >
@@ -380,13 +380,13 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                              {/* Selection Indicator */}
                              {isSelected && (
                                <div className="absolute inset-0 flex items-center justify-center">
-                                 <Check className="w-4 h-4 text-text-primary" />
+                                 <Check className="w-4 h-4 text-slate-50" />
                                </div>
                              )}
 
                              {/* Hover Tooltip */}
                              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-20 whitespace-nowrap">
-                                <div className="bg-black text-text-primary text-[12px] px-2 py-1 rounded border border-slate-700 shadow-xl">
+                                <div className="bg-slate-700 text-slate-50 text-[12px] px-2 py-1 rounded border border-slate-700 shadow-xl">
                                     镜头 {idx + 1}{isDone ? ' ✓' : ''}
                                 </div>
                              </div>
@@ -460,7 +460,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                      </button>
                    )}
                  </div>
-                 <div className="w-full bg-black rounded-lg aspect-video bg-black rounded-lg overflow-hidden border border-slate-800 relative">
+                 <div className="w-full bg-slate-700 rounded-lg aspect-video bg-slate-700 rounded-lg overflow-hidden border border-slate-800 relative">
                    <video
                      ref={videoRef}
                      controls
@@ -554,7 +554,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                   disabled={selectedShotIds.size === 0 || isPlayingSelected}
                   className={`h-12 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all border ${
                     selectedShotIds.size > 0 && !isPlayingSelected
-                      ? 'bg-indigo-600 text-text-primary hover:bg-indigo-500 border-indigo-500 shadow-lg shadow-indigo-600/20'
+                      ? 'bg-indigo-600 text-slate-50 hover:bg-indigo-500 border-indigo-500 shadow-lg shadow-indigo-600/20'
                       : 'bg-slate-900 text-slate-600 border-slate-800 cursor-not-allowed'
                   }`}>
                  {isPlayingSelected ? (

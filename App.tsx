@@ -179,7 +179,7 @@ function App() {
       case 'export':
         return <StageExport project={project} updateProject={updateProject} />;
       default:
-        return <div className="text-text-primary">未知阶段</div>;
+        return <div className="text-slate-50">未知阶段</div>;
     }
   };
 
@@ -229,7 +229,7 @@ function App() {
   // Workspace View
   return (
     <DialogProvider>
-      <div className={`${isMobile?'':'flex'} h-screen overflow-hidden bg-bg-primary min-h-screen font-sans text-text-primary selection:bg-selection-bg`} style={{paddingTop: 'env(safe-area-inset-top)'}}>
+      <div className={`${isMobile?'':'flex'} h-screen overflow-hidden bg-bg-primary min-h-screen font-sans text-slate-50 selection:bg-selection-bg`} style={{paddingTop: 'env(safe-area-inset-top)'}}>
         {isMobile ? (
           <>
             <SidebarMobile
@@ -274,7 +274,7 @@ function App() {
     currentFileAccessDomain={fileAccessDomain}
           />
         {/* Save Status Indicator */}
-        <div className="relative top-4 right-6 pointer-events-none opacity-50 flex items-center gap-2 text-xs font-mono text-slate-400 bg-black/50 px-2 py-1 rounded-full backdrop-blur-sm z-50">
+        <div className="relative top-4 right-6 pointer-events-none opacity-50 flex items-center gap-2 text-xs font-mono text-slate-400 bg-slate-700/50 px-2 py-1 rounded-full backdrop-blur-sm z-50">
            {saveStatus === 'saving' ? (
              <>
                <Save className="w-3 h-3 animate-pulse" />

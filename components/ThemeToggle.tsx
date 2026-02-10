@@ -74,7 +74,7 @@ export function ThemeToggle({ className = '', size = 'md' }: ThemeToggleProps) {
         transition-all duration-200 ease-in-out
         flex items-center justify-center text-text-secondary
         hover:bg-slate-900/30
-        hover:text-text-primary ${sizeClasses[size]} ${className}
+        hover:text-slate-50 ${sizeClasses[size]} ${className}
       `}
       title={getTooltipText()}
       aria-label={`当前主题: ${theme === 'light' ? '浅色' : theme === 'dark' ? '深色' : '跟随系统'}，点击切换`}

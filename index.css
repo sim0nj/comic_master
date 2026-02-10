@@ -1,6 +1,20 @@
 @import 'tailwindcss';
 
 @theme {
+  /* 定义Tailwind颜色变量 */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-panel: var(--bg-panel);
+  --color-bg-input: var(--bg-input);
+  --color-bg-footer: var(--bg-footer);
+  --color-bg-modal: var(--bg-modal);
+  --color-bg-selected: var(--bg-selected);
+  --color-bg-sidebar: var(--bg-sidebar);
+  --color-bg-header: var(--bg-header);
+  --color-bg-card: var(--bg-card);
+  --color-bg-button: var(--bg-button);
+  --color-bg-progress: var(--bg-progress);
+  --color-selection-bg: var(--selection-bg);
   /* 深色主题背景色 */
   --color-dark-bg-primary: #0c1022;
   --color-dark-bg-secondary: #0e1229;
@@ -16,32 +30,18 @@
   --color-dark-bg-progress: #1a1d2d;
   
   /* 浅色主题背景色 */
-  --color-light-bg-primary: #ffffff;
-  --color-light-bg-secondary: #f8fafc;
-  --color-light-bg-panel: #f1f5f9;
-  --color-light-bg-input: #ffffff;
-  --color-light-bg-footer: #f1f5f9;
-  --color-light-bg-modal: #ffffff;
-  --color-light-bg-selected: #e2e8f0;
-  --color-light-bg-sidebar: #ffffff;
-  --color-light-bg-header: #f8fafc;
-  --color-light-bg-card: #ffffff;
-  --color-light-bg-button: #f1f5f9;
-  --color-light-bg-progress: #e2e8f0;
-  
-  /* 磨砂玻璃效果 */
-  --color-glass-bg: rgb(20 20 20 / 0.6);
-  --color-glass-light-bg: rgb(255 255 255 / 0.8);
-  
-  /* 文字颜色 - 深色主题 */
-  --color-text-primary: #e5e5e5;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted: #64748b;
-  
-  /* 文字颜色 - 浅色主题 */
-  --color-text-light-primary: #1e293b;
-  --color-text-light-secondary: #64748b;
-  --color-text-light-muted: #94a3b8;
+  --color-light-bg-primary: #F3EFDD;
+  --color-light-bg-secondary: #F1EDD6;
+  --color-light-bg-panel: #F1F1D7;
+  --color-light-bg-input: #F0F0DC;
+  --color-light-bg-footer: #F6F6DC;
+  --color-light-bg-modal: #F5F5F5;
+  --color-light-bg-selected: #EBEBEB;
+  --color-light-bg-sidebar: #F0F0DC;
+  --color-light-bg-header: #EFECD9;
+  --color-light-bg-card: #F0EDDA;
+  --color-light-bg-button: #F9F9DB;
+  --color-light-bg-progress: #E5E2D2;
   
   /* 选择高亮 */
   --color-selection-bg: rgb(99 102 241 / 0.3);
@@ -49,6 +49,34 @@
 }
 
 @layer base {
+  /* 添加slate颜色映射以支持现有代码 */
+  :root {
+    --color-slate-50: #f8fafc;
+    --color-slate-100: #f1f5f9;
+    --color-slate-200: #e2e8f0;
+    --color-slate-300: #cbd5e1;
+    --color-slate-400: #94a3b8;
+    --color-slate-500: #64748b;
+    --color-slate-600: #475569;
+    --color-slate-700: #334155;
+    --color-slate-800: #1e293b;
+    --color-slate-900: #0f172a;
+  }
+
+  /* 浅色主题下调整slate颜色 */
+  :root[data-theme="light"] {
+    --color-slate-50: #0f172a;
+    --color-slate-100: #1e293b;
+    --color-slate-200: #334155;
+    --color-slate-300: #475569;
+    --color-slate-400: #64748b;
+    --color-slate-500: #021022;
+    --color-slate-600: #cbd5e1;
+    --color-slate-700: #e2e8f0;
+    --color-slate-800: #f1f5f9;
+    --color-slate-900: #f8fafc;
+  }
+
   /* 默认深色主题 */
   :root {
     --bg-primary: var(--color-dark-bg-primary);
@@ -63,11 +91,7 @@
     --bg-card: var(--color-dark-bg-card);
     --bg-button: var(--color-dark-bg-button);
     --bg-progress: var(--color-dark-bg-progress);
-    --text-primary: var(--color-text-primary);
-    --text-secondary: var(--color-text-secondary);
-    --text-muted: var(--color-text-muted);
     --selection-bg: var(--color-selection-bg);
-    --glass-bg: var(--color-glass-bg);
   }
 
   /* 浅色主题 */
@@ -84,16 +108,23 @@
     --bg-card: var(--color-light-bg-card);
     --bg-button: var(--color-light-bg-button);
     --bg-progress: var(--color-light-bg-progress);
-    --text-primary: var(--color-text-light-primary);
-    --text-secondary: var(--color-text-light-secondary);
-    --text-muted: var(--color-text-light-muted);
     --selection-bg: var(--color-selection-light-bg);
-    --glass-bg: var(--color-glass-light-bg);
   }
 
   /* 跟随系统主题 */
   @media (prefers-color-scheme: light) {
     :root[data-theme="system"] {
+      /* 调整slate颜色 */
+      --color-slate-50: #0f172a;
+      --color-slate-100: #1e293b;
+      --color-slate-200: #334155;
+      --color-slate-300: #475569;
+      --color-slate-400: #64748b;
+      --color-slate-500: #94a3b8;
+      --color-slate-600: #cbd5e1;
+      --color-slate-700: #e2e8f0;
+      --color-slate-800: #f1f5f9;
+      --color-slate-900: #f8fafc;
       --bg-primary: var(--color-light-bg-primary);
       --bg-secondary: var(--color-light-bg-secondary);
       --bg-panel: var(--color-light-bg-panel);
@@ -106,20 +137,32 @@
       --bg-card: var(--color-light-bg-card);
       --bg-button: var(--color-light-bg-button);
       --bg-progress: var(--color-light-bg-progress);
-      --text-primary: var(--color-text-light-primary);
-      --text-secondary: var(--color-text-light-secondary);
-      --text-muted: var(--color-text-light-muted);
       --selection-bg: var(--color-selection-light-bg);
-      --glass-bg: var(--color-glass-light-bg);
     }
-  }
-
-  * {
-    @apply border-slate-800;
   }
   
   body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    background-color: #050505;
+    color: #e5e5e5;
+  }
+  /* Sony Style Scrollbar - Thin, Rectangular */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary); 
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-secondary); 
+    border-radius: 0px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-primary); 
+  }
+  
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
   }
 }

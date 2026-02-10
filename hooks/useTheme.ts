@@ -30,8 +30,10 @@ export function useTheme() {
     
     const handleChange = () => {
       if (theme === 'system') {
-        // 当系统主题改变且当前设置为system时，更新DOM
-        document.documentElement.setAttribute('data-theme', 'system');
+        // 当系统主题改变且当前设置为system时，不需要手动设置data-theme
+        // CSS中的@media查询会自动处理
+        // 但为了确保组件能正确获取actualTheme，我们触发一个重新渲染
+        setTheme('system'); // 触发重新渲染但不改变localStorage
       }
     };
 

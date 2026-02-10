@@ -568,14 +568,14 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
       <div className={`${isMobile ? 'w-full' : 'w-96'} border-r border-slate-800 flex flex-col bg-bg-footer`}>
         {/* Header - Fixed Height 56px */}
         <div className="h-14 px-6 border-b border-slate-800 flex items-center justify-between shrink-0">
-            <h2 className="text-lg font-bold text-text-primary tracking-tight flex items-center gap-3">
+            <h2 className="text-lg font-bold text-slate-50 tracking-tight flex items-center gap-3">
               <BookOpen className="w-5 h-5 text-indigo-500" />
               项目配置
             </h2>
 {isMobile && (
             <button
                onClick={() => setActiveTab('script')}
-               className="px-4 py-2 rounded-lg bg-indigo-600 text-text-primary text-xs font-bold text-slate-400 hover:text-text-primary flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
+               className="px-4 py-2 rounded-lg bg-indigo-600 text-slate-50 text-xs font-bold text-slate-400 hover:text-slate-50 flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
              >
                <List className="w-3 h-3" />
                分镜
@@ -591,7 +591,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                 type="text"
                 value={localTitle}
                 onChange={(e) => setLocalTitle(e.target.value)}
-                className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-all placeholder:text-slate-700"
+                className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-all placeholder:text-slate-700"
                 placeholder="输入项目名称..."
               />
             </div>
@@ -605,7 +605,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                 <select
                   value={localLanguage}
                   onChange={(e) => setLocalLanguage(e.target.value)}
-                  className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {LANGUAGE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -626,7 +626,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                 <select
                   value={localStyle}
                   onChange={(e) => setLocalStyle(e.target.value)}
-                  className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {STYLE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -647,7 +647,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                 <select
                   value={localImageSize}
                   onChange={(e) => setLocalImageSize(e.target.value)}
-                  className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {IMAGE_SIZE_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -668,7 +668,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                 <select
                   value={localImageCount}
                   onChange={(e) => setLocalImageCount(Number(e.target.value))}
-                  className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {IMAGE_COUNT_OPTIONS.map(opt => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -706,7 +706,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                     type="text"
                     value={customDurationInput}
                     onChange={(e) => setCustomDurationInput(e.target.value)}
-                    className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none font-mono placeholder:text-slate-700"
+                    className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none font-mono placeholder:text-slate-700"
                     placeholder="输入时长 (如: 90s, 3m)"
                   />
                 </div>
@@ -736,7 +736,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                       }
                     });
                   }}
-                  className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   <option value="">系统默认模型</option>
                   {modelConfigs.filter(c => c.modelType === 'llm' && c.apiKey).map(config => (
@@ -769,7 +769,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                       }
                     });
                   }}
-                  className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   <option value="">系统默认模型</option>
                   {modelConfigs.filter(c => c.modelType === 'text2image' && c.apiKey).map(config => (
@@ -802,7 +802,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                       }
                     });
                   }}
-                  className="w-full bg-bg-input border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-bg-input border border-slate-800 text-slate-50 px-3 py-2.5 text-sm rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   <option value="">系统默认模型</option>
                   {modelConfigs.filter(c => c.modelType === 'image2video' && c.apiKey).map(config => (
@@ -859,7 +859,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
            </div>
            <button
                onClick={() => setActiveTab('script')}
-               className="px-4 py-2 rounded-lg bg-indigo-600 text-text-primary text-xs font-bold text-slate-400 hover:text-text-primary flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
+               className="px-4 py-2 rounded-lg bg-indigo-600 text-slate-50 text-xs font-bold text-slate-400 hover:text-slate-50 flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
              >
                <List className="w-3 h-3" />
                分镜
@@ -874,7 +874,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                     type="text"
                     value={scriptPrompt}
                     onChange={(e) => setScriptPrompt(e.target.value)}
-                    className="flex-1 bg-bg-input border border-slate-800 text-text-primary px-4 py-2.5 text-sm rounded-lg focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-600"
+                    className="flex-1 bg-bg-input border border-slate-800 text-slate-50 px-4 py-2.5 text-sm rounded-lg focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-600"
                     placeholder="输入简单提示词（如：一个关于青春校园的励志故事）..."
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
@@ -889,7 +889,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                     className={`px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 shrink-0 ${
                       isGeneratingScript
                         ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                        : 'bg-indigo-600 text-text-primary hover:bg-indigo-500 shadow-lg shadow-indigo-600/20'
+                        : 'bg-indigo-600 text-slate-50 hover:bg-indigo-500 shadow-lg shadow-indigo-600/20'
                     } ${!scriptPrompt.trim() ? 'opacity-50' : ''}`}
                  >
                     <Sparkles className={`w-3.5 h-3.5 ${isGeneratingScript ? 'animate-spin' : ''}`} />
@@ -941,7 +941,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
         {/* Header */}
         <div className="h-14 px-6 border-b border-slate-800 bg-bg-footer flex items-center justify-between shrink-0 z-20">
            <div className="flex items-center gap-6">
-              <h2 className="text-lg font-bold text-text-primary tracking-tight flex items-center gap-3">
+              <h2 className="text-lg font-bold text-slate-50 tracking-tight flex items-center gap-3">
                  <List className="w-5 h-5 text-indigo-500" />
                  拍摄清单
               </h2>
@@ -961,7 +961,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
            <div className="flex gap-2">
              <button
                onClick={() => setActiveTab('story')}
-               className="px-4 py-2 rounded-lg bg-indigo-600 text-text-primary text-xs font-bold text-slate-400 hover:text-text-primary flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
+               className="px-4 py-2 rounded-lg bg-indigo-600 text-slate-50 text-xs font-bold text-slate-400 hover:text-slate-50 flex items-center gap-2 px-4 py-2 hover:bg-slate-800 rounded-lg transition-all"
              >
                <BookOpen className="w-3 h-3" />
                剧本
@@ -982,7 +982,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                        <TextQuote className="w-3 h-3" /> 类型
                      </h3>
                      {!editingGenre && (
-                       <button onClick={startEditGenre} className="text-slate-600 hover:text-text-primary transition-colors">
+                       <button onClick={startEditGenre} className="text-slate-600 hover:text-slate-50 transition-colors">
                          <Edit className="w-3 h-3" />
                        </button>
                      )}
@@ -992,7 +992,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                        <select
                          value={tempGenre}
                          onChange={(e) => setTempGenre(e.target.value)}
-                         className="w-full bg-bg-input border border-slate-800 text-text-primary text-xs rounded px-2 py-1.5 appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                         className="w-full bg-bg-input border border-slate-800 text-slate-50 text-xs rounded px-2 py-1.5 appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                        >
                          {GENRE_OPTIONS.map(opt => (
                            <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -1007,7 +1007,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                        </div>
                      </div>
                    ) : (
-                     <p className="text-xs text-slate-300 font-medium cursor-text hover:text-text-primary" onClick={startEditGenre}>{project.scriptData?.genre || '剧情片'}</p>
+                     <p className="text-xs text-slate-300 font-medium cursor-text hover:text-slate-50" onClick={startEditGenre}>{project.scriptData?.genre || '剧情片'}</p>
                    )}
                  </div>
               </div>
@@ -1019,7 +1019,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                        <TextQuote className="w-3 h-3" /> 故事梗概
                      </h3>
                      {!editingLogline && (
-                       <button onClick={startEditLogline} className="text-slate-600 hover:text-text-primary transition-colors">
+                       <button onClick={startEditLogline} className="text-slate-600 hover:text-slate-50 transition-colors">
                          <Edit className="w-3 h-3" />
                        </button>
                      )}
@@ -1050,7 +1050,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                       <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
                          <Users className="w-3 h-3" /> 演员表
                       </h3>
-                      <button onClick={() => setShowAddCharacter(true)} className="text-slate-600 hover:text-text-primary transition-colors">
+                      <button onClick={() => setShowAddCharacter(true)} className="text-slate-600 hover:text-slate-50 transition-colors">
                          <Plus className="w-3 h-3" />
                       </button>
                     </div>
@@ -1063,7 +1063,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                   type="text"
                                   value={tempCharacter.name || ''}
                                   onChange={(e) => setTempCharacter({ ...tempCharacter, name: e.target.value })}
-                                  className="w-full bg-bg-input border border-slate-800 text-text-primary text-xs rounded px-2 py-1 focus:border-slate-600 focus:outline-none"
+                                  className="w-full bg-bg-input border border-slate-800 text-slate-50 text-xs rounded px-2 py-1 focus:border-slate-600 focus:outline-none"
                                   placeholder="角色名"
                                 />
                                 <select
@@ -1096,10 +1096,10 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                               </div>
                             ) : (
                               <>
-                                <span className="text-sm text-slate-300 font-medium group-hover:text-text-primary">{c.name}</span>
+                                <span className="text-sm text-slate-300 font-medium group-hover:text-slate-50">{c.name}</span>
                                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                   <span className="text-[12px] text-slate-600 font-mono">{c.gender}</span>
-                                  <button onClick={() => startEditCharacter(c)} className="text-slate-600 hover:text-text-primary"><Edit className="w-3 h-3" /></button>
+                                  <button onClick={() => startEditCharacter(c)} className="text-slate-600 hover:text-slate-50"><Edit className="w-3 h-3" /></button>
                                   <button onClick={() => deleteCharacter(c.id)} className="text-slate-600 hover:text-red-400"><Trash className="w-3 h-3" /></button>
                                 </div>
                               </>
@@ -1112,7 +1112,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                              type="text"
                              value={tempCharacter.name || ''}
                              onChange={(e) => setTempCharacter({ ...tempCharacter, name: e.target.value })}
-                             className="w-full bg-bg-panel border border-slate-800 text-text-primary text-xs rounded px-2 py-1 focus:border-slate-600 focus:outline-none"
+                             className="w-full bg-bg-panel border border-slate-800 text-slate-50 text-xs rounded px-2 py-1 focus:border-slate-600 focus:outline-none"
                              placeholder="角色名"
                            />
                            <select
@@ -1153,7 +1153,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                       <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
                          <MapPin className="w-3 h-3" /> 场景列表
                       </h3>
-                      <button onClick={() => setShowAddScene(true)} className="text-slate-600 hover:text-text-primary transition-colors">
+                      <button onClick={() => setShowAddScene(true)} className="text-slate-600 hover:text-slate-50 transition-colors">
                          <Plus className="w-3 h-3" />
                       </button>
                     </div>
@@ -1166,7 +1166,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                  type="text"
                                  value={tempScene.location || ''}
                                  onChange={(e) => setTempScene({ ...tempScene, location: e.target.value })}
-                                 className="w-full bg-bg-input border border-slate-800 text-text-primary text-xs rounded px-2 py-1 focus:border-slate-600 focus:outline-none"
+                                 className="w-full bg-bg-input border border-slate-800 text-slate-50 text-xs rounded px-2 py-1 focus:border-slate-600 focus:outline-none"
                                  placeholder="场景名称"
                                />
                                <input
@@ -1193,7 +1193,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                <div className="w-1.5 h-1.5 bg-slate-700 rounded-full group-hover:bg-slate-400 transition-colors"></div>
                                <span className="truncate group-hover:text-slate-200 flex-1">{s!.location}</span>
                                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                 <button onClick={() => startEditScene(s!)} className="text-slate-600 hover:text-text-primary"><Edit className="w-3 h-3" /></button>
+                                 <button onClick={() => startEditScene(s!)} className="text-slate-600 hover:text-slate-50"><Edit className="w-3 h-3" /></button>
                                  <button onClick={() => deleteScene(s!.id)} className="text-slate-600 hover:text-red-400"><Trash className="w-3 h-3" /></button>
                                </div>
                              </>
@@ -1206,7 +1206,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                              type="text"
                              value={tempScene.location || ''}
                              onChange={(e) => setTempScene({ ...tempScene, location: e.target.value })}
-                             className="w-full bg-bg-panel border border-slate-800 text-text-primary text-xs rounded px-2 py-1 focus:border-slate-600 focus:outline-none"
+                             className="w-full bg-bg-panel border border-slate-800 text-slate-50 text-xs rounded px-2 py-1 focus:border-slate-600 focus:outline-none"
                              placeholder="场景名称"
                            />
                            <input
@@ -1248,8 +1248,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                            <div className="px-4 md:px-8 py-5 flex flex-col md:flex-row items-baseline justify-between">
                               <div className="flex items-center justify-between gap-6">
                                  <div className="flex items-center justify-between md:items-baseline gap-4">
-                                    <span className="text-3xl font-bold text-text-primary/10 font-mono">{(index + 1).toString().padStart(2, '0')}</span>
-                                    <h3 className="text-lg font-bold text-text-primary uppercase tracking-wider line-clamp-1">
+                                    <span className="text-3xl font-bold text-slate-50/10 font-mono">{(index + 1).toString().padStart(2, '0')}</span>
+                                    <h3 className="text-lg font-bold text-slate-50 uppercase tracking-wider line-clamp-1">
                                        {scene.location}
                                     </h3>
                                  </div>
@@ -1266,7 +1266,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                               <div className="flex gap-2">
                                  <button
                                     onClick={() => setEditingSceneInMain(scene)}
-                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-text-primary bg-slate-900/80 border border-slate-800 hover:border-slate-600 rounded transition-all flex items-center justify-center gap-1.5"
+                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-50 bg-slate-900/80 border border-slate-800 hover:border-slate-600 rounded transition-all flex items-center justify-center gap-1.5"
                                     title="编辑场景"
                                  >
                                     <Edit className="w-3 h-3" />
@@ -1310,7 +1310,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                 <div className="xl:w-32 flex-shrink-0 flex flex-col">
                                    <div className="flex py-1 items-center justify-between flex-col pb-4">
                                      <div className="flex gap-1 items-center justify-between w-full">
-                                       <div className="text-xs font-mono text-slate-500 group-hover:text-text-primary transition-colors">
+                                       <div className="text-xs font-mono text-slate-500 group-hover:text-slate-50 transition-colors">
                                          分镜-{(project.shots.indexOf(shot) + 1).toString().padStart(3, '0')}
                                        </div>
                                        {shot.interval?.duration && (
@@ -1336,7 +1336,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                      <div className="flex gap-1 group-hover:opacity-100 transition-opacity">
                                        <button
                                          onClick={() => startEditShot(shot)}
-                                         className="p-1.5 hover:bg-slate-800 text-slate-600 group-hover:text-text-primary rounded transition-colors"
+                                         className="p-1.5 hover:bg-slate-800 text-slate-600 group-hover:text-slate-50 rounded transition-colors"
                                          title="编辑"
                                        >
                                          <Edit className="w-3.5 h-3.5" />

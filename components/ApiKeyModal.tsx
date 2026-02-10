@@ -56,7 +56,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-8">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-slate-700/80 backdrop-blur-sm"
         onClick={onClose}
       />
 
@@ -77,7 +77,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
               <Key className="w-5 h-5" />
            </div>
            <div>
-              <h1 className="text-xl font-bold text-text-primary tracking-wide">API 配置</h1>
+              <h1 className="text-xl font-bold text-slate-50 tracking-wide">API 配置</h1>
            </div>
         </div>
 
@@ -93,7 +93,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputKey}
                onChange={(e) => setInputKey(e.target.value)}
                placeholder="Enter your API Key..."
-               className="w-full bg-bg-input border border-slate-800 text-text-primary px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+               className="w-full bg-bg-input border border-slate-800 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
              />
              <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
                本应用默认使用火山引擎的大模型 API 。请确保您的 API Key 已开通相应的服务权限。
@@ -125,7 +125,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputCozeWorkflowId}
                onChange={(e) => setInputCozeWorkflowId(e.target.value)}
                placeholder="Enter Coze Workflow ID..."
-               className="w-full bg-bg-input border border-slate-800 text-text-primary px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+               className="w-full bg-bg-input border border-slate-800 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
              />
              <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
                配置 Coze 工作流 ID 用于智能剧本分析等功能。
@@ -141,7 +141,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputCozeApiKey}
                onChange={(e) => setInputCozeApiKey(e.target.value)}
                placeholder="Enter Coze API Key..."
-               className="w-full bg-bg-input border border-slate-800 text-text-primary px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+               className="w-full bg-bg-input border border-slate-800 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
              />
              <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
                本应用需要 Coze 的 API 访问权限。
@@ -165,7 +165,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputFileUploadServiceUrl}
                onChange={(e) => setInputFileUploadServiceUrl(e.target.value)}
                placeholder="https://apppub.good365.net:6443/apppub_api/thirdparty/upload"
-               className="w-full bg-bg-input border border-slate-800 text-text-primary px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+               className="w-full bg-bg-input border border-slate-800 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
              />
              <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
                配置后，AI 生成的图片和视频将上传到此服务。
@@ -182,7 +182,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputFileAccessDomain}
                onChange={(e) => setInputFileAccessDomain(e.target.value)}
                placeholder="ofs.good365.net:6443"
-               className="w-full bg-bg-input border border-slate-800 text-text-primary px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
+               className="w-full bg-bg-input border border-slate-800 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-700"
              />
              <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
                上传后的文件将使用此域名访问，不包含协议头。

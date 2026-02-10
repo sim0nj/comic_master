@@ -34,7 +34,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
         <div className="flex items-center gap-3">
           <button
             onClick={onExit}
-            className="text-slate-400 hover:text-text-primary transition-colors"
+            className="text-slate-400 hover:text-slate-50 transition-colors"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -44,10 +44,10 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
             </div>
             <div className="overflow-hidden">
               <div className="flex items-center gap-2">
-              <h1 className="text-xs font-bold text-text-primary tracking-wider uppercase">{projectName || '未命名项目'}</h1>
+              <h1 className="text-xs font-bold text-slate-50 tracking-wider uppercase">{projectName || '未命名项目'}</h1>
           <button
             onClick={() => setShowProjectSettings(true)}
-            className="text-[11px] font-medium font-bold text-slate-400 hover:text-text-primary items-center"
+            className="text-[11px] font-medium font-bold text-slate-400 hover:text-slate-50 items-center"
             title="项目设置"
           >
             <Edit className="w-3.5 h-3.5" />
@@ -62,14 +62,14 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowModelSettings(true)}
-            className="text-slate-400 hover:text-text-primary transition-colors p-1"
+            className="text-slate-400 hover:text-slate-50 transition-colors p-1"
             title="模型管理"
           >
             <Sparkles className="w-4 h-4" />
           </button>
           <button
              onClick={onOpenSettings}
-            className="text-slate-400 hover:text-text-primary transition-colors p-1"
+            className="text-slate-400 hover:text-slate-50 transition-colors p-1"
             title="模型管理"
           >
             <Settings className="w-4 h-4" />
@@ -89,12 +89,12 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
               className={`
                 flex flex-col items-center px-2 min-w-[60px] rounded-lg transition-all duration-200
                 ${isActive
-                  ? 'text-text-primary'
+                  ? 'text-slate-50'
                   : 'text-slate-500 hover:text-slate-300'
                 }
               `}
             >
-              <item.icon className={`w-5 h-5 ${isActive ? 'text-text-primary' : ''}`} />
+              <item.icon className={`w-5 h-5 ${isActive ? 'text-slate-50' : ''}`} />
               <span className="text-[10px] font-medium tracking-wider uppercase mt-1">
                 {item.label}
               </span>
