@@ -301,9 +301,9 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
         return (
           <div className="absolute inset-0 z-40 bg-slate-700/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
-            <div className="bg-bg-secondary border border-slate-800 w-full max-h-[80vh] max-w-2xl rounded-2xl flex flex-col shadow-2xl overflow-hidden">
+            <div className="bg-bg-secondary border border-slate-600 w-full max-h-[80vh] max-w-2xl rounded-2xl flex flex-col shadow-2xl overflow-hidden">
               {/* Modal Header */}
-              <div className="h-16 px-8 border-b border-slate-800 flex items-center justify-between shrink-0 bg-bg-footer">
+              <div className="h-16 px-8 border-b border-slate-600 flex items-center justify-between shrink-0 bg-bg-footer">
                 <div className="flex items-center gap-4">
                   <MapPin className="w-10 h-10 rounded-full bg-slate-800 p-2.5 text-emerald-500" />
                   <div>
@@ -323,12 +323,12 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                       <MapPin className="w-4 h-4" /> 场景图像
                     </h4>
-                    <div className="bg-bg-panel p-4 rounded-xl border border-slate-800">
+                    <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
                       <div className="aspect-[16/9] bg-slate-900 rounded-lg overflow-hidden mb-4 relative cursor-pointer" onClick={() => setPreviewImage(selectedScene.referenceImage)}>
                         {selectedScene.referenceImage ? (
                           <img src={selectedScene.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
                         ) : (
-                          <div className="flex items-center justify-center h-full text-slate-700">无图像</div>
+                          <div className="flex items-center justify-center h-full text-slate-600">无图像</div>
                         )}
                         {selectedScene.referenceImage && (
                           <div className="absolute inset-0 bg-slate-700/0 hover:bg-slate-700/20 transition-colors flex items-center justify-center opacity-0 hover:opacity-100">
@@ -345,11 +345,11 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       <Check className="w-4 h-4" /> 场景信息
                     </h4>
                     <div className="space-y-4">
-                      <div className="bg-bg-panel p-4 rounded-xl border border-slate-800">
+                      <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
                         <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold block mb-2">时间</label>
                         <p className="text-sm text-slate-50">{selectedScene.time}</p>
                       </div>
-                      <div className="bg-bg-panel p-4 rounded-xl border border-slate-800">
+                      <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
                         <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold block mb-2">氛围</label>
                         <p className="text-sm text-slate-50">{selectedScene.atmosphere}</p>
                       </div>
@@ -362,13 +362,13 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                     <Sparkles className="w-4 h-4" /> 视觉提示
                   </h4>
-                  <div className="bg-bg-panel p-4 rounded-xl border border-slate-800">
+                  <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
                     <textarea
                       value={editingSceneVisualPrompt}
                       onChange={(e) => setEditingSceneVisualPrompt(e.target.value)}
                       onBlur={handleSaveSceneVisualPrompt}
                       placeholder="输入场景的视觉描述..."
-                      className="w-full bg-bg-secondary border border-slate-800 rounded-lg px-4 py-3 text-sm text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-32 font-mono"
+                      className="w-full bg-bg-secondary border border-slate-600 rounded-lg px-4 py-3 text-sm text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-32 font-mono"
                     />
                   </div>
                 </div>
@@ -379,7 +379,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       })()}
 
       {/* Header - Consistent with Director */}
-      <div className="h-14 border-b border-slate-800 bg-bg-footer px-6 flex items-center justify-between shrink-0">
+      <div className="h-14 border-b border-slate-600 bg-bg-footer px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-slate-50 flex items-center gap-3">
                   <Group className="w-5 h-5 text-indigo-500" />
@@ -388,10 +388,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           </div>
           <div className="flex items-center gap-3">
              <div className="flex gap-2">
-                 <span className="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[12px] text-slate-400 font-mono uppercase">
+                 <span className="px-2 py-1 bg-slate-900 border border-slate-600 rounded text-[12px] text-slate-400 font-mono uppercase">
                     {project.scriptData.characters.length} 角色
                  </span>
-                 <span className="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[12px] text-slate-400 font-mono uppercase">
+                 <span className="px-2 py-1 bg-slate-900 border border-slate-600 rounded text-[12px] text-slate-400 font-mono uppercase">
                     {project.scriptData.scenes.length} 场景
                  </span>
              </div>
@@ -401,7 +401,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {/* Characters Section */}
         <section>
-          <div className="flex items-end justify-between mb-6 border-b border-slate-800 pb-4">
+          <div className="flex items-end justify-between mb-6 border-b border-slate-600 pb-4">
             <div>
                <h3 className="text-sm font-bold text-slate-50 uppercase tracking-widest flex items-center gap-2">
                  <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
@@ -414,7 +414,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allCharactersReady
-                    ? 'bg-bg-secondary text-slate-400 border border-slate-700 hover:text-slate-50 hover:border-slate-500'
+                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-500'
                     : 'bg-white text-black hover:bg-slate-200 shadow-lg shadow-white/5'
               }`}
             >
@@ -425,7 +425,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             {project.scriptData.characters.map((char) => (
-              <div key={char.id} className="bg-bg-secondary border border-slate-800 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
+              <div key={char.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
                 <div className="aspect-[3/4] bg-slate-900 relative overflow-hidden">
                   {char.referenceImage ? (
                     <>
@@ -451,12 +451,12 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       </div>
                     </>
                   ) : (
-                     <div className="w-full h-full flex flex-col items-center justify-center text-slate-700 p-4 text-center">
+                     <div className="w-full h-full flex flex-col items-center justify-center text-slate-600 p-4 text-center">
                        <User className="w-10 h-10 mb-3 opacity-10" />
                        <button
                           onClick={() => handleGenerateAsset('character', char.id)}
                           disabled={processingState?.type === 'character' && processingState?.id === char.id || !!batchProgress || !!processingState}
-                          className="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 rounded text-xs font-bold transition-all border border-slate-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 rounded text-xs font-bold transition-all border border-slate-600 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                        >
                          {processingState?.type === 'character' && processingState?.id === char.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
                          {processingState?.type === 'character' && processingState?.id === char.id ? '生成中...' : '生成'}
@@ -501,14 +501,14 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                   </button>
                   </div>
                 </div>
-                <div className="p-3 border-t border-slate-800 bg-bg-secondary">
+                <div className="p-3 border-t border-slate-600 bg-bg-secondary">
                   <div className="flex items-center justify-between mb-1">
                   <div  className="flex items-center gap-2 flex-wrap">
                   <h3 className="font-bold text-slate-200 truncate text-sm">{char.name}</h3>
-                  {char.gender!='未指定' && <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-800 uppercase font-mono">{char.gender}</span>}
-                  {char.age!='未指定' && <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-800 uppercase font-mono">{char.age}</span>}
+                  {char.gender!='未指定' && <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-600 uppercase font-mono">{char.gender}</span>}
+                  {char.age!='未指定' && <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-600 uppercase font-mono">{char.age}</span>}
                      {char.variations && char.variations.length > 0 && (
-                         <span className="px-1.5 py-0.5 text-[11px] rounded border border-slate-800 uppercase text-slate-400 font-mono flex items-center gap-1">
+                         <span className="px-1.5 py-0.5 text-[11px] rounded border border-slate-600 uppercase text-slate-400 font-mono flex items-center gap-1">
                              <Shirt className="w-2.5 h-2.5" /> +{char.variations.length}
                          </span>
                      )}
@@ -523,7 +523,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
         {/* Scenes Section */}
         <section>
-          <div className="flex items-end justify-between mb-6 border-b border-slate-800 pb-4">
+          <div className="flex items-end justify-between mb-6 border-b border-slate-600 pb-4">
             <div>
                <h3 className="text-sm font-bold text-slate-50 uppercase tracking-widest flex items-center gap-2">
                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></div>
@@ -536,7 +536,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allScenesReady
-                    ? 'bg-bg-secondary text-slate-400 border border-slate-700 hover:text-slate-50 hover:border-slate-700'
+                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-600'
                     : 'bg-white text-black hover:bg-slate-600 shadow-lg shadow-white/5'
               }`}
             >
@@ -547,7 +547,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
             {project.scriptData.scenes.map((scene) => (
-              <div key={scene.id} className="bg-bg-secondary border border-slate-800 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
+              <div key={scene.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-600 transition-all hover:shadow-lg">
                 <div className="aspect-[16/9] bg-slate-800/50 relative overflow-hidden">
                   {scene.referenceImage ? (
                     <>
@@ -573,12 +573,12 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       </div>
                     </>
                   ) : (
-                     <div className="w-full h-full flex flex-col items-center justify-center text-slate-700 p-4 text-center">
+                     <div className="w-full h-full flex flex-col items-center justify-center text-slate-600 p-4 text-center">
                        <MapPin className="w-10 h-10 mb-3 opacity-10" />
                        <button
                           onClick={(e) => { handleGenerateAsset('scene', scene.id); }}
                           disabled={processingState?.type === 'scene' && processingState?.id === scene.id || !!batchProgress || !!processingState}
-                          className="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 rounded text-xs font-bold transition-all border border-slate-700 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="px-4 py-2 bg-slate-800 text-slate-300 hover:bg-slate-700 rounded text-xs font-bold transition-all border border-slate-600 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                        >
                           {processingState?.type === 'scene' && processingState?.id === scene.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
                           {processingState?.type === 'scene' && processingState?.id === scene.id ? '生成中...' : '生成'}
@@ -617,14 +617,14 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     </button>
                     </div>
                 </div>
-                <div className="p-3 border-t border-slate-800 bg-bg-secondary">
+                <div className="p-3 border-t border-slate-600 bg-bg-secondary">
                   <div className="flex justify-between items-center mb-1">
                      <h3 className="font-bold text-slate-200 text-sm truncate">{scene.location}</h3>
-                     <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-800 uppercase font-mono whitespace-nowrap">{scene.time}</span>
+                     <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-600 uppercase font-mono whitespace-nowrap">{scene.time}</span>
                   </div>
                   <p className="text-[12px] text-slate-500 line-clamp-1 mb-2">{scene.atmosphere}</p>
                   {scene.visualPrompt && (
-                    <div className="mt-2 pt-2 border-t border-slate-800/50">
+                    <div className="mt-2 pt-2 border-t border-slate-600/50">
                       <div className="flex items-center justify-between gap-2">
                         <p className="text-[11px] text-slate-400 font-mono line-clamp-2 flex-1">{scene.visualPrompt}</p>
                         <button
@@ -637,10 +637,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     </div>
                   )}
                   {!scene.visualPrompt && scene.referenceImage && (
-                    <div className="mt-2 pt-2 border-t border-slate-800/50">
+                    <div className="mt-2 pt-2 border-t border-slate-600/50">
                       <button
                         onClick={() => setSelectedSceneId(scene.id)}
-                        className="w-full text-[11px] text-slate-500 hover:text-emerald-400 font-mono text-center py-1 border border-dashed border-slate-700 rounded hover:border-emerald-500/50 transition-colors"
+                        className="w-full text-[11px] text-slate-500 hover:text-emerald-400 font-mono text-center py-1 border border-dashed border-slate-600 rounded hover:border-emerald-500/50 transition-colors"
                       >
                         + 添加视觉提示
                       </button>
@@ -655,7 +655,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
         {/* Dialogue Synthesis Section */}
         {project.shots.length > 0 && (
           <section>
-            <div className="flex items-end justify-between mb-6 border-b border-slate-800 pb-4">
+            <div className="flex items-end justify-between mb-6 border-b border-slate-600 pb-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-50 uppercase tracking-widest flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>
@@ -664,17 +664,17 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                 <p className="text-xs text-slate-500 mt-1 pl-3.5">为镜头对话生成语音并编辑</p>
               </div>
               <div className="flex gap-2">
-                <span className="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[12px] text-slate-400 font-mono uppercase">
+                <span className="px-2 py-1 bg-slate-900 border border-slate-600 rounded text-[12px] text-slate-400 font-mono uppercase">
                   {project.shots.filter(s => s.dialogue).length} / {project.shots.length} 对话
                 </span>
-                <span className="px-2 py-1 bg-slate-900 border border-slate-800 rounded text-[12px] text-slate-400 font-mono uppercase">
+                <span className="px-2 py-1 bg-slate-900 border border-slate-600 rounded text-[12px] text-slate-400 font-mono uppercase">
                   {project.shots.filter(s => s.audioUrl).length} 音频
                 </span>
               </div>
             </div>
 
             {/* TTS Parameters Configuration */}
-            <div className="bg-bg-secondary border border-slate-800 rounded-xl p-5 mb-6">
+            <div className="bg-bg-secondary border border-slate-600 rounded-xl p-5 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
                   <AudioLines className="w-3.5 h-3.5 text-amber-400" />
@@ -689,7 +689,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.spd}
                       onChange={(e) => setTtsParams({ ...ttsParams, spd: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-700 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(val => (
                         <option key={val} value={val}>{val}</option>
@@ -708,7 +708,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.pit}
                       onChange={(e) => setTtsParams({ ...ttsParams, pit: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-700 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(val => (
                         <option key={val} value={val}>{val}</option>
@@ -727,7 +727,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.vol}
                       onChange={(e) => setTtsParams({ ...ttsParams, vol: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-700 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(val => (
                         <option key={val} value={val}>{val}</option>
@@ -746,7 +746,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.per}
                       onChange={(e) => setTtsParams({ ...ttsParams, per: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-700 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       {VOICE_LIBRARY.map(voice => (
                         <option key={voice.per} value={voice.per}>{voice.name}</option>
@@ -766,7 +766,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.aue}
                       onChange={(e) => setTtsParams({ ...ttsParams, aue: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-700 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       <option value={3}>MP3</option>
                       <option value={4}>PCM-16k</option>
@@ -783,10 +783,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6">
               {project.shots.map((shot, shotIndex) => (
-                <div key={shot.id} className="bg-bg-secondary border border-slate-800 rounded-xl overflow-hidden hover:border-slate-600 transition-all flex flex-col">
+                <div key={shot.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden hover:border-slate-600 transition-all flex flex-col">
                   <div className="p-4 space-y-3">
                     {/* Shot Info */}
-                    <div className="flex items-start gap-3 pb-3 border-b border-slate-800/50">
+                    <div className="flex items-start gap-3 pb-3 border-b border-slate-600/50">
                       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-800/100 text-slate-300/100 flex items-center justify-center font-mono text-sm font-bold">
                         {shotIndex + 1}
                       </div>
@@ -794,7 +794,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                         <p className="text-sm text-slate-50 font-medium truncate mb-1">{shot.actionSummary}</p>
                         <div className="flex items-center gap-2">
                           {shot.sceneId && (
-                            <span className="px-2 py-0.5 bg-slate-900/50 text-slate-400 text-[11px] rounded border border-slate-700/50">
+                            <span className="px-2 py-0.5 bg-slate-900/50 text-slate-400 text-[11px] rounded border border-slate-600/50">
                               {project.scriptData?.scenes.find(s => s.id === shot.sceneId)?.location || '未知场景'}
                             </span>
                           )}
@@ -810,7 +810,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                             value={editingShotDialogue.dialogue}
                             onChange={(e) => setEditingShotDialogue({ ...editingShotDialogue, dialogue: e.target.value })}
                             placeholder="输入对话内容..."
-                            className="w-full bg-bg-secondary border border-slate-700 rounded-lg px-3 py-3 text-sm text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-14 font-mono"
+                            className="w-full bg-bg-secondary border border-slate-600 rounded-lg px-3 py-3 text-sm text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-14 font-mono"
                           />
                           <div className="flex gap-2">
                             <button
@@ -828,7 +828,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                           </div>
                         </div>
                       ) : (
-                        <div className="bg-slate-900/30 border border-slate-700/50 rounded-lg p-3">
+                        <div className="bg-slate-900/30 border border-slate-600/50 rounded-lg p-3">
                           {shot.dialogue ? (
                             <p className="text-sm text-slate-300 h-12 font-mono leading-relaxed line-clamp-2">{shot.dialogue}</p>
                           ) : (

@@ -346,9 +346,9 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
             {(!isMobile || projects.length == 0) && 
             <div 
               onClick={handleCreate}
-              className="group cursor-pointer border border-slate-800 hover:border-slate-500 bg-bg-panel flex flex-col items-center justify-center min-h-[280px] transition-all"
+              className="group cursor-pointer border border-slate-600 hover:border-slate-500 bg-bg-panel flex flex-col items-center justify-center min-h-[280px] transition-all"
             >
-              <div className="w-12 h-12 border border-slate-700 flex items-center justify-center mb-6 group-hover:bg-slate-800 transition-colors">
+              <div className="w-12 h-12 border border-slate-600 flex items-center justify-center mb-6 group-hover:bg-slate-800 transition-colors">
                 <Plus className="w-5 h-5 text-slate-500 group-hover:text-slate-50" />
               </div>
               <span className="text-slate-600 font-mono text-[12px] uppercase tracking-widest group-hover:text-slate-300">新建项目</span>
@@ -359,7 +359,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
               <div 
                 key={proj.id}
                 onClick={() => onOpenProject(proj)}
-                className="group bg-bg-panel border border-slate-800 hover:border-slate-600 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[280px]"
+                className="group bg-bg-panel border border-slate-600 hover:border-slate-600 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[280px]"
               >
                   {/* Delete Confirmation Overlay */}
                   {deleteConfirmId === proj.id && (
@@ -377,7 +377,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                         <div className="flex gap-2 w-full pt-2">
                             <button 
                                 onClick={cancelDelete}
-                                className="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-50 text-[12px] font-bold uppercase tracking-wider transition-colors border border-slate-800"
+                                className="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-50 text-[12px] font-bold uppercase tracking-wider transition-colors border border-slate-600"
                             >
                                 取消
                             </button>
@@ -446,7 +446,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                               onChange={(e) => setEditingTitle(e.target.value)}
                               onKeyDown={(e) => handleKeyDown(e, proj)}
                               onClick={(e) => e.stopPropagation()}
-                              className="flex-1 bg-slate-900 border border-slate-700 text-slate-50 text-sm px-2 py-1 focus:outline-none focus:border-indigo-500"
+                              className="flex-1 bg-slate-900 border border-slate-600 text-slate-50 text-sm px-2 py-1 focus:outline-none focus:border-indigo-500"
                               autoFocus
                             />
                             <button
@@ -485,7 +485,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                             )}
                         </div>
                         {proj.scriptData?.logline && (
-                            <p className="text-[12px] text-slate-50-600 line-clamp-2 leading-relaxed font-mono border-l border-slate-800 pl-2">
+                            <p className="text-[12px] text-slate-50-600 line-clamp-2 leading-relaxed font-mono border-l border-slate-600 pl-2">
                             {proj.scriptData.logline}
                             </p>
                         )}
@@ -499,7 +499,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                           {projectImages.map((imgUrl, idx) => (
                             <div
                               key={idx}
-                              className="w-14 h-14 bg-slate-900 rounded overflow-hidden flex-shrink-0 border border-slate-800 hover:border-slate-600 transition-colors cursor-pointer group/img"
+                              className="w-14 h-14 bg-slate-900 rounded overflow-hidden flex-shrink-0 border border-slate-600 hover:border-slate-600 transition-colors cursor-pointer group/img"
                             >
                               <img
                                 src={imgUrl}
@@ -520,7 +520,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false }) => {
                         <Calendar className="w-3 h-3" />
                         {formatDate(proj.lastModified)}
                     </div>
-                    <ChevronRight className="w-3 h-3 text-slate-700 group-hover:text-slate-50 transition-colors" />
+                    <ChevronRight className="w-3 h-3 text-slate-600 group-hover:text-slate-50 transition-colors" />
                   </div>
               </div>
             ))}
