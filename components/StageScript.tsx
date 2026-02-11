@@ -693,7 +693,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                     className={`px-2 py-2.5 text-[11px] font-medium rounded-md transition-all text-center border ${
                       localDuration === opt.value
                         ? 'bg-slate-200/50 text-black border-slate-400 shadow-sm'
-                        : 'bg-transparent border-slate-600 text-slate-400 hover:border-slate-500 hover:text-slate-200'
+                        : 'bg-transparent border-slate-600 text-slate-400 hover:border-slate-300 hover:text-slate-200'
                     }`}
                   >
                     {opt.label}
@@ -948,11 +948,11 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
               
               <div className="flex items-center gap-4">
                   <div className="flex flex-col">
-                      <span className="text-[12px] text-slate-600 uppercase tracking-widest">项目</span>
+                      <span className="text-[12px] text-slate-400 uppercase tracking-widest">项目</span>
                       <span className="text-sm text-slate-200 font-medium">{project.scriptData?.title}</span>
                   </div>
                   <div className="flex flex-col">
-                      <span className="text-[12px] text-slate-600 uppercase tracking-widest">时长</span>
+                      <span className="text-[12px] text-slate-400 uppercase tracking-widest">时长</span>
                       <span className="text-sm font-mono text-slate-400">{project.targetDuration}</span>
                   </div>
               </div>
@@ -978,7 +978,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                  {/* Genre Selection */}
                  <div>
                    <div className="flex items-center justify-between mb-2">
-                     <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                     <h3 className="text-[12px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                        <TextQuote className="w-3 h-3" /> 类型
                      </h3>
                      {!editingGenre && (
@@ -1015,7 +1015,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                  {/* Logline */}
                  <div>
                    <div className="flex items-center justify-between mb-2">
-                     <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                     <h3 className="text-[12px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                        <TextQuote className="w-3 h-3" /> 故事梗概
                      </h3>
                      {!editingLogline && (
@@ -1038,7 +1038,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                        </div>
                      </div>
                    ) : (
-                     <p className="text-xs text-slate-400 italic leading-relaxed font-serif cursor-text hover:text-slate-300" onClick={startEditLogline}>"{project.scriptData?.logline}"</p>
+                     <p className="text-xs text-slate-300 italic leading-relaxed font-serif cursor-text hover:text-slate-300" onClick={startEditLogline}>"{project.scriptData?.logline}"</p>
                    )}
                  </div>
               </div>
@@ -1047,7 +1047,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                   {/* Characters */}
                   <section>
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                      <h3 className="text-[12px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                          <Users className="w-3 h-3" /> 演员表
                       </h3>
                       <button onClick={() => setShowAddCharacter(true)} className="text-slate-600 hover:text-slate-50 transition-colors">
@@ -1056,7 +1056,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                     </div>
                     <div className="space-y-2">
                        {project.scriptData?.characters.map(c => (
-                         <div key={c.id} className="flex justify-between items-center group cursor-default p-2 rounded hover:bg-slate-900/50 transition-colors">
+                         <div key={c.id} className="flex justify-between items-center group cursor-default p-2 rounded hover:bg-slate-900/100 transition-colors">
                             {editingCharacterId === c.id ? (
                               <div className="flex-1 space-y-2">
                                 <input
@@ -1090,8 +1090,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                   placeholder="性格特点"
                                 />
                                 <div className="flex gap-1">
-                                  <button onClick={saveCharacter} className="flex-1 py-1 bg-slate-800 text-slate-300 text-[11px] rounded hover:bg-slate-700">保存</button>
-                                  <button onClick={() => { setEditingCharacterId(null); setTempCharacter({}); }} className="flex-1 py-1 bg-slate-900 text-slate-500 text-[11px] rounded hover:text-slate-300">取消</button>
+                                  <button onClick={saveCharacter} className="flex-1 py-1 bg-slate-700 text-slate-300 text-[11px] rounded hover:bg-slate-600/100">保存</button>
+                                  <button onClick={() => { setEditingCharacterId(null); setTempCharacter({}); }} className="flex-1 py-1 bg-slate-600 text-slate-500 text-[11px] hover:bg-slate-600/50 rounded hover:text-slate-300">取消</button>
                                 </div>
                               </div>
                             ) : (
@@ -1139,8 +1139,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                              placeholder="性格特点"
                            />
                            <div className="flex gap-1">
-                             <button onClick={addCharacter} className="flex-1 py-1 bg-slate-800 text-slate-300 text-[11px] rounded hover:bg-slate-700">添加</button>
-                             <button onClick={() => { setShowAddCharacter(false); setTempCharacter({}); }} className="flex-1 py-1 bg-slate-900 text-slate-500 text-[11px] rounded hover:text-slate-300">取消</button>
+                             <button onClick={addCharacter} className="flex-1 py-1 bg-slate-700 text-slate-300 text-[11px] rounded hover:bg-slate-600/100">添加</button>
+                             <button onClick={() => { setShowAddCharacter(false); setTempCharacter({}); }} className="flex-1 py-1 bg-slate-600 text-slate-500 text-[11px] hover:bg-slate-600/50 rounded hover:text-slate-300">取消</button>
                            </div>
                          </div>
                        )}
@@ -1150,7 +1150,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                   {/* Scenes */}
                   <section>
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-[12px] font-bold text-slate-600 uppercase tracking-widest flex items-center gap-2">
+                      <h3 className="text-[12px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                          <MapPin className="w-3 h-3" /> 场景列表
                       </h3>
                       <button onClick={() => setShowAddScene(true)} className="text-slate-600 hover:text-slate-50 transition-colors">
@@ -1159,7 +1159,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                     </div>
                     <div className="space-y-1">
                        {uniqueScenesList.map((s) => (
-                         <div key={s!.id} className="flex items-center gap-3 text-xs text-slate-400 group cursor-default p-2 rounded hover:bg-slate-900/50 transition-colors">
+                         <div key={s!.id} className="flex items-center gap-3 text-xs text-slate-300 group cursor-default p-2 rounded hover:bg-slate-900/100 transition-colors">
                            {editingSceneId === s!.id ? (
                              <div className="flex-1 space-y-2">
                                <input
@@ -1184,8 +1184,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                  placeholder="氛围"
                                />
                                <div className="flex gap-1">
-                                 <button onClick={saveScene} className="flex-1 py-1 bg-slate-800 text-slate-300 text-[11px] rounded hover:bg-slate-700">保存</button>
-                                 <button onClick={() => { setEditingSceneId(null); setTempScene({}); }} className="flex-1 py-1 bg-slate-900 text-slate-500 text-[11px] rounded hover:text-slate-300">取消</button>
+                                 <button onClick={saveScene} className="flex-1 py-1 bg-slate-700 text-slate-300 text-[11px] rounded hover:bg-slate-600/100">保存</button>
+                                 <button onClick={() => { setEditingSceneId(null); setTempScene({}); }} className="flex-1 py-1 bg-slate-600 text-slate-500 text-[11px] rounded hover:bg-slate-600/50 hover:text-slate-300">取消</button>
                                </div>
                              </div>
                            ) : (
@@ -1224,8 +1224,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                              placeholder="氛围"
                            />
                            <div className="flex gap-1">
-                             <button onClick={addScene} className="flex-1 py-1 bg-slate-800 text-slate-300 text-[11px] rounded hover:bg-slate-700">添加</button>
-                             <button onClick={() => { setShowAddScene(false); setTempScene({}); }} className="flex-1 py-1 bg-slate-900 text-slate-500 text-[11px] rounded hover:text-slate-300">取消</button>
+                             <button onClick={addScene} className="flex-1 py-1 bg-slate-700 text-slate-300 text-[11px] rounded hover:bg-slate-600/100">添加</button>
+                             <button onClick={() => { setShowAddScene(false); setTempScene({}); }} className="flex-1 py-1 bg-slate-600 text-slate-500 text-[11px] rounded hover:bg-slate-600/50 hover:text-slate-300">取消</button>
                            </div>
                          </div>
                        )}
@@ -1266,7 +1266,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                               <div className="flex gap-2">
                                  <button
                                     onClick={() => setEditingSceneInMain(scene)}
-                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-50 bg-slate-900/80 border border-slate-600 hover:border-slate-500 rounded transition-all flex items-center justify-center gap-1.5"
+                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-50 bg-slate-900/80 border border-slate-600 hover:border-slate-300 rounded transition-all flex items-center justify-center gap-1.5"
                                     title="编辑场景"
                                  >
                                     <Edit className="w-3 h-3" />
@@ -1353,7 +1353,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                      {shot.actionSummary}
                                    </p>
                                    {shot.dialogue && (
-                                      <div className="pl-6 border-l-2 border-slate-600 group-hover:border-slate-500 transition-colors py-1">
+                                      <div className="pl-6 border-l-2 border-slate-600 group-hover:border-slate-300 transition-colors py-1">
                                          <p className="text-slate-400 font-serif italic text-sm">"{shot.dialogue}"</p>
                                       </div>
                                    )}
@@ -1372,7 +1372,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                 </div>
 
                                 {/* Prompt Preview */}
-                                <div className="w-64 xl:block pl-6 border-l border-slate-600 group-hover:border-slate-500">
+                                <div className="w-64 xl:block pl-6 border-l border-slate-600 group-hover:border-slate-300">
                                    <div className="text-[12px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                                       <Aperture className="w-3 h-3" /> 画面提示词
                                    </div>

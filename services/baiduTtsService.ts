@@ -30,7 +30,7 @@ function encodeURIComponentRFC3986(str: string): string {
 // Helper for retry logic
 const retryOperation = async <T>(
   operation: () => Promise<T>,
-  maxRetries: number = 3,
+  maxRetries: number = 1,
   baseDelay: number = 2000
 ): Promise<T> => {
   let lastError: Error | null = null;
@@ -72,7 +72,7 @@ const getAuthHeaders = () => {
 const fetchWithRetry = async (
   endpoint: string,
   options: RequestInit,
-  retries: number = 3
+  retries: number = 1
 ): Promise<any> => {
   return retryOperation(async () => {
     const response = await fetch(endpoint, {
@@ -151,7 +151,7 @@ export async function textToSpeech(
 
     // 发送请求
     const endpoint = `${runtimeApiUrl}/text2audio`;
-    const response = await fetch(endpoint, {
+    const response = await fetchWithRetry(endpoint, {
       method: "POST",
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

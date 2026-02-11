@@ -60,7 +60,7 @@ const getAuthHeaders = () => {
 // Helper for retry logic
 const retryOperation = async <T>(
   operation: () => Promise<T>,
-  maxRetries: number = 3,
+  maxRetries: number = 1,
   baseDelay: number = 2000
 ): Promise<T> => {
   let lastError: Error | null = null;
@@ -96,7 +96,7 @@ const retryOperation = async <T>(
 const fetchWithRetry = async (
   endpoint: string,
   options: RequestInit,
-  retries: number = 3
+  retries: number = 1
 ): Promise<any> => {
   return retryOperation(async () => {
     const response = await fetch(endpoint, {
@@ -138,26 +138,24 @@ export const parseScriptToData = async (
 
   const prompt = PROMPT_TEMPLATES.PARSE_SCRIPT(rawText, language);
 
-  const response = await retryOperation(async () => {
-    return await fetchWithRetry(endpoint, {
-      method: "POST",
-      body: JSON.stringify({
-        model: runtimeTextModel,
-        messages: [
-          {
-            role: "system",
-            content: PROMPT_TEMPLATES.SYSTEM_SCRIPT_ANALYZER,
-          },
-          {
-            role: "user",
-            content: prompt,
-          },
-        ],
-        temperature: 0.7,
-        max_tokens: 4096,
-        response_format: { type: "json_object" },
-      }),
-    });
+  const response =  await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify({
+      model: runtimeTextModel,
+      messages: [
+        {
+          role: "system",
+          content: PROMPT_TEMPLATES.SYSTEM_SCRIPT_ANALYZER,
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      temperature: 0.7,
+      max_tokens: 4096,
+      response_format: { type: "json_object" },
+    }),
   });
 
   const content = response.choices?.[0]?.message?.content || "{}";
@@ -316,25 +314,23 @@ export const generateScript = async (
 
   const generationPrompt = PROMPT_TEMPLATES.GENERATE_SCRIPT(prompt, targetDuration, genre, language);
 
-  const response = await retryOperation(async () => {
-    return await fetchWithRetry(endpoint, {
-      method: "POST",
-      body: JSON.stringify({
-        model: runtimeTextModel,
-        messages: [
-          {
-            role: "system",
-            content: PROMPT_TEMPLATES.SYSTEM_SCREENWRITER,
-          },
-          {
-            role: "user",
-            content: generationPrompt,
-          },
-        ],
-        temperature: 0.8,
-        max_tokens: 4096,
-      }),
-    });
+  const response =  await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify({
+      model: runtimeTextModel,
+      messages: [
+        {
+          role: "system",
+          content: PROMPT_TEMPLATES.SYSTEM_SCREENWRITER,
+        },
+        {
+          role: "user",
+          content: generationPrompt,
+        },
+      ],
+      temperature: 0.8,
+      max_tokens: 4096,
+    }),
   });
 
   const content = response.choices?.[0]?.message?.content || "";

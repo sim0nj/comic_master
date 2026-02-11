@@ -275,7 +275,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
               model: config.model,
               apiKey: config.apiKey,
               apiUrl: config.apiUrl || '',
-              enabled: false, // 导入的配置默认不启用
+              enabled: config.enabled || false, // 导入的配置默认不启用
               description: config.description || ''
             };
             await saveModelConfig(validConfig);
@@ -634,12 +634,12 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
             <div className="flex gap-3">
               <button
                 onClick={handleExport}
-                className="flex-1 py-3 border border-slate-600 bg-slate-600 text-slate-400 hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-3 border border-slate-600 bg-slate-700/100 text-slate-400 hover:bg-slate-600 hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
               >
                 <Download className="w-4 h-4" />
                 导出配置
               </button>
-              <div className="relative flex-1">
+              <div className="relative flex-1 group">
                 <input
                   type="file"
                   accept=".json"
@@ -647,7 +647,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
                 <button
-                  className="w-full py-3 border border-slate-600 bg-slate-600/50 text-slate-400 hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 border border-slate-600 bg-slate-700/50 text-slate-400 group-hover:bg-slate-400/100 group-hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
                 >
                   <Upload className="w-4 h-4" />
                   导入配置
@@ -655,7 +655,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
               </div>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex-1 py-3 border border-slate-600 bg-slate-700 text-black hover:bg-slate-400 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-white/5 flex items-center justify-center gap-2"
+                className="flex-1 py-3 border border-slate-600 bg-slate-700 text-black hover:bg-slate-400/50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors shadow-lg shadow-white/5 flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 添加新配置

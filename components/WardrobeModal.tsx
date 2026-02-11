@@ -157,7 +157,7 @@ const WardrobeModal: React.FC<Props> = ({
                                 )}
                             </div>
                             <div className="space-y-2">
-                                <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold">视觉提示</label>
+                                <label className="text-[12px] text-slate-300 uppercase tracking-wider font-bold">视觉提示</label>
                                 <textarea
                                     value={editingVisualPrompt}
                                     onChange={(e) => setEditingVisualPrompt(e.target.value)}
@@ -180,7 +180,7 @@ const WardrobeModal: React.FC<Props> = ({
                         <div className="space-y-4">
                             {/* List */}
                             {(character.variations || []).map((variation) => (
-                                <div key={variation.id} className="flex gap-4 p-4 bg-bg-panel border border-slate-600 rounded-xl group hover:border-slate-500 transition-colors">
+                                <div key={variation.id} className="flex gap-4 p-4 bg-bg-panel border border-slate-600 rounded-xl group hover:border-slate-300 transition-colors">
                                     <div className={`w-20 h-24 bg-slate-900 rounded-lg flex-shrink-0 overflow-hidden relative border border-slate-600 ${variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? 'cursor-pointer' : ''}`} onClick={variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? () => setPreviewImage(variation.referenceImage) : undefined}>
                                         {variation.referenceImage ? (
                                             <img src={variation.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />

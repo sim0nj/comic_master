@@ -103,7 +103,7 @@ const getAuthHeaders = () => {
 // Helper for retry logic
 const retryOperation = async <T>(
   operation: () => Promise<T>,
-  maxRetries: number = 3,
+  maxRetries: number = 1,
   baseDelay: number = 2000
 ): Promise<T> => {
   let lastError: Error | null = null;
@@ -139,7 +139,7 @@ const retryOperation = async <T>(
 const fetchWithRetry = async (
   endpoint: string,
   options: RequestInit,
-  retries: number = 3
+  retries: number = 1
 ): Promise<any> => {
   return retryOperation(async () => {
     const response = await fetch(endpoint, {

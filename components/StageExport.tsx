@@ -287,17 +287,17 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                  </div>
                  <div className="flex items-center gap-4 mt-3">
                     <div className="flex flex-col">
-                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">镜头</span>
+                        <span className="text-[12px] text-slate-400 uppercase tracking-widest font-bold mb-0.5">镜头</span>
                         <span className="text-sm font-mono text-slate-300">{project.shots.length}</span>
                     </div>
                     <div className="w-px h-6 bg-slate-800"></div>
                     <div className="flex flex-col">
-                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">累计时长</span>
+                        <span className="text-[12px] text-slate-400 uppercase tracking-widest font-bold mb-0.5">累计时长</span>
                         <span className="text-sm font-mono text-slate-300">~{estimatedDuration}s</span>
                     </div>
                     <div className="w-px h-6 bg-slate-800"></div>
                     <div className="flex flex-col">
-                        <span className="text-[11px] text-slate-600 uppercase tracking-widest font-bold mb-0.5">目标时长</span>
+                        <span className="text-[12px] text-slate-400 uppercase tracking-widest font-bold mb-0.5">目标时长</span>
                         <span className="text-sm font-mono text-slate-300">{project.targetDuration}</span>
                     </div>
                  </div>
@@ -317,7 +317,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
 
              {/* Timeline Visualizer Strip */}
              <div className="mb-4">
-                <div className="flex justify-between items-center text-[12px] text-slate-600 font-mono uppercase tracking-widest mb-2 px-1">
+                <div className="flex justify-between items-center text-[12px] text-slate-400 font-mono uppercase tracking-widest mb-2 px-1">
                     <span>分镜序列图</span>
                     <span>~{selectedDuration}s</span>
                 </div>
@@ -532,7 +532,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                  </div>
                  {isPlayingSelected && selectedShots[currentPlayingShotIndex] && (
                    <div className="mt-2 bg-bg-input border border-slate-600 rounded-lg p-3">
-                     <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">
+                     <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">
                        {selectedShots[currentPlayingShotIndex].actionSummary}
                      </p>
                    </div>
@@ -599,7 +599,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                <button
                   onClick={handleDownload}
                   disabled={!project.mergedVideoUrl}
-                  className={`h-12 bg-bg-footer hover:bg-slate-800 text-slate-300 border border-slate-600 hover:border-slate-500 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${
+                  className={`h-12 bg-bg-footer hover:bg-slate-800 text-slate-300 border border-slate-600 hover:border-slate-300 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${
                     !project.mergedVideoUrl ? 'cursor-not-allowed opacity-50' : ''
                   }`}>
                  <Download className="w-4 h-4" />

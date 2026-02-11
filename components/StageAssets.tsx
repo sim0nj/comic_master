@@ -105,9 +105,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
   const handleGenerateAsset = async (type: 'character' | 'scene', id: string) => {
     setProcessingState({ id, type });
+    let imageUrl: string | null = null;
+    let prompt = "";
     try {
       // Find the item
-      let prompt = "";
       let imagesize = '2560x1440';
       if (type === 'character') {
         imagesize = '1728x2304';
@@ -119,8 +120,16 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       }
 
       // Real API Call
-      const imageUrl = await ModelService.generateImage(prompt, [], type, localStyle, imagesize,1,{},project.id);
+      imageUrl = await ModelService.generateImage(prompt, [], type, localStyle, imagesize,1,null,project.id);
 
+    } catch (e) {
+      console.error(e);
+      if(e.message?.includes("enough")){
+        await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
+      }else{
+        await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+      }
+    } finally {
       // Update state
       if (project.scriptData) {
         const newData = { ...project.scriptData };
@@ -139,10 +148,6 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
         }
         updateProject({ scriptData: newData });
       }
-
-    } catch (e) {
-      console.error(e);
-    } finally {
       setProcessingState(null);
     }
   };
@@ -346,11 +351,11 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     </h4>
                     <div className="space-y-4">
                       <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
-                        <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold block mb-2">时间</label>
+                        <label className="text-[12px] text-slate-300 uppercase tracking-wider font-bold block mb-2">时间</label>
                         <p className="text-sm text-slate-50">{selectedScene.time}</p>
                       </div>
                       <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
-                        <label className="text-[11px] text-slate-400 uppercase tracking-wider font-bold block mb-2">氛围</label>
+                        <label className="text-[12px] text-slate-300 uppercase tracking-wider font-bold block mb-2">氛围</label>
                         <p className="text-sm text-slate-50">{selectedScene.atmosphere}</p>
                       </div>
                     </div>
@@ -414,7 +419,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allCharactersReady
-                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-500 hover:bg-indigo-500'
+                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-300 hover:bg-indigo-500'
                     : 'bg-white text-black hover:bg-slate-400 shadow-lg shadow-white/5'
               }`}
             >
@@ -425,7 +430,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             {project.scriptData.characters.map((char) => (
-              <div key={char.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-500 transition-all hover:shadow-lg">
+              <div key={char.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-300 transition-all hover:shadow-lg">
                 <div className="aspect-[3/4] bg-slate-900 relative overflow-hidden">
                   {char.referenceImage ? (
                     <>
@@ -536,7 +541,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allScenesReady
-                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-500 hover:bg-indigo-500'
+                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-300 hover:bg-indigo-500'
                     : 'bg-white text-black hover:bg-slate-600 shadow-lg shadow-white/5'
               }`}
             >
@@ -547,7 +552,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
             {project.scriptData.scenes.map((scene) => (
-              <div key={scene.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-500 transition-all hover:shadow-lg">
+              <div key={scene.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-300 transition-all hover:shadow-lg">
                 <div className="aspect-[16/9] bg-slate-800/50 relative overflow-hidden">
                   {scene.referenceImage ? (
                     <>
@@ -626,7 +631,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                   {scene.visualPrompt && (
                     <div className="mt-2 pt-2 border-t border-slate-600/50">
                       <div className="flex items-center justify-between gap-2">
-                        <p className="text-[11px] text-slate-400 font-mono line-clamp-2 flex-1">{scene.visualPrompt}</p>
+                        <p className="text-[12px] text-slate-300 font-mono line-clamp-2 flex-1">{scene.visualPrompt}</p>
                         <button
                           onClick={() => setSelectedSceneId(scene.id)}
                           className="text-[11px] text-emerald-400 hover:text-emerald-300 flex-shrink-0 font-bold uppercase tracking-wider"
@@ -783,7 +788,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6">
               {project.shots.map((shot, shotIndex) => (
-                <div key={shot.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden hover:border-slate-500 transition-all flex flex-col">
+                <div key={shot.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden hover:border-slate-300 transition-all flex flex-col">
                   <div className="p-4 space-y-3">
                     {/* Shot Info */}
                     <div className="flex items-start gap-3 pb-3 border-b border-slate-600/50">

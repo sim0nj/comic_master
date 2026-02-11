@@ -321,7 +321,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
             {(!isMobile || projects.length == 0) && 
             <div 
               onClick={handleCreate}
-              className="group cursor-pointer border border-slate-600 hover:border-slate-500 bg-bg-panel flex flex-col items-center justify-center min-h-[280px] transition-all"
+              className="group cursor-pointer border border-slate-600 hover:border-slate-300 bg-bg-panel flex flex-col items-center justify-center min-h-[280px] transition-all"
             >
               <div className="w-12 h-12 border border-slate-600 flex items-center justify-center mb-6 group-hover:bg-slate-800 transition-colors">
                 <Plus className="w-5 h-5 text-slate-500 group-hover:text-slate-50" />
@@ -334,7 +334,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
               <div 
                 key={proj.id}
                 onClick={() => onOpenProject(proj)}
-                className="group bg-bg-panel border border-slate-600 hover:border-slate-500 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[280px]"
+                className="group bg-bg-panel border border-slate-600 hover:border-slate-300 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[280px]"
               >
                   {/* Delete Confirmation Overlay */}
                   {deleteConfirmId === proj.id && (
@@ -474,7 +474,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                           {projectImages.map((imgUrl, idx) => (
                             <div
                               key={idx}
-                              className="w-14 h-14 bg-slate-900 rounded overflow-hidden flex-shrink-0 border border-slate-600 hover:border-slate-500 transition-colors cursor-pointer group/img"
+                              className="w-14 h-14 bg-slate-900 rounded overflow-hidden flex-shrink-0 border border-slate-600 hover:border-slate-300 transition-colors cursor-pointer group/img"
                             >
                               <img
                                 src={imgUrl}

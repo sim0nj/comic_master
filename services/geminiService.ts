@@ -16,7 +16,7 @@ const getAiClient = () => {
 };
 
 // Helper for retry logic on 429 errors
-const retryOperation = async <T>(operation: () => Promise<T>, maxRetries: number = 3, baseDelay: number = 2000): Promise<T> => {
+const retryOperation = async <T>(operation: () => Promise<T>, maxRetries: number = 1, baseDelay: number = 2000): Promise<T> => {
   let lastError;
   for (let i = 0; i < maxRetries; i++) {
     try {

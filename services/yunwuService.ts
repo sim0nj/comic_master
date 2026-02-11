@@ -60,7 +60,7 @@ const getAuthHeaders = () => {
 // Helper for retry logic
 const retryOperation = async <T>(
   operation: () => Promise<T>,
-  maxRetries: number = 3,
+  maxRetries: number = 1,
   baseDelay: number = 2000
 ): Promise<T> => {
   let lastError: Error | null = null;
@@ -96,7 +96,7 @@ const retryOperation = async <T>(
 const fetchWithRetry = async (
   endpoint: string,
   options: RequestInit,
-  retries: number = 3
+  retries: number = 1
 ): Promise<any> => {
   return retryOperation(async () => {
     const response = await fetch(endpoint, {
@@ -162,11 +162,9 @@ export const parseScriptToData = async (
     },
   };
 
-  const response = await retryOperation(async () => {
-    return await fetchWithRetry(endpoint, {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-    });
+  const response = await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
   });
 
   // 从云雾API的响应格式中提取内容
@@ -258,11 +256,9 @@ export const generateVideo = async (
     requestBody.images.push(endImageBase64);
   }
 
-  const response = await retryOperation(async () => {
-    return await fetchWithRetry(endpoint, {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-    });
+  const response = await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
   });
 
   // 获取任务ID
@@ -291,10 +287,8 @@ const pollVideoTask = async (taskId: string): Promise<string> => {
   for (let i = 0; i < maxAttempts; i++) {
     await new Promise((resolve) => setTimeout(resolve, pollInterval));
 
-    const response = await retryOperation(async () => {
-      return await fetchWithRetry(`${endpoint}?id=${taskId}`, {
-        method: "GET",
-      });
+    const response =  await fetchWithRetry(`${endpoint}?id=${taskId}`, {
+      method: "GET",
     });
 
     const status = response.status;
@@ -356,11 +350,9 @@ export const generateImage = async (
     ]
   };
 
-  const response = await retryOperation(async () => {
-    return await fetchWithRetry(endpoint, {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-    });
+  const response = await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
   });
 
   // 提取图片 base64 数据
@@ -415,11 +407,9 @@ export const generateScript = async (
     },
   };
 
-  const response = await retryOperation(async () => {
-    return await fetchWithRetry(endpoint, {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-    });
+  const response = await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
   });
 
   const content = response.candidates?.[0]?.content?.parts?.[0]?.text || "";
@@ -457,11 +447,9 @@ export const generateVisualPrompts = async (
     },
   };
 
-  const response = await retryOperation(async () => {
-    return await fetchWithRetry(endpoint, {
-      method: "POST",
-      body: JSON.stringify(requestBody),
-    });
+  const response =  await fetchWithRetry(endpoint, {
+    method: "POST",
+    body: JSON.stringify(requestBody),
   });
 
   return response.candidates?.[0]?.content?.parts?.[0]?.text || "";
@@ -523,11 +511,9 @@ export const generateShotListForScene = async (
       },
     };
 
-    const response = await retryOperation(async () => {
-      return await fetchWithRetry(endpoint, {
-        method: "POST",
-        body: JSON.stringify(requestBody),
-      });
+    const response =  await fetchWithRetry(endpoint, {
+      method: "POST",
+      body: JSON.stringify(requestBody),
     });
 
     const content = response.candidates?.[0]?.content?.parts?.[0]?.text || "[]";

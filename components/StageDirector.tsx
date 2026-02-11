@@ -267,7 +267,11 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       });
     } catch (e: any) {
       console.error(e);
-      await dialog.alert({ title: '错误', message: `生成失败: ${e.message}`, type: 'error' });
+      if(e.message?.includes("enough")){
+        await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
+      }else{
+        await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+      }
     } finally {
       setProcessingState(null);
     }
@@ -320,7 +324,11 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       }));
     } catch (e: any) {
       console.error(e);
-      await dialog.alert({ title: '错误', message: `视频生成失败: ${e.message}`, type: 'error' });
+      if(e.message?.includes("enough")){
+        await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
+      }else{
+        await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+      }
     } finally {
       setProcessingState(null);
     }
@@ -523,7 +531,12 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
              updateProject({ shots: currentShots });
 
           } catch (e) {
-             console.error(`Failed to generate for shot ${shot.id}`, e);
+            if(e.message?.includes("enough")){
+              await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
+            }else{
+              await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+            }
+            console.error(`Failed to generate for shot ${shot.id}`, e);
           }
       }
 
@@ -828,7 +841,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                   disabled={!!batchProgress || !!batchVideoProgress}
                   className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                       allStartFramesGenerated
-                        ? 'bg-bg-input text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-500'
+                        ? 'bg-bg-input text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-300'
                         : 'bg-white text-black hover:bg-slate-600 shadow-lg shadow-white/5 border border-slate-600'
                   }`}
               >
@@ -865,7 +878,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                               onClick={() => setActiveShotId(shot.id)}
                               className={`
                                   group relative flex flex-col bg-bg-header border rounded-xl overflow-hidden cursor-pointer transition-all duration-200
-                                  ${isActive ? 'border-indigo-500 ring-1 ring-indigo-500/50 shadow-xl scale-[1.02]' : 'border-slate-600 hover:border-slate-500 hover:shadow-lg'}
+                                  ${isActive ? 'border-indigo-500 ring-1 ring-indigo-500/50 shadow-xl scale-[1.02]' : 'border-slate-600 hover:border-slate-300 hover:shadow-lg'}
                               `}
                           >
                               {/* Header */}
@@ -966,7 +979,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
 
                               {/* Footer */}
                               <div className="p-3">
-                                  <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
                                       {shot.actionSummary}
                                   </p>
                               </div>

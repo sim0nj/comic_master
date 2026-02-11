@@ -58,9 +58,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
 
         <button
           onClick={onExit}
-          className="flex items-center gap-2 text-slate-500 hover:text-slate-50 transition-colors text-xs font-mono uppercase tracking-wide group w-full"
+          className="flex items-center gap-2 hover:scale-110 transition-transform text-slate-500 hover:text-slate-50 transition-colors text-xs font-mono uppercase tracking-wide group w-full"
         >
-          <ChevronLeft className="w-4 h-4 group-hover:-translate-1 transition-transform" />
+          <ChevronLeft className="w-4 h-4" />
           {!collapsed && <span>返回项目列表</span>}
         </button>
       </div>
