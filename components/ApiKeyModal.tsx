@@ -76,19 +76,19 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
       />
 
       {/* Modal */}
-      <div className="w-full max-w-md bg-bg-panel border border-slate-600 p-8 rounded-xl shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-300">
+      <div className="w-full max-w-md bg-slate-600/80 border border-slate-600 p-8 rounded-xl shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-300">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="p-2 absolute top-4 right-4 text-slate-600 hover:bg-slate-800 rounded-full transition-colors"
+          className="p-2 absolute top-4 right-4 text-slate-400 hover:bg-slate-800 rounded-full transition-colors"
         >
           <X className="w-5 h-5 text-slate-500" />
         </button>
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-8 border-b border-slate-900 pb-6">
-           <div className="w-10 h-10 bg-white text-black flex items-center justify-center">
+           <div className="w-10 h-10 bg-slate-800 text-black flex items-center justify-center">
               <Key className="w-5 h-5" />
            </div>
            <div>
@@ -108,15 +108,15 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputKey}
                onChange={(e) => setInputKey(e.target.value)}
                placeholder="Enter your API Key..."
-               className="w-full bg-bg-input border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-600"
+               className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
              />
-             <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+             <p className="mt-3 text-[12px] text-slate-400 leading-relaxed">
                本应用默认使用火山引擎的大模型 API 。请确保您的 API Key 已开通相应的服务权限。
                <a
                  href="https://www.volcengine.com/docs/82379"
                  target="_blank"
                  rel="noreferrer"
-                 className="text-indigo-400 hover:underline ml-1"
+                 className="text-slate-400 hover:underline ml-1"
                >
                  查看文档
                </a>
@@ -140,9 +140,9 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputCozeWorkflowId}
                onChange={(e) => setInputCozeWorkflowId(e.target.value)}
                placeholder="Enter Coze Workflow ID..."
-               className="w-full bg-bg-input border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-600"
+               className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
              />
-             <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+             <p className="mt-3 text-[12px] text-slate-400 leading-relaxed">
                配置 Coze 工作流 ID 用于等功能。
              </p>
            </div>
@@ -156,15 +156,15 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputCozeApiKey}
                onChange={(e) => setInputCozeApiKey(e.target.value)}
                placeholder="Enter Coze API Key..."
-               className="w-full bg-bg-input border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-600"
+               className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
              />
-             <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+             <p className="mt-3 text-[12px] text-slate-400 leading-relaxed">
                本应用需要 Coze 的 API 访问权限。
                <a
                  href="https://www.coze.cn/docs"
                  target="_blank"
                  rel="noreferrer"
-                 className="text-indigo-400 hover:underline ml-1"
+                 className="text-slate-400 hover:underline ml-1"
                >
                  查看文档
                </a>
@@ -180,11 +180,11 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputFileUploadServiceUrl}
                onChange={(e) => setInputFileUploadServiceUrl(e.target.value)}
                placeholder="https://apppub.good365.net:6443/apppub_api/thirdparty/upload"
-               className="w-full bg-bg-input border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-600"
+               className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
              />
-             <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+             <p className="mt-3 text-[12px] text-slate-400 leading-relaxed">
                配置后，AI 生成的图片和视频将上传到此服务。
-               <span className="text-slate-600">（可选）</span>
+               <span className="text-slate-400">（可选）</span>
              </p>
            </div>
 
@@ -197,11 +197,11 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
                value={inputFileAccessDomain}
                onChange={(e) => setInputFileAccessDomain(e.target.value)}
                placeholder="ofs.good365.net:6443"
-               className="w-full bg-bg-input border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-600"
+               className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
              />
-             <p className="mt-3 text-[12px] text-slate-600 leading-relaxed">
+             <p className="mt-3 text-[12px] text-slate-400 leading-relaxed">
                上传后的文件将使用此域名访问，不包含协议头。
-               <span className="text-slate-600">（可选）</span>
+               <span className="text-slate-400">（可选）</span>
              </p>
            </div>
              </>
@@ -215,7 +215,7 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
              保存配置 <ArrowRight className="w-3 h-3" />
            </button>
 
-           <div className="flex items-center justify-center gap-2 text-[12px] text-slate-600 font-mono">
+           <div className="flex items-center justify-center gap-2 text-[12px] text-slate-400 font-mono">
              <ShieldCheck className="w-3 h-3" />
              密钥仅保存在浏览器本地
            </div>

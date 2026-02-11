@@ -117,9 +117,9 @@ const WardrobeModal: React.FC<Props> = ({
 
   return (
     <div className="absolute inset-0 z-40 bg-slate-700/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
-        <div className="bg-bg-input border border-slate-600 w-full max-w-4xl max-h-[80vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
+        <div className="bg-slate-800 border border-slate-600 w-full max-w-4xl max-h-[80vh] rounded-2xl flex flex-col shadow-2xl overflow-hidden">
             {/* Modal Header */}
-            <div className="h-16 px-8 border-b border-slate-600 flex items-center justify-between shrink-0 bg-bg-secondary">
+            <div className="h-16 px-8 border-b border-slate-600 flex items-center justify-between shrink-0 bg-slate-600/80">
                 <div className="flex items-center gap-4">
                     <div className="w-10 h-10 rounded-full bg-slate-800 overflow-hidden border border-slate-600">
                         {character.referenceImage && <img src={character.referenceImage} className="w-full h-full object-cover"/>}
@@ -142,7 +142,7 @@ const WardrobeModal: React.FC<Props> = ({
                         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                             <User className="w-4 h-4" /> 基础形象
                         </h4>
-                        <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
+                        <div className="bg-slate-800 p-4 rounded-xl border border-slate-600">
                             <div className="aspect-[3/4] bg-slate-900 rounded-lg overflow-hidden mb-4 relative cursor-pointer" onClick={() =>  setPreviewImage(character.referenceImage)}>
                                 {character.referenceImage ? (
                                     <img src={character.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
@@ -163,7 +163,7 @@ const WardrobeModal: React.FC<Props> = ({
                                     onChange={(e) => setEditingVisualPrompt(e.target.value)}
                                     onBlur={handleSaveVisualPrompt}
                                     placeholder="输入角色的视觉描述..."
-                                    className="w-full bg-bg-input border border-slate-600 rounded-lg px-3 py-2 text-xs text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500 transition-colors resize-none h-24 font-mono"
+                                    className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-xs text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-slate-500 transition-colors resize-none h-24 font-mono"
                                 />
                             </div>
                         </div>
@@ -180,7 +180,7 @@ const WardrobeModal: React.FC<Props> = ({
                         <div className="space-y-4">
                             {/* List */}
                             {(character.variations || []).map((variation) => (
-                                <div key={variation.id} className="flex gap-4 p-4 bg-bg-panel border border-slate-600 rounded-xl group hover:border-slate-300 transition-colors">
+                                <div key={variation.id} className="flex gap-4 p-4 bg-slate-800 border border-slate-600 rounded-xl group hover:border-slate-300 transition-colors">
                                     <div className={`w-20 h-24 bg-slate-900 rounded-lg flex-shrink-0 overflow-hidden relative border border-slate-600 ${variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? 'cursor-pointer' : ''}`} onClick={variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? () => setPreviewImage(variation.referenceImage) : undefined}>
                                         {variation.referenceImage ? (
                                             <img src={variation.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
@@ -209,7 +209,7 @@ const WardrobeModal: React.FC<Props> = ({
                                         <button
                                             onClick={() => handleGenerateVariation(variation.id)}
                                             disabled={!!processingState}
-                                            className="text-[12px] font-bold uppercase tracking-wider text-indigo-400 hover:text-slate-50 flex items-center gap-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="text-[12px] font-bold uppercase tracking-wider text-slate-400 hover:text-slate-50 flex items-center gap-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             <RefreshCw className={`w-3 h-3 ${processingState?.type === 'character' && processingState?.id === variation.id ? 'animate-spin' : ''}`} />
                                             {processingState?.type === 'character' && processingState?.id === variation.id ? '生成中...' : variation.referenceImage ? '重新生成' : '生成造型'}
@@ -219,20 +219,20 @@ const WardrobeModal: React.FC<Props> = ({
                             ))}
 
                             {/* Add New */}
-                            <div className="p-4 border border-dashed border-slate-600 rounded-xl bg-bg-panel/50">
+                            <div className="p-4 border border-dashed border-slate-600 rounded-xl bg-slate-800/50">
                                 <div className="space-y-3">
                                     <input 
                                         type="text" 
                                         placeholder="造型名称（示例：穿校服）" 
                                         value={newVarName}
                                         onChange={e => setNewVarName(e.target.value)}
-                                        className="w-full bg-bg-input border border-slate-600 rounded px-3 py-2 text-xs text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-slate-600"
+                                        className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-xs text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-slate-600"
                                     />
                                     <textarea 
                                         placeholder="服饰 / 状态的视觉描述……"
                                         value={newVarPrompt}
                                         onChange={e => setNewVarPrompt(e.target.value)}
-                                        className="w-full bg-bg-input border border-slate-600 rounded px-3 py-2 text-xs text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-slate-600 resize-none h-16"
+                                        className="w-full bg-slate-800 border border-slate-600 rounded px-3 py-2 text-xs text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-slate-600 resize-none h-16"
                                     />
                                     <button 
                                         onClick={handleAddVariation}

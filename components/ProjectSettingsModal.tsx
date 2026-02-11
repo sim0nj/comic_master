@@ -127,12 +127,12 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-700/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-700/80 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-bg-panel border border-slate-600 rounded-lg w-[480px] max-w-[90vw] max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
+      <div className="bg-slate-600/80 border border-slate-600 rounded-lg w-[480px] max-w-[90vw] max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
         <div className="p-6 border-b border-slate-600 flex items-center justify-between shrink-0">
           <h3 className="text-sm font-bold text-slate-50 tracking-wide flex items-center gap-2">
             <Settings className="w-4 h-4 text-slate-400" />
@@ -146,7 +146,7 @@ const ProjectSettingsModal: React.FC<ProjectSettingsModalProps> = ({ isOpen, onC
           </button>
         </div>
 
-        <div className="p-6 space-y-5 flex-1 overflow-y-auto">
+        <div className="p-6 space-y-5 flex-1 overflow-y-auto bg-slate-800">
           {/* Title Input */}
           <div className="space-y-2">
             <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">项目标题</label>

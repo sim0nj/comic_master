@@ -247,20 +247,20 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
   };
 
     if (!project.shots.length) return (
-        <div className="flex flex-col items-center justify-center h-full text-slate-500 bg-bg-secondary">
+        <div className="flex flex-col items-center justify-center h-full text-slate-500 bg-slate-900">
             <AlertCircle className="w-12 h-12 mb-4 opacity-50"/>
             <p>暂无镜头数据，请先制作剧本并完成成分镜。</p>
         </div>
     );
 
   return (
-    <div className="flex flex-col h-full bg-bg-secondary overflow-hidden">
+    <div className="flex flex-col h-full bg-slate-900 overflow-hidden">
       
       {/* Header - Consistent with Director */}
-      <div className="h-14 border-b border-slate-600 bg-bg-footer px-6 flex items-center justify-between shrink-0">
+      <div className="h-14 border-b border-slate-600 bg-slate-700 px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-slate-50 flex items-center gap-3">
-                  <Film className="w-5 h-5 text-indigo-500" />
+                  <Film className="w-5 h-5 text-slate-500" />
                   成片与导出
               </h2>
           </div>
@@ -275,9 +275,9 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
         <div className="max-w-6xl mx-auto space-y-8">
           
           {/* Main Status Panel */}
-          <div className="bg-bg-input border border-slate-600 rounded-xl p-6 sm:p-6 shadow-2xl relative overflow-hidden group">
+          <div className="bg-slate-800 border border-slate-600 rounded-xl p-6 sm:p-6 shadow-2xl relative overflow-hidden group">
              {/* Background Decoration */}
-             <div className="absolute top-0 right-0 p-48 bg-indigo-900/5 blur-[120px] rounded-full pointer-events-none"></div>
+             <div className="absolute top-0 right-0 p-48 bg-slate-900/5 blur-[120px] rounded-full pointer-events-none"></div>
              <div className="absolute bottom-0 left-0 p-32 bg-emerald-900/5 blur-[100px] rounded-full pointer-events-none"></div>
 
              <div className="flex flex-row md:flex-row justify-between items-start md:items-center mb-4 relative z-10 gap-6">
@@ -305,7 +305,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
 
                <div className="text-right bg-slate-700/20 p-4 rounded-lg border border-white/5 backdrop-blur-sm min-w-[60px]">
                   <div className="flex items-baseline justify-end gap-1 mb-1">
-                      <span className="text-3xl font-mono font-bold text-indigo-400">{progress}</span>
+                      <span className="text-3xl font-mono font-bold text-slate-400">{progress}</span>
                       <span className="text-sm text-slate-500">%</span>
                   </div>
                   <div className="text-[12px] text-slate-500 uppercase tracking-widest flex items-center justify-end gap-2">
@@ -326,13 +326,13 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                 <div className="flex justify-between items-center mb-2 px-1">
                     <div className="flex items-center gap-4">
                         <span className="text-[12px] text-slate-500 font-mono">
-                            已选择: <span className="text-indigo-400 font-bold">{selectedShotIds.size}</span> / {completedShots.length}
+                            已选择: <span className="text-slate-400 font-bold">{selectedShotIds.size}</span> / {completedShots.length}
                         </span>
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={selectAllCompleted}
                                 disabled={completedShots.length === 0}
-                                className="text-[11px] text-slate-500 hover:text-indigo-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
+                                className="text-[11px] text-slate-500 hover:text-slate-400 transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1"
                             >
                                 <Check className="w-3 h-3" />
                                 全选
@@ -349,7 +349,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                     </div>
                 </div>
 
-                <div className="h-20 bg-bg-footer rounded-lg border border-slate-600 flex items-center px-2 gap-1 overflow-x-auto custom-scrollbar relative shadow-inner">
+                <div className="h-20 bg-slate-700 rounded-lg border border-slate-600 flex items-center px-2 gap-1 overflow-x-auto custom-scrollbar relative shadow-inner">
                    {project.shots.length === 0 ? (
                       <div className="w-full flex items-center justify-center text-slate-600 text-xs font-mono uppercase tracking-widest">
                           <Film className="w-4 h-4 mr-2" />
@@ -367,15 +367,15 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                             onMouseLeave={() => setFocusedShot(null)}
                             className={`h-14 min-w-[18px] flex-1 rounded-[2px] transition-all relative group flex flex-col justify-end overflow-hidden cursor-pointer ${
                               isSelected
-                                ? 'bg-slate-600/60 border-2 border-indigo-400'
+                                ? 'bg-slate-600/60 border-2 border-slate-400'
                                 : isDone
-                                  ? 'bg-indigo-900/40 border border-indigo-500/30 hover:bg-indigo-500/40'
+                                  ? 'bg-slate-900/40 border border-slate-500/30 hover:bg-slate-500/40'
                                   : 'bg-slate-400 border border-slate-600 cursor-not-allowed opacity-50'
                             }`}
                             title={`镜头 ${idx+1}: ${shot.actionSummary}`}
                           >
                              {/* Mini Progress Bar inside timeline segment */}
-                             {isDone && !isSelected && <div className="h-full w-full bg-indigo-500/20" title={`镜头 ${idx+1}: ${shot.actionSummary}`}></div>}
+                             {isDone && !isSelected && <div className="h-full w-full bg-slate-500/20" title={`镜头 ${idx+1}: ${shot.actionSummary}`}></div>}
 
                              {/* Selection Indicator */}
                              {isSelected && (
@@ -397,7 +397,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                 </div>
 
                 {/* Shot Summary Display */}
-                <div className="mt-3 bg-bg-footer rounded-lg border border-slate-600 p-4 min-h-[80px] flex items-center justify-center">
+                <div className="mt-3 bg-slate-700 rounded-lg border border-slate-600 p-4 min-h-[80px] flex items-center justify-center">
                   {(() => {
                     const displayShot = focusedShot || (() => {
                       const firstSelectedShotId = Array.from(selectedShotIds)[0];
@@ -421,8 +421,8 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                     return (
                       <div className="w-full text-center">
                         <div className="flex items-center justify-center gap-2 mb-2">
-                          <Film className="w-4 h-4 text-indigo-400" />
-                          <span className="text-xs font-bold text-indigo-400 font-mono uppercase tracking-widest">
+                          <Film className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-bold text-slate-400 font-mono uppercase tracking-widest">
                             镜头 {displayShot.index + 1}
                           </span>
                           {isSelected && (
@@ -446,7 +446,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                        {isPlayingSelected ? '播放选中镜头' : '成片预览'}
                      </span>
                      {isPlayingSelected && (
-                       <span className="text-[11px] text-indigo-400 font-mono bg-indigo-500/10 px-2 py-0.5 rounded">
+                       <span className="text-[11px] text-slate-400 font-mono bg-slate-500/10 px-2 py-0.5 rounded">
                          {currentPlayingShotIndex + 1} / {selectedShots.length}
                        </span>
                      )}
@@ -480,8 +480,8 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                        {/* Shot Indicator and Controls */}
                        <div className="flex items-center justify-between mb-2">
                          <div className="flex items-center gap-2">
-                           <Film className="w-3 h-3 text-indigo-400" />
-                           <span className="text-xs font-bold text-indigo-400 font-mono uppercase tracking-widest">
+                           <Film className="w-3 h-3 text-slate-400" />
+                           <span className="text-xs font-bold text-slate-400 font-mono uppercase tracking-widest">
                              镜头 {project.shots.indexOf(selectedShots[currentPlayingShotIndex]) + 1}
                            </span>
                          </div>
@@ -501,7 +501,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                                  key={shot.id}
                                  className={`absolute h-full rounded-l-sm rounded-r-sm ${
                                    idx < currentPlayingShotIndex
-                                     ? 'bg-indigo-500'
+                                     ? 'bg-slate-500'
                                      : idx === currentPlayingShotIndex
                                        ? 'bg-slate-600'
                                        : 'bg-slate-600'
@@ -531,7 +531,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                    )}
                  </div>
                  {isPlayingSelected && selectedShots[currentPlayingShotIndex] && (
-                   <div className="mt-2 bg-bg-input border border-slate-600 rounded-lg p-3">
+                   <div className="mt-2 bg-slate-800 border border-slate-600 rounded-lg p-3">
                      <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">
                        {selectedShots[currentPlayingShotIndex].actionSummary}
                      </p>
@@ -554,7 +554,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                   disabled={selectedShotIds.size === 0 || isPlayingSelected}
                   className={`h-12 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all border ${
                     selectedShotIds.size > 0 && !isPlayingSelected
-                      ? 'bg-slate-600 text-slate-50 hover:bg-indigo-500 border-indigo-500 shadow-lg shadow-indigo-600/20'
+                      ? 'bg-slate-600 text-slate-50 hover:bg-slate-500 border-slate-500 shadow-lg shadow-indigo-600/20'
                       : 'bg-slate-900 text-slate-600 border-slate-600 cursor-not-allowed'
                   }`}>
                  {isPlayingSelected ? (
@@ -575,7 +575,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                   disabled={selectedShotIds.size === 0 || isMerging}
                   className={`h-12 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all border ${
                  selectedShotIds.size > 0 && !isMerging
-                   ? 'bg-white text-black hover:bg-slate-400 border-white shadow-lg shadow-white/5'
+                   ? 'bg-slate-800 text-black hover:bg-slate-400 border-white shadow-lg shadow-white/5'
                    : 'bg-slate-900 text-slate-600 border-slate-600 cursor-not-allowed'
                }`}>
                  {isMerging ? (
@@ -599,7 +599,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                <button
                   onClick={handleDownload}
                   disabled={!project.mergedVideoUrl}
-                  className={`h-12 bg-bg-footer hover:bg-slate-800 text-slate-300 border border-slate-600 hover:border-slate-300 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${
+                  className={`h-12 bg-slate-700 hover:bg-slate-800 text-slate-300 border border-slate-600 hover:border-slate-300 rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${
                     !project.mergedVideoUrl ? 'cursor-not-allowed opacity-50' : ''
                   }`}>
                  <Download className="w-4 h-4" />

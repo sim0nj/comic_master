@@ -27,7 +27,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
   ];
 
   return (
-    <aside className="top-0 z-50 left-0 right-0 z-50 select-none bg-bg-primary border-b border-slate-600 flex flex-col">
+    <aside className="top-0 z-50 left-0 right-0 z-50 select-none bg-slate-600 border-b border-slate-600 flex flex-col">
       {/* 顶部栏 */}
       <div className="flex items-center justify-between px-4 py-2">
         {/* 左侧：Logo 和 返回按钮 */}
@@ -39,7 +39,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
             <ChevronLeft className="w-5 h-5" />
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-white text-black flex items-center justify-center flex-shrink-0">
+            <div className="w-7 h-7 bg-slate-800 text-black flex items-center justify-center flex-shrink-0">
               <Aperture className="w-4 h-4" />
             </div>
             <div className="overflow-hidden">
@@ -79,7 +79,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
       </div>
 
       {/* 导航 */}
-      <nav className="fixed bottom-0 left-0 right-0 py-2 h-16 z-50 flex border-t border-slate-600 items-center justify-around px-4 py-0 overflow-hidden select-none bg-bg-primary border-b border-slate-600">
+      <nav className="fixed bottom-0 left-0 right-0 py-2 h-16 z-50 flex border-t border-slate-600 items-center justify-around px-4 py-0 overflow-hidden select-none bg-slate-600 border-b border-slate-600">
         {navItems.map((item) => {
           const isActive = currentStage === item.id;
           return (

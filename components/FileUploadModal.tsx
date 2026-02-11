@@ -102,11 +102,11 @@ const FileUploadModal: React.FC<Props> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-700/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
-      <div className="bg-bg-input border border-slate-600 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
+      <div className="bg-slate-800 border border-slate-600 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="h-16 px-6 border-b border-slate-600 flex items-center justify-between bg-bg-secondary">
+        <div className="h-16 px-6 border-b border-slate-600 flex items-center justify-between bg-slate-600/80">
           <h3 className="text-lg font-bold text-slate-50 flex items-center gap-2">
-            <Upload className="w-5 h-5 text-indigo-500" />
+            <Upload className="w-5 h-5 text-slate-500" />
             {title}
           </h3>
           <button
@@ -125,7 +125,7 @@ const FileUploadModal: React.FC<Props> = ({
               {/* Upload Area */}
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-600 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 hover:bg-slate-900/50 transition-all"
+                className="border-2 border-dashed border-slate-600 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:border-slate-500 hover:bg-slate-900/50 transition-all"
               >
                 <Upload className="w-12 h-12 text-slate-600 mb-4" />
                 <p className="text-slate-400 text-sm font-medium mb-2">点击选择文件</p>
@@ -158,7 +158,7 @@ const FileUploadModal: React.FC<Props> = ({
                   )}
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-bg-panel rounded-lg border border-slate-600">
+                <div className="flex items-center justify-between p-3 bg-slate-800 rounded-lg border border-slate-600">
                   <div className="flex-1 min-w-0">
                     <p className="text-sm text-slate-50 font-medium truncate">
                       {selectedFile?.name}
@@ -185,7 +185,7 @@ const FileUploadModal: React.FC<Props> = ({
         </div>
 
         {/* Footer */}
-        <div className="h-16 px-6 border-t border-slate-600 flex items-center justify-between bg-bg-secondary">
+        <div className="h-16 px-6 border-t border-slate-600 flex items-center justify-between bg-slate-600/80">
           <button
             onClick={handleRemoveFile}
             disabled={!previewUrl || uploadSuccess || uploading}
@@ -205,7 +205,7 @@ const FileUploadModal: React.FC<Props> = ({
               <button
                 onClick={handleUpload}
                 disabled={uploading}
-                className="px-6 py-2 bg-indigo-500 hover:bg-indigo-600 text-slate-50 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-slate-500 hover:bg-slate-600 text-slate-50 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {uploading ? (
                   <>

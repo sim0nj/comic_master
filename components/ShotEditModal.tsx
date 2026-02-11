@@ -114,13 +114,13 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-700/70 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-700/80 backdrop-blur-sm"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-bg-panel border border-slate-600 rounded-lg w-[600px] max-w-[90vw] max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
-        <div className="p-6 border-b border-slate-600 flex items-center justify-between shrink-0">
+      <div className="bg-slate-800 border border-slate-600 rounded-lg w-[600px] max-w-[90vw] max-h-[85vh] overflow-hidden shadow-2xl flex flex-col">
+        <div className="bg-slate-600/80 p-6 border-b border-slate-600 flex items-center justify-between shrink-0">
           <h3 className="text-sm font-bold text-slate-50 tracking-wide flex items-center gap-2">
             <Aperture className="w-4 h-4 text-slate-400" />
             {isNewShot ? '添加分镜' : '编辑分镜'}
@@ -140,7 +140,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
             <textarea
               value={tempShot.actionSummary || ''}
               onChange={(e) => setTempShot({ ...tempShot, actionSummary: e.target.value })}
-              className="w-full bg-bg-input border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md focus:border-slate-600 focus:outline-none transition-all resize-none"
+              className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md focus:border-slate-600 focus:outline-none transition-all resize-none"
               rows={2}
               placeholder="描述镜头中的动作..."
             />
@@ -152,7 +152,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
             <textarea
               value={tempShot.dialogue || ''}
               onChange={(e) => setTempShot({ ...tempShot, dialogue: e.target.value })}
-              className="w-full bg-bg-input border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md focus:border-slate-600 focus:outline-none transition-all resize-none"
+              className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md focus:border-slate-600 focus:outline-none transition-all resize-none"
               rows={2}
               placeholder="镜头中的对白..."
             />
@@ -166,7 +166,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                 <select
                   value={tempShot.shotSize || 'MED'}
                   onChange={(e) => setTempShot({ ...tempShot, shotSize: e.target.value })}
-                  className="w-full bg-bg-input border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   <option value="特写">特写</option>
                   <option value="大特写">大特写</option>
@@ -188,7 +188,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                 <select
                   value={tempShot.cameraMovement || '固定'}
                   onChange={(e) => setTempShot({ ...tempShot, cameraMovement: e.target.value })}
-                  className="w-full bg-bg-input border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   <option value="固定">固定</option>
                   <option value="前推">前推</option>
@@ -218,7 +218,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                       duration: Number(e.target.value)
                     } as any
                   })}
-                  className="w-full bg-bg-input border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                  className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-3 py-2.5 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                 >
                   {Array.from({ length: 30 }, (_, i) => i + 1).map(sec => (
                     <option key={sec} value={sec}>{sec} 秒</option>
@@ -244,7 +244,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                     onClick={() => toggleCharacter(char.name)}
                     className={`relative px-3 py-2 text-xs font-medium rounded-lg transition-all duration-200 border flex items-center gap-1.5 ${
                       isSelected
-                        ? 'bg-indigo-600 text-slate-50 border-indigo-500 shadow-lg shadow-indigo-500/25 scale-105'
+                        ? 'bg-slate-600 text-slate-50 border-slate-500 shadow-lg shadow-indigo-500/25 scale-105'
                         : 'bg-slate-900 text-slate-400 border-slate-600 hover:border-slate-300 hover:text-slate-300 hover:bg-slate-800'
                     }`}
                   >
@@ -292,13 +292,13 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
 
             <div className="space-y-3">
               {(tempShot.keyframes || []).map((kf: Keyframe, kfIdx: number) => (
-                <div key={kf.id || kfIdx} className="bg-bg-input border border-slate-600 rounded-lg p-4 space-y-3">
+                <div key={kf.id || kfIdx} className="bg-slate-800 border border-slate-600 rounded-lg p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex gap-2">
                       <select
                         value={kf.type || 'start'}
                         onChange={(e) => updateKeyframe(kfIdx, 'type', e.target.value)}
-                        className="bg-bg-panel border border-slate-600 text-slate-50 text-xs px-2 py-1 rounded focus:border-slate-600 focus:outline-none"
+                        className="bg-slate-800 border border-slate-600 text-slate-50 text-xs px-2 py-1 rounded focus:border-slate-600 focus:outline-none"
                       >
                         <option value="start">起始帧</option>
                         <option value="end">结束帧</option>
@@ -319,7 +319,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                     <textarea
                       value={kf.visualPrompt || ''}
                       onChange={(e) => updateKeyframe(kfIdx, 'visualPrompt', e.target.value)}
-                      className="w-full bg-bg-panel border border-slate-600 text-slate-50 px-3 py-2 text-xs rounded-md focus:border-slate-600 focus:outline-none transition-all resize-none font-mono"
+                      className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-3 py-2 text-xs rounded-md focus:border-slate-600 focus:outline-none transition-all resize-none font-mono"
                       rows={3}
                       placeholder="输入视觉提示词，用于 AI 生成图像..."
                     />
@@ -350,7 +350,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                     console.error('刷新模型配置失败:', error);
                   }
                 }}
-                className="text-[11px] text-indigo-400 hover:text-slate-50 transition-colors flex items-center gap-1"
+                className="text-[11px] text-slate-400 hover:text-slate-50 transition-colors flex items-center gap-1"
                 title="刷新模型配置"
               >
                 <RefreshCw className="w-3 h-3" />
@@ -371,7 +371,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                         text2image: e.target.value || undefined
                       }
                     })}
-                    className="w-full bg-bg-input border border-slate-600 text-slate-50 px-3 py-2 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                    className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-3 py-2 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                   >
                     <option value="">使用项目默认</option>
                     {modelConfigs
@@ -401,7 +401,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
                         image2video: e.target.value || undefined
                       }
                     })}
-                    className="w-full bg-bg-input border border-slate-600 text-slate-50 px-3 py-2 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
+                    className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-3 py-2 text-xs rounded-md appearance-none focus:border-slate-600 focus:outline-none transition-all cursor-pointer"
                   >
                     <option value="">使用项目默认</option>
                     {modelConfigs
@@ -421,7 +421,7 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose }) =
           </div>
         </div>
 
-        <div className="p-6 border-t border-slate-600 flex gap-3 shrink-0">
+        <div className="p-6 bg-slate-600/80 border-t border-slate-600 flex gap-3 shrink-0">
           <button
             onClick={onClose}
             className="flex-1 py-3 bg-slate-900 text-slate-400 hover:text-slate-50 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors"

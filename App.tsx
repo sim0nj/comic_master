@@ -149,9 +149,9 @@ function App() {
   if (!apiKey) {
     return (
       <DialogProvider>
-        <div className="h-screen bg-bg-secondary flex items-center justify-center p-8 relative overflow-hidden">
+        <div className="h-screen bg-slate-900 flex items-center justify-center p-8 relative overflow-hidden">
           {/* Background Accents */}
-          <div className="absolute top-0 right-0 p-64 bg-indigo-900/5 blur-[150px] rounded-full pointer-events-none"></div>
+          <div className="absolute top-0 right-0 p-64 bg-slate-900/5 blur-[150px] rounded-full pointer-events-none"></div>
           <div className="absolute bottom-0 left-0 p-48 bg-slate-900/10 blur-[120px] rounded-full pointer-events-none"></div>
 
           <ApiKeyModal
@@ -176,7 +176,7 @@ function App() {
   // Workspace View
   return (
     <DialogProvider>
-      <div className={`${isMobile?'':'flex'} h-screen overflow-hidden bg-bg-primary min-h-screen font-sans text-slate-50 selection:bg-selection-bg`} style={{paddingTop: 'env(safe-area-inset-top)'}}>
+      <div className={`${isMobile?'':'flex'} h-screen overflow-hidden bg-slate-600 min-h-screen font-sans text-slate-50 selection:bg-bg-slate-900`} style={{paddingTop: 'env(safe-area-inset-top)'}}>
         {isMobile ? (
           <>
             <SidebarMobile

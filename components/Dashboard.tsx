@@ -261,7 +261,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
   };
 
   return (
-    <div className="min-h-screen bg-bg-secondary text-slate-300 p-8 pt-2 md:p-12 font-sans selection:bg-white/20">
+    <div className="min-h-screen bg-slate-900 text-slate-300 p-8 pt-2 md:p-12 font-sans selection:bg-slate-800/20">
       <div className="max-w-7xl mx-auto">
         <header className={`border-b border-slate-900 pb-4 ${isMobile ? '' : 'mb-16 flex items-end'} justify-between`}>
           <div className='flex items-center justify-between'>
@@ -278,7 +278,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
           <div className="flex gap-3 flex-end justify-end">
             <button
               onClick={handleCreate}
-              className="group flex items-center gap-3 px-6 py-3 bg-white text-black hover:bg-slate-400 transition-colors"
+              className="group flex items-center gap-3 px-6 py-3 bg-slate-800 text-black hover:bg-slate-400 transition-colors"
             >
               <Plus className="w-4 h-4" />
               {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">新建项目</span>}
@@ -286,14 +286,14 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
             <button
               onClick={handleImport}
               disabled={importing}
-              className="group flex items-center gap-3 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group flex items-center gap-3 px-6 py-3 bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Upload className="w-4 h-4" />
               {!isMobile && <span className="font-bold text-xs tracking-widest uppercase">{importing ? '导入中...' : '导入项目'}</span>}
             </button>
             <button
               onClick={() => setShowModelSettings(true)}
-              className="group flex items-center gap-3 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-slate-50 transition-colors"
+              className="group flex items-center gap-3 px-6 py-3 bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-slate-50 transition-colors"
               title="模型管理"
             >
               <Sparkles className="w-4 h-4" />
@@ -301,7 +301,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
             </button>
             <button
               onClick={() => setApiKeyModalOpen(true)}
-              className="group flex items-center gap-3 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-slate-50 transition-colors"
+              className="group flex items-center gap-3 px-6 py-3 bg-slate-700/50 hover:bg-slate-700 text-slate-300 hover:text-slate-50 transition-colors"
               title="系统设置"
             >
               <Settings className="w-4 h-4" />
@@ -321,7 +321,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
             {(!isMobile || projects.length == 0) && 
             <div 
               onClick={handleCreate}
-              className="group cursor-pointer border border-slate-600 hover:border-slate-300 bg-bg-panel flex flex-col items-center justify-center min-h-[280px] transition-all"
+              className="group cursor-pointer border border-slate-600 hover:border-slate-300 bg-slate-800 flex flex-col items-center justify-center min-h-[280px] transition-all"
             >
               <div className="w-12 h-12 border border-slate-600 flex items-center justify-center mb-6 group-hover:bg-slate-800 transition-colors">
                 <Plus className="w-5 h-5 text-slate-500 group-hover:text-slate-50" />
@@ -334,12 +334,12 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
               <div 
                 key={proj.id}
                 onClick={() => onOpenProject(proj)}
-                className="group bg-bg-panel border border-slate-600 hover:border-slate-300 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[280px]"
+                className="group bg-slate-800 border border-slate-600 hover:border-slate-300 p-0 flex flex-col cursor-pointer transition-all relative overflow-hidden h-[280px]"
               >
                   {/* Delete Confirmation Overlay */}
                   {deleteConfirmId === proj.id && (
                     <div 
-                        className="absolute inset-0 z-20 bg-bg-panel flex flex-col items-center justify-center p-6 space-y-4 animate-in fade-in duration-200"
+                        className="absolute inset-0 z-20 bg-slate-800 flex flex-col items-center justify-center p-6 space-y-4 animate-in fade-in duration-200"
                         onClick={(e) => e.stopPropagation()} 
                     >
                         <div className="w-10 h-10 bg-red-900/20 flex items-center justify-center rounded-full">
@@ -372,7 +372,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                      {editingProjectId !== proj.id ? (
                      <button
                         onClick={(e) => openProjectSettings(e, proj)}
-                        className="absolute top-4 right-20 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-20 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
                         title="编辑项目"
                      >
                         <Edit className="w-4 h-4" />
@@ -383,7 +383,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                      {editingProjectId === null ? (
                      <button
                         onClick={(e) => handleDuplicate(e, proj)}
-                        className="absolute top-4 right-28 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-28 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
                         title="复制项目"
                      >
                         <Copy className="w-4 h-4" />
@@ -394,7 +394,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                      {editingProjectId === null ? (
                      <button
                         onClick={(e) => handleExport(e, proj)}
-                        className="absolute top-4 right-12 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-indigo-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-12 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
                         title="导出项目"
                      >
                         <Download className="w-4 h-4" />
@@ -421,7 +421,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                               onChange={(e) => setEditingTitle(e.target.value)}
                               onKeyDown={(e) => handleKeyDown(e, proj)}
                               onClick={(e) => e.stopPropagation()}
-                              className="flex-1 bg-slate-900 border border-slate-600 text-slate-50 text-sm px-2 py-1 focus:outline-none focus:border-indigo-500"
+                              className="flex-1 bg-slate-900 border border-slate-600 text-slate-50 text-sm px-2 py-1 focus:outline-none focus:border-slate-500"
                               autoFocus
                             />
                             <button
@@ -490,7 +490,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                      </div>
                   </div>
 
-                  <div className="px-6 py-3 border-t border-slate-900 flex items-center justify-between bg-bg-footer">
+                  <div className="px-6 py-3 border-t border-slate-900 flex items-center justify-between bg-slate-700">
                     <div className="flex items-center gap-2 text-[11px] text-slate-500/50 font-mono uppercase tracking-widest group-hover:text-slate-50 ">
                         <Calendar className="w-3 h-3" />
                         {formatDate(proj.lastModified)}

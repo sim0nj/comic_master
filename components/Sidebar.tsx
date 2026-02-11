@@ -34,13 +34,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
   ];
 
   return (
-    <aside className={`${collapsed ? 'w-20' : 'xl:w-72 md:w-20'} bg-bg-primary border-r border-slate-600 h-screen fixed left-0 top-0 flex flex-col z-50 select-none
+    <aside className={`${collapsed ? 'w-20' : 'xl:w-72 md:w-20'} bg-slate-600/50 border-r border-slate-600 h-screen fixed left-0 top-0 flex flex-col z-50 select-none
     shadow-2xl animate-in slide-in-from-right-10 duration-300 transition-all duration-300 ease-in-out`}>
       {/* Header */}
       <div className="p-6 border-b border-slate-900">
         {!collapsed ? (
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-8 bg-white text-black flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-slate-800 text-black flex items-center justify-center flex-shrink-0">
               <Aperture className="w-5 h-5" />
             </div>
             <div className="overflow-hidden">
@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
           </div>
         ) : (
           <div className="flex justify-center mb-6">
-            <div className="w-8 h-8 bg-white text-black flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 bg-slate-800 text-black flex items-center justify-center flex-shrink-0">
               <Aperture className="w-5 h-5" />
             </div>
           </div>
@@ -68,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
       {/* Project Status */}
       {!collapsed ? (
         <div className="px-6 py-2 border-b border-slate-900">
-           <div className="text-[12px] text-slate-600 uppercase tracking-widest mb-1">当前项目</div>
+           <div className="text-[12px] text-slate-500 uppercase tracking-widest mb-1">当前项目</div>
            <div className="text-sm font-medium flex items-center  text-slate-200 truncate font-mono">{projectName || '未命名项目'}
            <button
                 onClick={() => setShowProjectSettings(true)}
@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
         <div className="px-6 py-2 border-b border-slate-900">
           <button
                 onClick={() => setShowProjectSettings(true)}
-                className="text-xs font-bold text-slate-600 hover:text-slate-50"
+                className="text-xs font-bold text-slate-500 hover:text-slate-50"
                 >
                 <Edit className="w-4 h-4 group-hover:-translate-1 transition-transform" />
            </button>
@@ -108,7 +108,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                 <item.icon className={`w-4 h-4 ${isActive ? 'text-slate-50' : 'text-slate-400 group-hover:text-slate-500'}`} />
                 {!collapsed && <span className="font-medium text-xs tracking-wider uppercase">{item.label}</span>}
               </div>
-              {!collapsed && <span className={`text-[12px] font-mono ${isActive ? 'text-slate-400' : 'text-slate-600'}`}>{item.sub}</span>}
+              {!collapsed && <span className={`text-[12px] font-mono ${isActive ? 'text-slate-400' : 'text-slate-500'}`}>{item.sub}</span>}
             </button>
           );
         })}
@@ -120,14 +120,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
           <>
             <button
               onClick={() => setShowModelSettings(true)}
-              className="flex items-center justify-between text-slate-600 hover:text-slate-50 cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
+              className="flex items-center justify-between text-slate-500 hover:text-slate-50 cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
             >
               <span className="font-mono text-[12px] uppercase tracking-widest">模型管理</span>
               <Sparkles className="w-4 h-4" />
             </button>
             <button
               onClick={onOpenSettings}
-              className="flex items-center justify-between text-slate-600 hover:text-slate-50 cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
+              className="flex items-center justify-between text-slate-500 hover:text-slate-50 cursor-pointer transition-colors w-full px-3 py-2 hover:bg-slate-900/30 rounded-lg"
             >
               <span className="font-mono text-[12px] uppercase tracking-widest">系统设置</span>
               <Settings className="w-4 h-4" />
@@ -140,7 +140,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                   href="https://github.com/3dudu/comic_master/issues"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-slate-600 hover:text-slate-50 transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                  className="text-slate-500 hover:text-slate-50 transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
                   title="GitHub"
                 >
                   <GithubIcon className="w-4 h-4" />
@@ -153,14 +153,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
           <>
           <button
             onClick={() => setShowModelSettings(true)}
-            className="flex justify-center text-slate-600 hover:text-slate-50 cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
+            className="flex justify-center text-slate-500 hover:text-slate-50 cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
             title="模型管理"
           >
             <Sparkles className="w-4 h-4" />
           </button>
           <button
               onClick={onOpenSettings} title="系统设置"
-              className="flex justify-center text-slate-600 hover:text-slate-50 cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
+              className="flex justify-center text-slate-500 hover:text-slate-50 cursor-pointer transition-colors w-full py-2 hover:bg-slate-900/30 rounded-lg"
             >
             <Settings className="w-4 h-4" />
           </button>
@@ -172,7 +172,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
                 href="https://github.com/3dudu/comic_master/issues"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-slate-600 hover:text-slate-50 transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
+                className="text-slate-500 hover:text-slate-50 transition-colors p-2 hover:bg-slate-900/30 rounded-lg"
                 title="GitHub"
               >
                 <GithubIcon className="w-4 h-4" />

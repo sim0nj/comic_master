@@ -2,79 +2,50 @@
 
 @theme {
   /* 定义Tailwind颜色变量 */
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-panel: var(--bg-panel);
-  --color-bg-input: var(--bg-input);
-  --color-bg-footer: var(--bg-footer);
-  --color-bg-modal: var(--bg-modal);
   --color-bg-selected: var(--bg-selected);
-  --color-bg-sidebar: var(--bg-sidebar);
-  --color-bg-header: var(--bg-header);
-  --color-bg-card: var(--bg-card);
   --color-bg-button: var(--bg-button);
   --color-bg-progress: var(--bg-progress);
-  --color-selection-bg: var(--selection-bg);
-  /* 深色主题背景色 */
-  --color-dark-bg-primary: #0c1022;
-  --color-dark-bg-secondary: #0e1229;
-  --color-dark-bg-panel: #0e0e28;
-  --color-dark-bg-input: #0f0f23;
-  --color-dark-bg-footer: #090923;
-  --color-dark-bg-modal: #0A0A0A;
-  --color-dark-bg-selected: #321655;
-  --color-dark-bg-sidebar: #0f0f23;
-  --color-dark-bg-header: #101326;
-  --color-dark-bg-card: #0f1225;
-  --color-dark-bg-button: #060624;
-  --color-dark-bg-progress: #1a1d2d;
+  /* 深色主题背景色 - 使用teal色系 */
+  --color-dark-bg-selected: var(--color-teal-700);    /* teal-300 */
+  --color-dark-bg-button: var(--color-teal-900);      /* teal-950 */
+  --color-dark-bg-progress: var(--color-teal-900);    /* teal-900 */
   
-  /* 浅色主题背景色 */
-  --color-light-bg-primary: #F3EFDD;
-  --color-light-bg-secondary: #F1EDD6;
-  --color-light-bg-panel: #F1F1D7;
-  --color-light-bg-input: #F0F0DC;
-  --color-light-bg-footer: #F6F6DC;
-  --color-light-bg-modal: #F5F5F5;
-  --color-light-bg-selected: #CDE9AA;
-  --color-light-bg-sidebar: #F0F0DC;
-  --color-light-bg-header: #EFECD9;
-  --color-light-bg-card: #F0EDDA;
-  --color-light-bg-button: #F9F9DB;
-  --color-light-bg-progress: #E5E2D2;
+  /* 浅色主题背景色 - 使用teal色系的浅色调 */
+  --color-light-bg-selected: var(--color-teal-200);   /* teal-600 */
+  --color-light-bg-button: var(--color-teal-100);     /* teal-100 */
+  --color-light-bg-progress: var(--color-teal-50);   /* teal-50 */
   
-  /* 选择高亮 */
-  --color-selection-bg: rgb(99 102 241 / 0.3);
-  --color-selection-light-bg: rgb(99 102 241 / 0.2);
 }
 
 @layer base {
-  /* 添加slate颜色映射以支持现有代码 */
+  /* 添加teal颜色映射以支持现有代码 */
   :root {
-    --color-slate-50: #f8fafc;
-    --color-slate-100: #f1f5f9;
-    --color-slate-200: #e2e8f0;
-    --color-slate-300: #cbd5e1;
-    --color-slate-400: #94a3b8;
-    --color-slate-500: #64748b;
-    --color-slate-600: #475569;
-    --color-slate-700: #334155;
-    --color-slate-800: #1e293b;
-    --color-slate-900: #0f172a;
+    --color-slate-50: var(--color-teal-50);    /* teal-50 */
+    --color-slate-100: var(--color-teal-100);   /* teal-100 */
+    --color-slate-200: var(--color-teal-200);   /* teal-200 */
+    --color-slate-300: var(--color-teal-300);   /* teal-300 */
+    --color-slate-400: var(--color-teal-400);   /* teal-400 */
+    --color-slate-500: var(--color-teal-500);   /* teal-500 */
+    --color-slate-600: var(--color-teal-600);   /* teal-600 */
+    --color-slate-700: var(--color-teal-700);   /* teal-700 */
+    --color-slate-800: var(--color-teal-800);   /* teal-800 */
+    --color-slate-900: var(--color-teal-900);   /* teal-900 */
+    --color-slate-950: var(--color-teal-950);   /* teal-950 */
   }
 
-  /* 浅色主题下调整slate颜色 */
+  /* 浅色主题下调整teal颜色 */
   :root[data-theme="light"] {
-    --color-slate-50: #0f172a;
-    --color-slate-100: #1e293b;
-    --color-slate-200: #334155;
-    --color-slate-300: #475569;
-    --color-slate-400: #64748b;
-    --color-slate-500: #021022;
-    --color-slate-600: #cbd5e1;
-    --color-slate-700: #e2e8f0;
-    --color-slate-800: #f1f5f9;
-    --color-slate-900: #f8fafc;
+    --color-slate-50: var(--color-teal-950);    /* teal-950 */
+    --color-slate-100: var(--color-teal-900);   /* teal-900 */
+    --color-slate-200: var(--color-teal-800);   /* teal-800 */
+    --color-slate-300: var(--color-teal-700);   /* teal-700 */
+    --color-slate-400: var(--color-teal-600);   /* teal-600 */
+    --color-slate-500: var(--color-teal-500);   /* 自定义深色 */
+    --color-slate-600: var(--color-teal-300);   /* teal-300 */
+    --color-slate-700: var(--color-teal-200);   /* teal-200 */
+    --color-slate-800: var(--color-teal-100);   /* teal-100 */
+    --color-slate-900: var(--color-teal-100);    /* teal-50 */
+    --color-slate-950: var(--color-teal-50);    /* 接近白色 */
   }
 
   /* 默认深色主题 */
@@ -91,7 +62,6 @@
     --bg-card: var(--color-dark-bg-card);
     --bg-button: var(--color-dark-bg-button);
     --bg-progress: var(--color-dark-bg-progress);
-    --selection-bg: var(--color-selection-bg);
   }
 
   /* 浅色主题 */
@@ -108,7 +78,6 @@
     --bg-card: var(--color-light-bg-card);
     --bg-button: var(--color-light-bg-button);
     --bg-progress: var(--color-light-bg-progress);
-    --selection-bg: var(--color-selection-light-bg);
   }
 
   /* 跟随系统主题 */
@@ -137,14 +106,11 @@
       --bg-card: var(--color-light-bg-card);
       --bg-button: var(--color-light-bg-button);
       --bg-progress: var(--color-light-bg-progress);
-      --selection-bg: var(--color-selection-light-bg);
     }
   }
   
   body {
     font-family: 'Inter', sans-serif;
-    background-color: #050505;
-    color: #e5e5e5;
   }
   /* Sony Style Scrollbar - Thin, Rectangular */
   ::-webkit-scrollbar {
@@ -162,7 +128,7 @@
     background: var(--border-primary); 
   }
   ::selection {
-    background-color: #6366f1;  /* 选中背景色 */
-    color: #ffffff;              /* 选中文字颜色 */
+    background-color: var(--color-slate-200);  /* teal-500 选中背景色 */
+    color: var(--color-slate-900);              /* 选中文字颜色 */
   }
 }

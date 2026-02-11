@@ -250,7 +250,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   };
 
   if (!project.scriptData) return (
-      <div className="flex flex-col items-center justify-center h-full text-slate-500 bg-bg-secondary">
+      <div className="flex flex-col items-center justify-center h-full text-slate-500 bg-slate-900">
           <AlertCircle className="w-12 h-12 mb-4 opacity-50"/>
           <p>暂无镜头数据，请先制作剧本并完成成分镜。</p>
       </div>
@@ -261,12 +261,12 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
   const selectedChar = project.scriptData.characters.find(c => c.id === selectedCharId);
 
   return (
-    <div className="flex flex-col h-full bg-bg-secondary relative overflow-hidden">
+    <div className="flex flex-col h-full bg-slate-900 relative overflow-hidden">
 
       {/* Image Preview Modal */}
       {previewImage && (
         <div className="fixed inset-0 z-50 bg-slate-700/95 flex items-center justify-center backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setPreviewImage(null)}>
-          <button onClick={() => setPreviewImage(null)} className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors">
+          <button onClick={() => setPreviewImage(null)} className="absolute top-4 right-4 p-2 bg-slate-800/10 hover:bg-slate-800/20 rounded-full transition-colors">
             <X className="w-6 h-6 text-slate-50" />
           </button>
           <img src={previewImage} alt="Preview" className="max-w-[90vw] max-h-[90vh] object-contain" />
@@ -276,10 +276,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       {/* Global Progress Overlay */}
       {batchProgress && (
         <div className="absolute inset-0 z-50 bg-slate-700/80 flex flex-col items-center justify-center backdrop-blur-md animate-in fade-in">
-          <Loader2 className="w-12 h-12 text-indigo-500 animate-spin mb-6" />
+          <Loader2 className="w-12 h-12 text-slate-500 animate-spin mb-6" />
           <h3 className="text-xl font-bold text-slate-50 mb-2">正在批量生成资源...</h3>
           <div className="w-64 h-1.5 bg-slate-800 rounded-full overflow-hidden mb-2">
-             <div className="h-full bg-indigo-500 transition-all duration-300" style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%` }}></div>
+             <div className="h-full bg-slate-500 transition-all duration-300" style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%` }}></div>
           </div>
           <p className="text-slate-400 font-mono text-xs">进度: {batchProgress.current} / {batchProgress.total}</p>
         </div>
@@ -306,9 +306,9 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
         return (
           <div className="absolute inset-0 z-40 bg-slate-700/90 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-200">
-            <div className="bg-bg-secondary border border-slate-600 w-full max-h-[80vh] max-w-2xl rounded-2xl flex flex-col shadow-2xl overflow-hidden">
+            <div className="bg-slate-900 border border-slate-600 w-full max-h-[80vh] max-w-2xl rounded-2xl flex flex-col shadow-2xl overflow-hidden">
               {/* Modal Header */}
-              <div className="h-16 px-8 border-b border-slate-600 flex items-center justify-between shrink-0 bg-bg-footer">
+              <div className="h-16 px-8 border-b border-slate-600 flex items-center justify-between shrink-0 bg-slate-700">
                 <div className="flex items-center gap-4">
                   <MapPin className="w-10 h-10 rounded-full bg-slate-800 p-2.5 text-emerald-500" />
                   <div>
@@ -328,7 +328,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                       <MapPin className="w-4 h-4" /> 场景图像
                     </h4>
-                    <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
+                    <div className="bg-slate-800 p-4 rounded-xl border border-slate-600">
                       <div className="aspect-[16/9] bg-slate-900 rounded-lg overflow-hidden mb-4 relative cursor-pointer" onClick={() => setPreviewImage(selectedScene.referenceImage)}>
                         {selectedScene.referenceImage ? (
                           <img src={selectedScene.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
@@ -350,11 +350,11 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       <Check className="w-4 h-4" /> 场景信息
                     </h4>
                     <div className="space-y-4">
-                      <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
+                      <div className="bg-slate-800 p-4 rounded-xl border border-slate-600">
                         <label className="text-[12px] text-slate-300 uppercase tracking-wider font-bold block mb-2">时间</label>
                         <p className="text-sm text-slate-50">{selectedScene.time}</p>
                       </div>
-                      <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
+                      <div className="bg-slate-800 p-4 rounded-xl border border-slate-600">
                         <label className="text-[12px] text-slate-300 uppercase tracking-wider font-bold block mb-2">氛围</label>
                         <p className="text-sm text-slate-50">{selectedScene.atmosphere}</p>
                       </div>
@@ -367,13 +367,13 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                     <Sparkles className="w-4 h-4" /> 视觉提示
                   </h4>
-                  <div className="bg-bg-panel p-4 rounded-xl border border-slate-600">
+                  <div className="bg-slate-800 p-4 rounded-xl border border-slate-600">
                     <textarea
                       value={editingSceneVisualPrompt}
                       onChange={(e) => setEditingSceneVisualPrompt(e.target.value)}
                       onBlur={handleSaveSceneVisualPrompt}
                       placeholder="输入场景的视觉描述..."
-                      className="w-full bg-bg-secondary border border-slate-600 rounded-lg px-4 py-3 text-sm text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-32 font-mono"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-lg px-4 py-3 text-sm text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-32 font-mono"
                     />
                   </div>
                 </div>
@@ -384,10 +384,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       })()}
 
       {/* Header - Consistent with Director */}
-      <div className="h-14 border-b border-slate-600 bg-bg-footer px-6 flex items-center justify-between shrink-0">
+      <div className="h-14 border-b border-slate-600 bg-slate-700 px-6 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-slate-50 flex items-center gap-3">
-                  <Group className="w-5 h-5 text-indigo-500" />
+                  <Group className="w-5 h-5 text-slate-500" />
                   角色与场景
               </h2>
           </div>
@@ -409,7 +409,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
           <div className="flex items-end justify-between mb-6 border-b border-slate-600 pb-4">
             <div>
                <h3 className="text-sm font-bold text-slate-50 uppercase tracking-widest flex items-center gap-2">
-                 <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full"></div>
+                 <div className="w-1.5 h-1.5 bg-slate-500 rounded-full"></div>
                  角色定妆
                </h3>
                <p className="text-xs text-slate-500 mt-1 pl-3.5">为剧本角色生成一致参考图</p>
@@ -419,8 +419,8 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allCharactersReady
-                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-300 hover:bg-indigo-500'
-                    : 'bg-white text-black hover:bg-slate-400 shadow-lg shadow-white/5'
+                    ? 'bg-slate-900 text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-300 hover:bg-slate-500'
+                    : 'bg-slate-800 text-black hover:bg-slate-400 shadow-lg shadow-white/5'
               }`}
             >
               {allCharactersReady ? <RefreshCw className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
@@ -430,13 +430,13 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             {project.scriptData.characters.map((char) => (
-              <div key={char.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-300 transition-all hover:shadow-lg">
+              <div key={char.id} className="bg-slate-900 border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-300 transition-all hover:shadow-lg">
                 <div className="aspect-[3/4] bg-slate-900 relative overflow-hidden">
                   {char.referenceImage ? (
                     <>
                       <img src={char.referenceImage} alt={char.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                       {processingState?.type === 'character' && processingState?.id === char.id ? (
-                        <div className="absolute inset-0 bg-slate-700/70 flex items-center justify-center backdrop-blur-sm">
+                        <div className="absolute inset-0 bg-slate-700/80 flex items-center justify-center backdrop-blur-sm">
                           <Loader2 className="w-8 h-8 text-slate-50 animate-spin" />
                         </div>
                       ) : (
@@ -444,7 +444,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                           <button
                             onClick={() => { setPreviewImage(char.referenceImage); }}
                             disabled={!!batchProgress || !!processingState}
-                            className="px-3 py-1.5 bg-slate-700/50 text-slate-50 text-[12px] font-bold uppercase flex items-center gap-2 tracking-wider rounded border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-3 py-1.5 bg-slate-700/50 text-slate-50 text-[12px] font-bold uppercase flex items-center gap-2 tracking-wider rounded border border-white/20 hover:bg-slate-800 hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <Expand className="w-3 h-3" />
                             全屏预览
@@ -475,7 +475,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       {/* Preview Button */}
                       <button
                         onClick={(e) => handleGenerateAsset('character', char.id) }
-                        className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-black transition-colors border border-white/10 backdrop-blur"
                         title="重新生成"
                       >
                         <Sparkles className="w-3 h-3" />
@@ -483,7 +483,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       {/* Download Button */}
                       <button
                         onClick={(e) => { handleDownloadImage(char.referenceImage!, char.name); }}
-                        className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-black transition-colors border border-white/10 backdrop-blur"
                         title="下载图片"
                       >
                         <Download className="w-3 h-3" />
@@ -493,20 +493,20 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                   <button
                             onClick={(e) => { handleFileUploadClick(char.id, 'character'); }}
                             disabled={!!batchProgress || !!processingState}
-                            className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                            className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-black transition-colors border border-white/10 backdrop-blur"
                           >
                             <Upload className="w-3 h-3" />
                   </button>
                   <button
                      onClick={(e) => { setSelectedCharId(char.id); }}
-                     className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                     className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-black transition-colors border border-white/10 backdrop-blur"
                      title="管理造型"
                   >
                       <Shirt className="w-3 h-3" />
                   </button>
                   </div>
                 </div>
-                <div className="p-3 border-t border-slate-600 bg-bg-secondary">
+                <div className="p-3 border-t border-slate-600 bg-slate-900">
                   <div className="flex items-center justify-between mb-1">
                   <div  className="flex items-center gap-2 flex-wrap">
                   <h3 className="font-bold text-slate-200 truncate text-sm">{char.name}</h3>
@@ -541,8 +541,8 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               disabled={!!batchProgress}
               className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all flex items-center gap-2 ${
                   allScenesReady
-                    ? 'bg-bg-secondary text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-300 hover:bg-indigo-500'
-                    : 'bg-white text-black hover:bg-slate-600 shadow-lg shadow-white/5'
+                    ? 'bg-slate-900 text-slate-400 border border-slate-600 hover:text-slate-50 hover:border-slate-300 hover:bg-slate-500'
+                    : 'bg-slate-800 text-black hover:bg-slate-600 shadow-lg shadow-white/5'
               }`}
             >
               {allScenesReady ? <RefreshCw className="w-3 h-3" /> : <Sparkles className="w-3 h-3" />}
@@ -552,13 +552,13 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
             {project.scriptData.scenes.map((scene) => (
-              <div key={scene.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-300 transition-all hover:shadow-lg">
+              <div key={scene.id} className="bg-slate-900 border border-slate-600 rounded-xl overflow-hidden flex flex-col group hover:border-slate-300 transition-all hover:shadow-lg">
                 <div className="aspect-[16/9] bg-slate-800/50 relative overflow-hidden">
                   {scene.referenceImage ? (
                     <>
                       <img src={scene.referenceImage} alt={scene.location} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                       {processingState?.type === 'scene' && processingState?.id === scene.id ? (
-                        <div className="absolute inset-0 bg-slate-700/70 flex items-center justify-center backdrop-blur-sm">
+                        <div className="absolute inset-0 bg-slate-700/80 flex items-center justify-center backdrop-blur-sm">
                           <Loader2 className="w-8 h-8 text-slate-50 animate-spin" />
                         </div>
                       ) : (
@@ -566,7 +566,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                           <button
                             onClick={(e) => {setPreviewImage(scene.referenceImage); }}
                             disabled={!!batchProgress || !!processingState}
-                            className="px-3 py-1.5 bg-slate-700/50 text-slate-50 text-[12px] font-bold uppercase tracking-wider rounded flex items-center gap-2 border border-white/20 hover:bg-white hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="px-3 py-1.5 bg-slate-700/50 text-slate-50 text-[12px] font-bold uppercase tracking-wider rounded flex items-center gap-2 border border-white/20 hover:bg-slate-800 hover:text-black transition-colors backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             <Expand className="w-3 h-3" />
                             全屏预览
@@ -596,7 +596,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                           <>
                       <button
                         onClick={(e) => {handleGenerateAsset('scene', scene.id); }}
-                        className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-black transition-colors border border-white/10 backdrop-blur"
                         title="重新生成"
                       >
                         <Sparkles className="w-3 h-3" />
@@ -604,7 +604,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                       {/* Download Button */}
                       <button
                         onClick={(e) => { handleDownloadImage(scene.referenceImage!, scene.location); }}
-                        className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                        className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-black transition-colors border border-white/10 backdrop-blur"
                         title="下载图片"
                       >
                         <Download className="w-3 h-3" />
@@ -615,14 +615,14 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <button
                       onClick={(e) => { handleFileUploadClick(scene.id, 'scene'); }}
                       disabled={!!batchProgress || !!processingState}
-                      className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-white hover:text-black transition-colors border border-white/10 backdrop-blur"
+                      className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-black transition-colors border border-white/10 backdrop-blur"
                       title="上传图片"
                       >
                       <Upload className="w-3 h-3" />
                     </button>
                     </div>
                 </div>
-                <div className="p-3 border-t border-slate-600 bg-bg-secondary">
+                <div className="p-3 border-t border-slate-600 bg-slate-900">
                   <div className="flex justify-between items-center mb-1">
                      <h3 className="font-bold text-slate-200 text-sm truncate">{scene.location}</h3>
                      <span className="px-1.5 py-0.5 bg-slate-900 text-slate-500 text-[11px] rounded border border-slate-600 uppercase font-mono whitespace-nowrap">{scene.time}</span>
@@ -679,14 +679,14 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
             </div>
 
             {/* TTS Parameters Configuration */}
-            <div className="bg-bg-secondary border border-slate-600 rounded-xl p-5 mb-6">
+            <div className="bg-slate-900 border border-slate-600 rounded-xl p-5 mb-6">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
                   <AudioLines className="w-3.5 h-3.5 text-amber-400" />
                   语音合成参数
                 </h4>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
                 {/* SPD - 语速 */}
                 <div className="space-y-2">
                   <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold block">语速 (SPD)</label>
@@ -694,7 +694,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.spd}
                       onChange={(e) => setTtsParams({ ...ttsParams, spd: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-slate-900 border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(val => (
                         <option key={val} value={val}>{val}</option>
@@ -713,7 +713,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.pit}
                       onChange={(e) => setTtsParams({ ...ttsParams, pit: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-slate-900 border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(val => (
                         <option key={val} value={val}>{val}</option>
@@ -732,7 +732,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.vol}
                       onChange={(e) => setTtsParams({ ...ttsParams, vol: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-slate-900 border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(val => (
                         <option key={val} value={val}>{val}</option>
@@ -751,7 +751,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.per}
                       onChange={(e) => setTtsParams({ ...ttsParams, per: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-slate-900 border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       {VOICE_LIBRARY.map(voice => (
                         <option key={voice.per} value={voice.per}>{voice.name}</option>
@@ -771,7 +771,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                     <select
                       value={ttsParams.aue}
                       onChange={(e) => setTtsParams({ ...ttsParams, aue: parseInt(e.target.value) })}
-                      className="w-full bg-bg-secondary border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
+                      className="w-full bg-slate-900 border border-slate-600 text-slate-50 px-3 py-2.5 text-sm rounded-lg appearance-none focus:border-emerald-500 focus:outline-none transition-all cursor-pointer"
                     >
                       <option value={3}>MP3</option>
                       <option value={4}>PCM-16k</option>
@@ -786,9 +786,9 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
               {project.shots.map((shot, shotIndex) => (
-                <div key={shot.id} className="bg-bg-secondary border border-slate-600 rounded-xl overflow-hidden hover:border-slate-300 transition-all flex flex-col">
+                <div key={shot.id} className="bg-slate-900 border border-slate-600 rounded-xl overflow-hidden hover:border-slate-300 transition-all flex flex-col">
                   <div className="p-4 space-y-3">
                     {/* Shot Info */}
                     <div className="flex items-start gap-3 pb-3 border-b border-slate-600/50">
@@ -815,7 +815,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                             value={editingShotDialogue.dialogue}
                             onChange={(e) => setEditingShotDialogue({ ...editingShotDialogue, dialogue: e.target.value })}
                             placeholder="输入对话内容..."
-                            className="w-full bg-bg-secondary border border-slate-600 rounded-lg px-3 py-3 text-sm text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-14 font-mono"
+                            className="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-3 text-sm text-slate-50 placeholder:text-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none h-14 font-mono"
                           />
                           <div className="flex gap-2">
                             <button
@@ -859,10 +859,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                           </button>
                         )}
                           {editingShotDialogue?.shotId !== shot.id && shot.audioUrl && (
-                          <div className="flex-1 bg-slate-900/50 rounded-lg pr-3 pl-3 min-w-0">
+                          <div className="flex-1 bg-slate-900/50 min-w-0">
                             <audio
                               controls
-                              className="w-full h-6"
+                              className="w-full h-8"
                               src={shot.audioUrl}
                             />
                           </div>
@@ -871,7 +871,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
                             <button
                               onClick={() => handleGenerateAudio(shot.id, shot.dialogue || '')}
                               disabled={generatingAudio?.shotId === shot.id}
-                              className="px-3 py-1.5 bg-slate-600 hover:bg-blue-400 text-slate-50 text-[11px] font-bold uppercase tracking-wide rounded transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                              className="px-3 py-1.5 bg-slate-600 hover:bg-slate-400 text-slate-50 text-[11px] font-bold uppercase tracking-wide rounded transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                             >
                               {generatingAudio?.shotId === shot.id ? (
                                 <>
