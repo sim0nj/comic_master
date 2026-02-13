@@ -1266,23 +1266,15 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                               <div className="flex gap-2">
                                  <button
                                     onClick={() => setEditingSceneInMain(scene)}
-                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-50 bg-slate-900/80 border border-slate-600 hover:border-slate-300 rounded transition-all flex items-center justify-center gap-1.5"
+                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-50 bg-slate-700/80 border border-slate-600 hover:bg-slate-600/80 hover:border-slate-300 rounded transition-all flex items-center justify-center gap-1.5"
                                     title="编辑场景"
                                  >
                                     <Edit className="w-3 h-3" />
                                     <span>修改</span>
                                  </button>
                                  <button
-                                    onClick={() => deleteScene(scene.id)}
-                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-red-400 bg-slate-900/80 border border-slate-600 hover:border-red-900/50 rounded transition-all flex items-center justify-center gap-1.5"
-                                    title="删除场景"
-                                 >
-                                    <Trash className="w-3 h-3" />
-                                    <span>删除</span>
-                                 </button>
-                                 <button
                                     onClick={() => startAddShot(scene.id)}
-                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-400 bg-slate-900/80 border border-slate-600 hover:border-slate-600 rounded transition-all flex items-center justify-center gap-1.5"
+                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-400 bg-slate-700/80 border hover:bg-slate-600/80 border-slate-600 hover:border-slate-300 rounded transition-all flex items-center justify-center gap-1.5"
                                     title="添加分镜"
                                  >
                                     <Plus className="w-3 h-3" />
@@ -1291,11 +1283,19 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                  <button
                                     onClick={() => handleRegenerateSceneShots(scene.id, index)}
                                     disabled={regeneratingSceneId === scene.id}
-                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-400 bg-slate-900/80 border border-slate-600 hover:border-slate-600 rounded transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-slate-400 bg-slate-700/80 border hover:bg-slate-600/80 border-slate-600 hover:border-slate-300 rounded transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                                     title="重新生成分镜"
                                  >
                                     <Wand2 className="w-3 h-3" />
                                     <span>{regeneratingSceneId === scene.id ? '生成中...' : '重新分镜'}</span>
+                                 </button>
+                                 <button
+                                    onClick={() => deleteScene(scene.id)}
+                                    className="px-2.5 py-1.5 text-[11px] font-medium text-slate-400 hover:text-red-400 bg-slate-700/80 border border-slate-600 hover:bg-slate-600/80 hover:border-red-900/50 rounded transition-all flex items-center justify-center gap-1.5"
+                                    title="删除场景"
+                                 >
+                                    <Trash className="w-3 h-3" />
+                                    <span>删除</span>
                                  </button>
                               </div>
                            </div>
@@ -1336,7 +1336,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                                      <div className="flex gap-1 group-hover:opacity-100 transition-opacity">
                                        <button
                                          onClick={() => startEditShot(shot)}
-                                         className="p-1.5 hover:bg-slate-700 text-slate-400 group-hover:text-slate-500 rounded transition-colors"
+                                         className="p-1.5 hover:bg-slate-600 text-slate-400 group-hover:text-slate-500 rounded transition-colors"
                                          title="编辑"
                                        >
                                          <Edit className="w-3.5 h-3.5" />

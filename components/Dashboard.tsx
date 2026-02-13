@@ -372,7 +372,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                      {editingProjectId !== proj.id ? (
                      <button
                         onClick={(e) => openProjectSettings(e, proj)}
-                        className="absolute top-4 right-20 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-20 group-hover:opacity-100 p-2 hover:bg-slate-700 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
                         title="编辑项目"
                      >
                         <Edit className="w-4 h-4" />
@@ -383,7 +383,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                      {editingProjectId === null ? (
                      <button
                         onClick={(e) => handleDuplicate(e, proj)}
-                        className="absolute top-4 right-28 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-28 group-hover:opacity-100 p-2 hover:bg-slate-700 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
                         title="复制项目"
                      >
                         <Copy className="w-4 h-4" />
@@ -394,7 +394,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                      {editingProjectId === null ? (
                      <button
                         onClick={(e) => handleExport(e, proj)}
-                        className="absolute top-4 right-12 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-12 group-hover:opacity-100 p-2 hover:bg-slate-700 text-slate-400 hover:text-slate-400 transition-all rounded-sm z-10"
                         title="导出项目"
                      >
                         <Download className="w-4 h-4" />
@@ -405,7 +405,7 @@ const Dashboard: React.FC<Props> = ({ onOpenProject, isMobile=false, onClearKey 
                      {editingProjectId === null ? (
                      <button
                         onClick={(e) => requestDelete(e, proj.id)}
-                        className="absolute top-4 right-4 group-hover:opacity-100 p-2 hover:bg-slate-800 text-slate-400 hover:text-red-400 transition-all rounded-sm z-10"
+                        className="absolute top-4 right-4 group-hover:opacity-100 p-2 hover:bg-slate-700 text-slate-400 hover:text-red-400 transition-all rounded-sm z-10"
                         title="删除项目"
                      >
                         <Trash2 className="w-4 h-4" />
