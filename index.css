@@ -5,37 +5,34 @@
   --color-bg-selected: var(--bg-selected);
   --color-bg-button: var(--bg-button);
   --color-bg-progress: var(--bg-progress);
-  /* 深色主题背景色 - 使用teal色系 */
-  --color-dark-bg-selected: var(--color-slate-600);    /* teal-300 */
-  --color-dark-bg-button: var(--color-slate-900);      /* teal-950 */
-  --color-dark-bg-progress: var(--color-slate-900);    /* teal-900 */
+  --color-dark-bg-selected: var(--color-slate-600);
+  --color-dark-bg-button: var(--color-slate-900);
+  --color-dark-bg-progress: var(--color-slate-900);
   
-  /* 浅色主题背景色 - 使用teal色系的浅色调 */
-  --color-light-bg-selected: var(--color-teal-300);   /* teal-600 */
-  --color-light-bg-button: var(--color-teal-100);     /* teal-100 */
-  --color-light-bg-progress: var(--color-teal-50);   /* teal-50 */
+  --color-light-bg-selected: var(--color-gray-300);
+  --color-light-bg-button: var(--color-gray-100);
+  --color-light-bg-progress: var(--color-gray-50);
   
 }
 
 @layer base {
-  /* 添加teal颜色映射以支持现有代码 */
   :root {
 
   }
 
-  /* 浅色主题下调整teal颜色 */
+  /* 浅色主题下调整gray颜色 */
   :root[data-theme="light"] {
-    --color-slate-50: var(--color-teal-950);    /* teal-950 */
-    --color-slate-100: var(--color-teal-900);   /* teal-900 */
-    --color-slate-200: var(--color-teal-800);   /* teal-800 */
-    --color-slate-300: var(--color-teal-700);   /* teal-700 */
-    --color-slate-400: var(--color-teal-600);   /* teal-600 */
-    --color-slate-500: var(--color-teal-500);   /* 自定义深色 */
-    --color-slate-600: var(--color-teal-300);   /* teal-300 */
-    --color-slate-700: var(--color-teal-200);   /* teal-200 */
-    --color-slate-800: var(--color-teal-100);   /* teal-100 */
-    --color-slate-900: var(--color-teal-100);    /* teal-50 */
-    --color-slate-950: var(--color-teal-50);    /* 接近白色 */
+    --color-slate-50: var(--color-gray-950);
+    --color-slate-100: var(--color-gray-900);
+    --color-slate-200: var(--color-gray-800);
+    --color-slate-300: var(--color-gray-700);
+    --color-slate-400: var(--color-gray-600);
+    --color-slate-500: var(--color-gray-500);
+    --color-slate-600: var(--color-gray-300);
+    --color-slate-700: var(--color-gray-200);
+    --color-slate-800: var(--color-gray-100);
+    --color-slate-900: var(--color-gray-100);
+    --color-slate-950: var(--color-gray-50);
   }
 
   /* 默认深色主题 */
@@ -74,16 +71,7 @@
   @media (prefers-color-scheme: light) {
     :root[data-theme="system"] {
       /* 调整slate颜色 */
-      --color-slate-50: #0f172a;
-      --color-slate-100: #1e293b;
-      --color-slate-200: #334155;
-      --color-slate-300: #475569;
-      --color-slate-400: #64748b;
-      --color-slate-500: #94a3b8;
-      --color-slate-600: #cbd5e1;
-      --color-slate-700: #e2e8f0;
-      --color-slate-800: #f1f5f9;
-      --color-slate-900: #f8fafc;
+
       --bg-primary: var(--color-light-bg-primary);
       --bg-secondary: var(--color-light-bg-secondary);
       --bg-panel: var(--color-light-bg-panel);
@@ -118,7 +106,7 @@
     background: var(--border-primary); 
   }
   ::selection {
-    background-color: var(--color-slate-200);  /* teal-500 选中背景色 */
+    background-color: var(--color-slate-200);  
     color: var(--color-slate-900);              /* 选中文字颜色 */
   }
 }

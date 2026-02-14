@@ -854,7 +854,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
       <div className="flex-1 flex flex-col bg-slate-900 relative">
         <div className="h-14 border-b border-slate-600 flex items-center justify-between px-8 bg-slate-700 shrink-0">
            <div className="flex items-center gap-3">
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-700"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-500"></div>
               <span className="text-xs font-bold text-slate-400">剧本编辑器</span>
            </div>
            <button
@@ -868,7 +868,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
 
         {/* AI Script Generation Input */}
         <div className="border-b border-slate-600/50 bg-slate-900 p-4">
-           <div className="max-w-3xl mx-auto">
+           <div className="mx-auto">
               <div className="flex gap-3">
                  <input
                     type="text"
@@ -899,8 +899,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
            </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
-           <div className={`max-w-3xl mx-auto ${isMobile ? 'px-4 h-[600px]' : 'h-full'} flex flex-col py-2`}>
+        <div className="flex-1 overflow-y-auto p-4">
+           <div className={`mx-auto ${isMobile ? 'h-[600px]' : 'h-full'} flex flex-col py-2`}>
               <textarea
                   value={localScript}
                   onChange={(e) => setLocalScript(e.target.value)}
@@ -1244,7 +1244,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                    return (
                      <div key={scene.id} className="border-b border-slate-600">
                         {/* Scene Header strip */}
-                        <div className="sticky top-0 z-10 bg-slate-900/95 backdrop-blur border-y border-slate-600 shadow-lg shadow-black/20">
+                        <div className="sticky top-0 z-10 bg-slate-800 backdrop-blur border-b border-slate-600 shadow-lg shadow-black/20">
                            <div className="px-4 md:px-8 py-5 flex flex-col md:flex-row items-baseline justify-between">
                               <div className="flex items-center justify-between gap-6">
                                  <div className="flex items-center justify-between md:items-baseline gap-4">
@@ -1302,9 +1302,9 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                         </div>
   
                         {/* Shot Rows */}
-                        <div className="divide-y divide-slate-800/50">
+                        <div className="divide-y divide-slate-600">
                            {sceneShots.map((shot) => (
-                             <div key={shot.id} className="group bg-slate-900 hover:bg-slate-700 transition-colors p-6 py-4 gap-4 md:p-8 flex md:gap-8" >
+                             <div key={shot.id} className="group bg-slate-900 hover:bg-slate-700/40 transition-colors p-6 py-4 gap-4 md:p-8 flex md:gap-8" >
 
                                 {/* Shot ID & Tech Data */}
                                 <div className="xl:w-32 flex-shrink-0 flex flex-col">

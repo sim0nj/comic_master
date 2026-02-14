@@ -367,10 +367,10 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
                             onMouseLeave={() => setFocusedShot(null)}
                             className={`h-14 min-w-[18px] flex-1 rounded-[2px] transition-all relative group flex flex-col justify-end overflow-hidden cursor-pointer ${
                               isSelected
-                                ? 'bg-slate-600/60 border-2 border-slate-400'
+                                ? 'bg-slate-600 border-2 border-slate-400'
                                 : isDone
-                                  ? 'bg-slate-900/40 border border-slate-500/30 hover:bg-slate-500/40'
-                                  : 'bg-slate-400 border border-slate-600 cursor-not-allowed opacity-50'
+                                  ? 'bg-slate-600 border border-slate-500/30 hover:bg-slate-400/50'
+                                  : 'bg-slate-800/80 border border-slate-600 cursor-not-allowed opacity-50'
                             }`}
                             title={`镜头 ${idx+1}: ${shot.actionSummary}`}
                           >
