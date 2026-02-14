@@ -494,7 +494,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
                   onClick={() => setFormData({ ...formData, enabled: !formData.enabled })}
                   className={`w-full py-3 rounded-lg text-sm font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-3 ${
                     formData.enabled
-                      ? 'bg-slate-300 text-text-primary'
+                      ? 'bg-yellow-300 text-slate-500'
                       : 'bg-slate-600 text-slate-400'
                   }`}
                 >

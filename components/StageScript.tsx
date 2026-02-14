@@ -164,6 +164,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
     if (!localScript || localScript === project.rawScript) {
       return;
     }
+    project.lastModified = 0;
 
     // 设置新的定时器，延迟 2 秒后保存
     autoSaveTimerRef.current = setTimeout(() => {
@@ -498,11 +499,12 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
         language: localLanguage,
         visualStyle: localStyle,
         imageSize: localImageSize,
-        imageCount: localImageCount,
-        isParsingScript: true
+        imageCount: localImageCount
       });
 
       const scriptData = await ModelService.parseScriptToData(localScript, localLanguage);
+
+      updateProject({ isParsingScript: true });
 
       scriptData.targetDuration = finalDuration;
       scriptData.language = localLanguage;
@@ -545,7 +547,6 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
       updateProject({
         scriptData,
         shots,
-        isParsingScript: false,
         title: scriptData.title
       });
 
@@ -555,7 +556,6 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
     } catch (err: any) {
       console.error(err);
       setError(`错误: ${err.message || "AI 连接失败"}`);
-      updateProject({ isParsingScript: false });
       setProcessingStep('');
     } finally {
       setIsProcessing(false);
@@ -916,7 +916,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
            <span>{localScript.length} 字符</span>
            <span>{localScript.split('\n').length} 行</span>
            <div className="flex items-center gap-1.5">
-             <div className="w-1.5 h-1.5 rounded-full bg-green-800"></div>
+             <div className={`w-1.5 h-1.5 rounded-full ${project.lastModified ? 'bg-green-800':'bg-red-800'}`}></div>
              {project.lastModified ? '已自动保存' : '准备就绪'}
            </div>
         </div>
