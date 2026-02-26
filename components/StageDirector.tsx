@@ -88,6 +88,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
   const updateShot = (shotId: string, transform: (s: Shot) => Shot) => {
     const newShots = project.shots.map(s => s.id === shotId ? transform(s) : s);
     updateProject({ shots: newShots });
+    project.shots = newShots;
   };
 
   const updateKeyframePrompt = (shotId: string, type: 'start' | 'end' | 'full', prompt: string) => {

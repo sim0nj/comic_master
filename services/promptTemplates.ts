@@ -66,10 +66,10 @@ export const PROMPT_TEMPLATES = {
     2. 重要提示：每场戏镜头数量上限为 2-8 个，避免出现 JSON 截断错误。
     3. 镜头运动：请使用专业术语（如：前推、右摇、固定、手持、跟拍）。
     4. 景别：明确取景范围（如：大特写、中景、全景）。
-    5. 镜头情节概述：详细描述该镜头内发生的情节（使用 ${lang} 指定语言）。
+    5. 镜头情节概述：详细描述该镜头内发生的情节（使用 ${lang} 语言描述）。
     6. 视觉提示语：用于图像生成的详细英文描述，字数控制在 80 词以内。
     7. 转场动画：包含起始帧，结束帧，时长，运动强度（取值为 0-100）。
-    8. 视频提示词：visualPrompt 使用 ${lang} 指定语言。
+    8. 视频提示词：visualPrompt, 使用 ${lang} 语言描述。
 
     输出格式：JSON 数组，数组内对象包含以下字段：
     - id（字符串类型）
@@ -79,7 +79,7 @@ export const PROMPT_TEMPLATES = {
     - cameraMovement（字符串类型）
     - shotSize（字符串类型）
     - characters（字符串数组类型）
-    - keyframes（对象数组类型，对象包含 id、type（取值为 ["start", "end"]）、visualPrompt（使用 ${lang} 指定语言） 字段）
+    - keyframes（对象数组类型，对象包含 id、type（取值为 ["start", "end"]）、visualPrompt（使用 ${lang} 语言描述） 字段）
     - interval（对象类型，包含 id、startKeyframeId、endKeyframeId、duration、motionStrength、status（取值为 ["pending", "completed"]） 字段）
   `,
 
