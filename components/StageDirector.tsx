@@ -997,7 +997,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
 
       {/* Toolbar */}
       {(!isMobile || !activeShotId) && (
-      <div className="h-14 border-b border-slate-600 bg-slate-700 px-6 flex items-center justify-between shrink-0">
+      <div className="h-14 border-b border-slate-600 bg-slate-700 md:px-6 px-2 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
               <h2 className="text-lg font-bold text-slate-50 flex items-center gap-3">
                   <Clapperboard className="w-5 h-5 text-slate-500" />
@@ -1038,27 +1038,27 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       {/* Main Content Area */}
       <div className="flex-1 overflow-hidden flex">
           {/* Grid View - Responsive Logic */}
-          <div className={`flex-1 overflow-y-auto transition-all duration-500 ease-in-out ${activeShotId ? (isMobile?'hidden':'p-6 border-r border-slate-600') : 'p-6'}`}>
+          <div className={`flex-1 overflow-y-auto transition-all duration-500 ease-in-out ${activeShotId ? (isMobile?'hidden':'md:p-6 p-2 border-r border-slate-600') : 'md:p-6 p-2'}`}>
                   {project.scriptData?.scenes.map((scene, index) => {
                     const sceneShots = project.shots.filter(s => s.sceneId === scene.id);
                 return (
                   <>
- <div className="flex items-center gap-2 pb-2 border-b border-slate-600 mb-2">
+ <div className="flex items-center gap-2 pb-1 border-b border-slate-600 mb-2">
                     <MapPin className="w-4 h-4 text-slate-500" />
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">场景{scene.id}：{scene?.location || '未知场景'}
                     </span>
                     <button
                     onClick={() => setEditingSceneInMain(scene!)}
-                    className="text-[11px] font-medium text-slate-400 hover:text-slate-50 rounded transition-all"
+                    className="text-[11px] font-medium text-slate-400 hover:text-slate-50 hover:bg-slate-600 p-1 md:p-1.5 rounded transition-all"
                     title="编辑场景"
                  >
                     <Edit className="w-3.5 h-3.5" />
                  </button>
-                 <div className="flex-1 flex justify-end items-center gap-2">
+                 <div className="flex-1 flex justify-end items-center">
                     <button
                         onClick={() => handleSceneBatchGenerateImages(scene.id)}
                         disabled={!!batchProgress || !!batchVideoProgress}
-                        className="text-[11px] font-medium text-slate-400 hover:text-slate-50 rounded transition-all flex items-center gap-1"
+                        className="text-[11px] font-medium text-slate-400 hover:text-slate-50 hover:bg-slate-600 p-1 md:p-1.5 rounded transition-all flex items-center gap-1"
                         title="批量生成图片"
                     >
                         <Image className="w-3 h-3" />
@@ -1067,7 +1067,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                     <button
                         onClick={() => handleSceneBatchGenerateVideos(scene.id)}
                         disabled={!!batchProgress || !!batchVideoProgress}
-                        className="text-[11px] font-medium text-slate-400 hover:text-slate-50 rounded transition-all flex items-center gap-1"
+                        className="text-[11px] font-medium text-slate-400 hover:text-slate-50 hover:bg-slate-600 p-1 md:p-1.5 rounded transition-all flex items-center gap-1"
                         title="批量生成视频"
                     >
                         <Video className="w-3 h-3" />
@@ -1207,7 +1207,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
               <div className={`${isMobile ? 'w-full' : 'md:w-[480px] lg:w-[480px] 2xl:w-[640px]'} bg-slate-700/50 flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20`}>
                   
                   {/* Workbench Header */}
-                  <div className="h-16 px-6 border-b border-slate-600 flex items-center justify-between bg-slate-600/50 shrink-0">
+                  <div className="h-16 md:px-6 px-2 border-b border-slate-600 flex items-center justify-between bg-slate-600/50 shrink-0">
                        <div className="flex items-center gap-3">
                            <span className="w-8 h-8 bg-slate-900/30 text-slate-400 rounded-lg flex items-center justify-center font-bold font-mono text-sm border border-slate-500/20">
                               {String(activeShotIndex + 1).padStart(2, '0')}
@@ -1241,7 +1241,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                   </div>
 
                   {/* Workbench Content */}
-                  <div className="flex-1 overflow-y-auto p-6 space-y-6 border-b border-slate-600">
+                  <div className="flex-1 overflow-y-auto md:p-6 p-2 space-y-6 border-b border-slate-600">
                        {/* Section 1: Context */}
                        {renderSceneContext()}
                        {/* Section 2: Narrative */}
