@@ -696,15 +696,8 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
               <div className="flex items-center justify-between mb-2">
                  <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-slate-500" />
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">场景环境
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">场景/角色
                     </span>
-                     <button
-                    onClick={() => setEditingSceneInMain(scene!)}
-                    className="text-[11px] font-medium text-slate-400 hover:text-slate-50 rounded transition-all"
-                    title="编辑场景"
-                 >
-                    <Edit className="w-3.5 h-3.5" />
-                 </button>
                  </div>
 
               </div>
@@ -864,129 +857,147 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       <div className="flex-1 overflow-hidden flex">
           {/* Grid View - Responsive Logic */}
           <div className={`flex-1 overflow-y-auto transition-all duration-500 ease-in-out ${activeShotId ? (isMobile?'hidden':'p-6 border-r border-slate-600') : 'p-6'}`}>
-              <div className={`grid gap-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4': 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5'}`}>
-                  {project.shots.map((shot, idx) => {
-                      const sKf = shot.keyframes?.find(k => k.type === 'start');
-                      const fKf = shot.keyframes?.find(k => k.type === 'full');
-                      const hasImage = !!sKf?.imageUrl || !!fKf?.imageUrl;
-                      const hasVideo = !!shot.interval?.videoUrl;
-                      const isActive = activeShotId === shot.id;
+                  {project.scriptData?.scenes.map((scene, index) => {
+                    const sceneShots = project.shots.filter(s => s.sceneId === scene.id);
+                return (
+                  <>
+ <div className="flex items-center gap-2 pb-2">
+                    <MapPin className="w-4 h-4 text-slate-500" />
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">场景{scene.id}：{scene?.location || '未知场景'}
+                    </span>
+                     <button
+                    onClick={() => setEditingSceneInMain(scene!)}
+                    className="text-[11px] font-medium text-slate-400 hover:text-slate-50 rounded transition-all"
+                    title="编辑场景"
+                 >
+                    <Edit className="w-3.5 h-3.5" />
+                 </button>
+                 </div>
+                <div className={`grid gap-4 pb-4 ${activeShotId ? 'grid-cols-2 md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4': 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5'}`}>
+                    {sceneShots.map((shot, idx) => {
+                        const sKf = shot.keyframes?.find(k => k.type === 'start');
+                        const fKf = shot.keyframes?.find(k => k.type === 'full');
+                        const hasImage = !!sKf?.imageUrl || !!fKf?.imageUrl;
+                        const hasVideo = !!shot.interval?.videoUrl;
+                        const isActive = activeShotId === shot.id;
 
-                      return (
-                          <div 
-                              key={shot.id}
-                              onClick={() => setActiveShotId(shot.id)}
-                              className={`
-                                  group relative flex flex-col bg-slate-900 border rounded-xl overflow-hidden cursor-pointer transition-all duration-200
-                                  ${isActive ? 'border-slate-500 ring-1 ring-indigo-500/50 shadow-xl scale-[1.02]' : 'border-slate-600 hover:border-slate-300 hover:shadow-lg'}
-                              `}
-                          >
-                              {/* Header */}
-                              <div className="px-1.5 md:px-2 py-2 bg-bg-button border-b border-slate-600 flex justify-between items-center">
-                                <div className="flex items-center gap-1 md:gap-1.5">
-                                  <span className={`font-mono text-[12px] font-bold ${isActive ? 'text-slate-400' : 'text-slate-500'}`}>{String(idx + 1).padStart(2, '0')}</span>
-                                      <span className="text-[11px] px-1 md:px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded uppercase">{shot.cameraMovement} {shot.interval?.duration}s</span>
-                                 </div>
-                                  <div className="flex items-center gap-0.5 md:gap-1">
-                                      <button
-                                        onClick={(e) => { e.stopPropagation(); startEditShot(shot); }}
-                                        className="p-1 md:p-1.5 hover:bg-slate-700 text-slate-500 hover:text-slate-50 rounded transition-colors"
-                                        title="编辑镜头"
-                                      >
-                                        <Edit className="w-3 h-3" />
-                                      </button>
-                                      <button
-                                        onClick={(e) => {e.stopPropagation();deleteShot(shot.id)}}
-                                        className="p-1 md:p-1.5 hover:bg-red-900/20 text-slate-600 group-hover:text-red-400 rounded transition-colors"
-                                        title="删除"
-                                      >
-                                        <Trash className="w-3 h-3" />
-                                      </button>
+                        return (
+                            <div 
+                                key={shot.id}
+                                onClick={() => setActiveShotId(shot.id)}
+                                className={`
+                                    group relative flex flex-col bg-slate-900 border rounded-xl overflow-hidden cursor-pointer transition-all duration-200
+                                    ${isActive ? 'border-slate-500 ring-1 ring-indigo-500/50 shadow-xl scale-[1.02]' : 'border-slate-600 hover:border-slate-300 hover:shadow-lg'}
+                                `}
+                            >
+                                {/* Header */}
+                                <div className="px-1.5 md:px-2 py-2 bg-bg-button border-b border-slate-600 flex justify-between items-center">
+                                  <div className="flex items-center gap-1 md:gap-1.5">
+                                    <span className={`font-mono text-[12px] font-bold ${isActive ? 'text-slate-400' : 'text-slate-500'}`}>{String(idx + 1).padStart(2, '0')}</span>
+                                        <span className="text-[11px] px-1 md:px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded uppercase">{shot.cameraMovement} {shot.interval?.duration}s</span>
                                   </div>
-                              </div>
+                                    <div className="flex items-center gap-0.5 md:gap-1">
+                                        <button
+                                          onClick={(e) => { e.stopPropagation(); startEditShot(shot); }}
+                                          className="p-1 md:p-1.5 hover:bg-slate-700 text-slate-500 hover:text-slate-50 rounded transition-colors"
+                                          title="编辑镜头"
+                                        >
+                                          <Edit className="w-3 h-3" />
+                                        </button>
+                                        <button
+                                          onClick={(e) => {e.stopPropagation();deleteShot(shot.id)}}
+                                          className="p-1 md:p-1.5 hover:bg-red-900/20 text-slate-600 group-hover:text-red-400 rounded transition-colors"
+                                          title="删除"
+                                        >
+                                          <Trash className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                </div>
 
-                              {/* Thumbnail */}
-                              <div
-                                className="aspect-video bg-slate-800/50 relative overflow-hidden"
-                                onMouseEnter={() => {
-                                  if (hasVideo && !videoPlayingShots.has(shot.id)) {
-                                    setVideoPlayingShots(prev => new Set([...prev, shot.id]));
-                                  }
-                                }}
-                                
-                              >
-                                  {videoReadyShots.has(shot.id) && hasVideo && videoPlayingShots.has(shot.id) ? (
-                                      <video
-                                        data-shot-id={shot.id}
-                                        src={shot.interval?.videoUrl}
-                                        className="w-full h-full object-cover"
-                                        muted controls autoPlay loop
-                                        onMouseEnter={(e) => e.currentTarget.play()}
-                                        onMouseLeave={(e) => e.currentTarget.pause()}
-                                        onCanPlay={() => {
-                                          if (!videoReadyShots.has(shot.id)) {
-                                            setVideoReadyShots(prev => new Set([...prev, shot.id]));
-                                          }
-                                        }}
-                                      />
-                                  ) : hasImage ? (
-                                      <>
-                                        <img src={sKf!.imageUrl || fKf!.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                                        {/* Preload video in background */}
-                                        {hasVideo && !videoReadyShots.has(shot.id) && (
-                                          <video
-                                            src={shot.interval?.videoUrl}
-                                            className="hidden"
-                                            onCanPlay={() => {
-                                              if (!videoReadyShots.has(shot.id)) {
-                                                setVideoReadyShots(prev => new Set([...prev, shot.id]));
-                                              }
-                                            }}
-                                          />
-                                        )}
-                                      </>
-                                  ) : hasVideo ? (
-                                      <video
-                                        data-shot-id={shot.id}
-                                        src={shot.interval?.videoUrl}
-                                        className="w-full h-full object-cover"
-                                        muted controls autoPlay loop
-                                        onMouseEnter={(e) => e.currentTarget.play()}
-                                        onMouseLeave={(e) => e.currentTarget.pause()}
-                                        onCanPlay={() => {
-                                          if (!videoReadyShots.has(shot.id)) {
-                                            setVideoReadyShots(prev => new Set([...prev, shot.id]));
-                                          }
-                                        }}
-                                      />
-                                  ) : (
-                                      <div className="absolute inset-0 flex items-center justify-center text-slate-600">
-                                          <ImageIcon className="w-8 h-8 opacity-20" />
-                                      </div>
-                                  )}
+                                {/* Thumbnail */}
+                                <div
+                                  className="aspect-video bg-slate-800/50 relative overflow-hidden"
+                                  onMouseEnter={() => {
+                                    if (hasVideo && !videoPlayingShots.has(shot.id)) {
+                                      setVideoPlayingShots(prev => new Set([...prev, shot.id]));
+                                    }
+                                  }}
+                                  
+                                >
+                                    {videoReadyShots.has(shot.id) && hasVideo && videoPlayingShots.has(shot.id) ? (
+                                        <video
+                                          data-shot-id={shot.id}
+                                          src={shot.interval?.videoUrl}
+                                          className="w-full h-full object-cover"
+                                          muted controls autoPlay loop
+                                          onMouseEnter={(e) => e.currentTarget.play()}
+                                          onMouseLeave={(e) => e.currentTarget.pause()}
+                                          onCanPlay={() => {
+                                            if (!videoReadyShots.has(shot.id)) {
+                                              setVideoReadyShots(prev => new Set([...prev, shot.id]));
+                                            }
+                                          }}
+                                        />
+                                    ) : hasImage ? (
+                                        <>
+                                          <img src={sKf!.imageUrl || fKf!.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                          {/* Preload video in background */}
+                                          {hasVideo && !videoReadyShots.has(shot.id) && (
+                                            <video
+                                              src={shot.interval?.videoUrl}
+                                              className="hidden"
+                                              onCanPlay={() => {
+                                                if (!videoReadyShots.has(shot.id)) {
+                                                  setVideoReadyShots(prev => new Set([...prev, shot.id]));
+                                                }
+                                              }}
+                                            />
+                                          )}
+                                        </>
+                                    ) : hasVideo ? (
+                                        <video
+                                          data-shot-id={shot.id}
+                                          src={shot.interval?.videoUrl}
+                                          className="w-full h-full object-cover"
+                                          muted controls autoPlay loop
+                                          onMouseEnter={(e) => e.currentTarget.play()}
+                                          onMouseLeave={(e) => e.currentTarget.pause()}
+                                          onCanPlay={() => {
+                                            if (!videoReadyShots.has(shot.id)) {
+                                              setVideoReadyShots(prev => new Set([...prev, shot.id]));
+                                            }
+                                          }}
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center text-slate-600">
+                                            <ImageIcon className="w-8 h-8 opacity-20" />
+                                        </div>
+                                    )}
 
-                                  {/* Badges */}
-                                  <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
-                                      {hasVideo && <div className="p-1 bg-green-500 text-slate-50 rounded shadow-lg backdrop-blur"><Video className="w-3 h-3" /></div>}
-                                  </div>
+                                    {/* Badges */}
+                                    <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
+                                        {hasVideo && <div className="p-1 bg-green-500 text-slate-50 rounded shadow-lg backdrop-blur"><Video className="w-3 h-3" /></div>}
+                                    </div>
 
-                                  {!activeShotId && !hasImage && !hasVideo && (
-                                      <div className="absolute inset-0 bg-slate-700/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                          <span className="text-[12px] text-slate-50 font-bold uppercase tracking-wider bg-slate-800/50/90 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur">点击生成</span>
-                                      </div>
-                                  )}
-                              </div>
+                                    {!activeShotId && !hasImage && !hasVideo && (
+                                        <div className="absolute inset-0 bg-slate-700/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <span className="text-[12px] text-slate-50 font-bold uppercase tracking-wider bg-slate-800/50/90 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur">点击生成</span>
+                                        </div>
+                                    )}
+                                </div>
 
-                              {/* Footer */}
-                              <div className="p-3">
-                                  <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
-                                      {shot.actionSummary}
-                                  </p>
-                              </div>
-                          </div>
-                      );
-                  })}
-              </div>
+                                {/* Footer */}
+                                <div className="p-3">
+                                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                                        {shot.actionSummary}
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div></>
+                );
+              })}
           </div>
 
           {/* Right Workbench - Optimized Interaction */}
