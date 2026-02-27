@@ -1,5 +1,5 @@
 // components/ApiKeyModal.tsx
-import { ArrowRight, Key, ShieldCheck, X } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff, Key, ShieldCheck, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 interface ApiKeyModalProps {
@@ -18,6 +18,8 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
   const [inputCozeApiKey, setInputCozeApiKey] = useState('');
   const [inputFileUploadServiceUrl, setInputFileUploadServiceUrl] = useState('');
   const [inputFileAccessDomain, setInputFileAccessDomain] = useState('');
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [showCozeApiKey, setShowCozeApiKey] = useState(false);
 
   // 从 localStorage 加载配置
   useEffect(() => {
@@ -103,13 +105,23 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
              <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2">
                火山引擎 / 豆包 API Key
              </label>
-             <input
-               type="password"
-               value={inputKey}
-               onChange={(e) => setInputKey(e.target.value)}
-               placeholder="Enter your API Key..."
-               className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
-             />
+             <div className="relative">
+               <input
+                 type={showApiKey ? "text" : "password"}
+                 value={inputKey}
+                 onChange={(e) => setInputKey(e.target.value)}
+                 placeholder="Enter your API Key..."
+                 className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 pr-10 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
+               />
+               <button
+                 type="button"
+                 onClick={() => setShowApiKey(!showApiKey)}
+                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-200 transition-colors"
+                 title={showApiKey ? "隐藏 API Key" : "显示 API Key"}
+               >
+                 {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+               </button>
+             </div>
              <p className="mt-3 text-[12px] text-slate-400 leading-relaxed">
                本应用默认使用火山引擎的大模型 API 。请确保您的 API Key 已开通相应的服务权限。
                <a
@@ -151,13 +163,23 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
              <label className="block text-[12px] font-bold text-slate-500 uppercase tracking-widest mb-2 mt-2">
                Coze API Key
              </label>
-             <input
-               type="password"
-               value={inputCozeApiKey}
-               onChange={(e) => setInputCozeApiKey(e.target.value)}
-               placeholder="Enter Coze API Key..."
-               className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
-             />
+             <div className="relative">
+               <input
+                 type={showCozeApiKey ? "text" : "password"}
+                 value={inputCozeApiKey}
+                 onChange={(e) => setInputCozeApiKey(e.target.value)}
+                 placeholder="Enter Coze API Key..."
+                 className="w-full bg-slate-800 border border-slate-600 text-slate-50 px-4 py-3 pr-10 text-sm rounded-lg focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-900 transition-all font-mono placeholder:text-slate-400"
+               />
+               <button
+                 type="button"
+                 onClick={() => setShowCozeApiKey(!showCozeApiKey)}
+                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-200 transition-colors"
+                 title={showCozeApiKey ? "隐藏 API Key" : "显示 API Key"}
+               >
+                 {showCozeApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+               </button>
+             </div>
              <p className="mt-3 text-[12px] text-slate-400 leading-relaxed">
                本应用需要 Coze 的 API 访问权限。
                <a

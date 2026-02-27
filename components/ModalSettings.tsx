@@ -1,4 +1,4 @@
-import { Check, ChevronRight, Download, Edit, Film, Globe, Image, Key, Link, Music, Plus, Sparkles, Tags, Trash2, Upload, X } from 'lucide-react';
+import { Check, ChevronRight, Download, Edit, Eye, EyeOff, Film, Globe, Image, Key, Link, Music, Plus, Sparkles, Tags, Trash2, Upload, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { triggerModelConfigChanged } from '../services/modelConfigEvents';
 import { createDefaultModelConfigs, saveModelConfigWithExclusiveEnabled, toggleConfigEnabled } from '../services/modelConfigService';
@@ -95,6 +95,7 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
     enabled: false,
     description: ''
   });
+  const [showApiKey, setShowApiKey] = useState(false);
 
   const loadConfigs = async () => {
     try {
@@ -432,13 +433,23 @@ const ModalSettings: React.FC<Props> = ({ isOpen, onClose, isMobile=false }) => 
                   <Key className="w-3 h-3" />
                   API Key
                 </label>
-                <input
-                  type="password"
-                  value={formData.apiKey}
-                  onChange={(e) => setFormData({ ...formData, apiKey: e.target.value })}
-                  className="w-full bg-bg-selected border border-slate-800 text-text-primary px-3 py-2.5 text-sm rounded-md focus:border-slate-600 focus:outline-none transition-all font-mono placeholder:text-slate-400"
-                  placeholder="输入您的 API Key..."
-                />
+                <div className="relative">
+                  <input
+                    type={showApiKey ? "text" : "password"}
+                    value={formData.apiKey}
+                    onChange={(e) => setFormData({ ...formData, apiKey: e.target.value })}
+                    className="w-full bg-bg-selected border border-slate-800 text-text-primary px-3 py-2.5 pr-10 text-sm rounded-md focus:border-slate-600 focus:outline-none transition-all font-mono placeholder:text-slate-400"
+                    placeholder="输入您的 API Key..."
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowApiKey(!showApiKey)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-200 transition-colors"
+                    title={showApiKey ? "隐藏 API Key" : "显示 API Key"}
+                  >
+                    {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
 
               {/* Model Name - Optional */}
