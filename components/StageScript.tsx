@@ -1304,7 +1304,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                         {/* Shot Rows */}
                         <div className="divide-y divide-slate-600">
                            {sceneShots.map((shot) => (
-                             <div key={shot.id} className="group bg-slate-900 hover:bg-slate-700/40 transition-colors p-4 py-4 gap-4 md:p-8 flex flex-col items-center justify-around md:gap-8" >
+                             <div key={shot.id} className="group bg-slate-900 hover:bg-slate-700/40 transition-colors p-4 py-4 gap-4 md:p-8 flex flex-col md:flex-row items-start justify-around md:gap-8" >
 
 <div className="w-full flex justify-between items-center gap-4 md:gap-8">
                                 {/* Shot ID & Tech Data */}
