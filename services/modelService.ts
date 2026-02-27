@@ -674,7 +674,7 @@ export class ModelService {
       console.log('audioDataUrl:', audioDataUrl);
       // 上传到文件服务器
       const uploadResponse = await uploadFileToService({
-        fileType: projectId + '_audio_tts',
+        fileType: projectId + '/audio_tts',
         base64Data: audioBase64,
         fileName: 's.mp3'
       });
@@ -786,7 +786,7 @@ export class ModelService {
       const isBase64 = imageUrlOrBase64.startsWith('data:');
 
       const uploadResponse = await uploadFileToService({
-        fileType: projectid+'_'+imageType+'_'+provider,
+        fileType: projectid+'/image_'+imageType,
         fileUrl: isBase64 ? undefined : imageUrlOrBase64,
         base64Data: isBase64 ? imageUrlOrBase64 : undefined
       });
@@ -877,7 +877,7 @@ export class ModelService {
     // 将模型返回的视频 URL 转换成本地服务器文件
     try {
       const uploadResponse = await uploadFileToService({
-        fileType: projectid+'_video_'+provider,
+        fileType: projectid+'/video',
         fileUrl: videoUrl
       });
 
