@@ -2,16 +2,13 @@
 
 @theme {
   /* 定义Tailwind颜色变量 */
-  --color-bg-selected: var(--bg-selected);
-  --color-bg-button: var(--bg-button);
-  --color-bg-progress: var(--bg-progress);
   --color-dark-bg-selected: var(--color-slate-600);
   --color-dark-bg-button: var(--color-slate-900);
   --color-dark-bg-progress: var(--color-slate-900);
   
-  --color-light-bg-selected: var(--color-gray-300);
-  --color-light-bg-button: var(--color-gray-100);
-  --color-light-bg-progress: var(--color-gray-50);
+  --color-light-bg-selected: var(--color-slate-600);
+  --color-light-bg-button: var(--color-slate-900);
+  --color-light-bg-progress: var(--color-slate-900);
   
 }
 
@@ -22,6 +19,7 @@
 
   /* 浅色主题下调整gray颜色 */
   :root[data-theme="light"] {
+
     --color-slate-50: var(--color-gray-950);
     --color-slate-100: var(--color-gray-900);
     --color-slate-200: var(--color-gray-800);
@@ -33,6 +31,19 @@
     --color-slate-800: var(--color-gray-100);
     --color-slate-900: var(--color-gray-100);
     --color-slate-950: var(--color-gray-50);
+
+    --bg-primary: var(--color-light-bg-primary);
+    --bg-secondary: var(--color-light-bg-secondary);
+    --bg-panel: var(--color-light-bg-panel);
+    --bg-input: var(--color-light-bg-input);
+    --bg-footer: var(--color-light-bg-footer);
+    --bg-modal: var(--color-light-bg-modal);
+    --bg-selected: var(--color-light-bg-selected);
+    --bg-sidebar: var(--color-light-bg-sidebar);
+    --bg-header: var(--color-light-bg-header);
+    --bg-card: var(--color-light-bg-card);
+    --bg-button: var(--color-light-bg-button);
+    --bg-progress: var(--color-light-bg-progress);
   }
 
   /* 默认深色主题 */
@@ -49,22 +60,6 @@
     --bg-card: var(--color-dark-bg-card);
     --bg-button: var(--color-dark-bg-button);
     --bg-progress: var(--color-dark-bg-progress);
-  }
-
-  /* 浅色主题 */
-  :root[data-theme="light"] {
-    --bg-primary: var(--color-light-bg-primary);
-    --bg-secondary: var(--color-light-bg-secondary);
-    --bg-panel: var(--color-light-bg-panel);
-    --bg-input: var(--color-light-bg-input);
-    --bg-footer: var(--color-light-bg-footer);
-    --bg-modal: var(--color-light-bg-modal);
-    --bg-selected: var(--color-light-bg-selected);
-    --bg-sidebar: var(--color-light-bg-sidebar);
-    --bg-header: var(--color-light-bg-header);
-    --bg-card: var(--color-light-bg-card);
-    --bg-button: var(--color-light-bg-button);
-    --bg-progress: var(--color-light-bg-progress);
   }
 
   /* 跟随系统主题 */
@@ -106,7 +101,6 @@
     background: var(--border-primary); 
   }
   ::selection {
-    background-color: var(--color-slate-200);  
-    color: var(--color-slate-900);              /* 选中文字颜色 */
+    background-color: var(--bg-selected);  
   }
 }
