@@ -105,7 +105,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentStage, setStage, onExit, onOpe
             >
               <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
                 <item.icon className={`w-4 h-4 ${isActive ? 'text-slate-50' : 'text-slate-400 group-hover:text-slate-500'}`} />
-                {!collapsed && <span className="font-medium text-xs tracking-wider uppercase">{item.label}</span>}
+                {!collapsed && <span className={`${isActive ? 'font-bold' : 'font-medium'} text-xs tracking-wider uppercase`}>{item.label}</span>}
               </div>
               {!collapsed && <span className={`text-[12px] font-mono ${isActive ? 'text-slate-400' : 'text-slate-500'}`}>{item.sub}</span>}
             </button>

@@ -31,7 +31,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
       {/* 顶部栏 */}
       <div className="flex items-center justify-between px-2 py-2">
         {/* 左侧：Logo 和 返回按钮 */}
-        <div className="flex items-center gap-3">y
+        <div className="flex items-center gap-2">
           <button
             onClick={onExit}
             className="text-slate-400 hover:text-slate-50 transition-colors"
@@ -40,7 +40,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
           </button>
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 bg-slate-800 text-slate-50 flex items-center justify-center flex-shrink-0">
-              <Aperture className="w-4 h-4" />
+              <Aperture className="w-5 h-5" />
             </div>
             <div className="overflow-hidden">
               <div className="flex items-center gap-2">
@@ -95,7 +95,7 @@ const SidebarMobile: React.FC<SidebarMobileProps> = ({ currentStage, setStage, o
               `}
             >
               <item.icon className={`w-5 h-5 ${isActive ? 'text-slate-50' : ''}`} />
-              <span className="text-[10px] font-medium tracking-wider uppercase mt-1">
+              <span className={`text-[10px] tracking-wider uppercase mt-1 ${isActive ? 'font-bold' : 'font-medium'}`}>
                 {item.label}
               </span>
             </button>
