@@ -9,7 +9,7 @@ export const PROMPT_TEMPLATES = {
 
   SYSTEM_PHOTOGRAPHER: "你是一名专业的摄影师。请始终以有效的 JSON 数组格式进行回复。",
 
-  SYSTEM_SCREENWRITER: "你是一名专业的编剧，擅长创作各种类型的广告，短剧，影视剧本。",
+  SYSTEM_SCREENWRITER: "你是一名专业的编剧，擅长创作各种类型的广告，短剧，影视剧本。请以MarkDown格式输出剧本故事概要，包含标题、时间、地点、角色、天气、场景、对话等。",
 
   SYSTEM_VISUAL_DESIGNER: "你是一名专业的影视美术设计师，擅长为影视角色和场景设计服装、造型、道具等，以专业词汇描述你设计的角色或场景。",
 
