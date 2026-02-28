@@ -1,5 +1,5 @@
+import { AlertTriangle, CheckCircle, Info, XCircle } from 'lucide-react';
 import React from 'react';
-import { Info, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 
 interface AlertDialogProps {
   title?: string;
@@ -26,7 +26,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center"
+      className="fixed inset-0 z-[1000] flex items-center justify-center"
       onClick={onClose}
     >
       <div className="absolute inset-0 bg-slate-700/60 backdrop-blur-sm" />
