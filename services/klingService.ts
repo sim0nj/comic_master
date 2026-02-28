@@ -90,19 +90,16 @@ export async function generateVideo(
     };
     if (startImageBase64){
       requestBody.image = startImageBase64;
-    }
-    if (endImageBase64){
-      requestBody.image_tail = endImageBase64;
-    }
-    if(runtimeVideoModel.indexOf("2-6")>0){
-      requestBody.sound = 'on';
+      const match = startImageBase64.match(/^data:(image\/[a-zA-Z]+);base64,(.+)$/);
+      if (match) {
+        requestBody.image =  match[2];
+      }else {
+        requestBody.image = startImageBase64;
+      }
     }
 
-    const match = startImageBase64.match(/^data:(image\/[a-zA-Z]+);base64,(.+)$/);
-    if (match) {
-      requestBody.image =  match[2];
-    }else {
-      requestBody.image = startImageBase64;
+    if(runtimeVideoModel.indexOf("2-6")>0){
+      requestBody.sound = 'on';
     }
 
     // 处理结束图片（如果不是宫格模式）
