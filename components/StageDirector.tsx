@@ -1150,9 +1150,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                           data-shot-id={shot.id}
                                           src={shot.interval?.videoUrl}
                                           className="w-full h-full object-cover"
-                                          muted controls autoPlay loop
-                                          onMouseEnter={(e) => e.currentTarget.play()}
-                                          onMouseLeave={(e) => e.currentTarget.pause()}
+                                          muted controls loop
                                           onCanPlay={() => {
                                             if (!videoReadyShots.has(shot.id)) {
                                               setVideoReadyShots(prev => new Set([...prev, shot.id]));
@@ -1180,9 +1178,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                           data-shot-id={shot.id}
                                           src={shot.interval?.videoUrl}
                                           className="w-full h-full object-cover"
-                                          muted controls autoPlay loop
-                                          onMouseEnter={(e) => e.currentTarget.play()}
-                                          onMouseLeave={(e) => e.currentTarget.pause()}
+                                          muted controls loop
                                           onCanPlay={() => {
                                             if (!videoReadyShots.has(shot.id)) {
                                               setVideoReadyShots(prev => new Set([...prev, shot.id]));
