@@ -17,9 +17,9 @@ const PROVIDER_OPTIONS = [
   { value: 'deepseek', label: 'DeepSeek', apiUrl: 'https://platform.deepseek.com/' },
   { value: 'openai', label: 'OpenAI', apiUrl: 'https://platform.openai.com/' },
   { value: 'gemini', label: 'Gemini (Google)', apiUrl: 'https://ai.google.dev/' },
-  { value: 'yunwu', label: 'Yunwu (云雾)', apiUrl: 'https://yunwu.ai/' },
-  { value: 'minimax', label: 'Minimax (海螺)', apiUrl: 'https://www.minimaxi.com/' },
-  { value: 'kling', label: 'Kling (可灵)', apiUrl: 'https://klingai.com/' },
+  { value: 'yunwu', label: 'Yunwu (云雾)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
+  { value: 'minimax', label: 'Minimax (海螺，云雾中转)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
+  { value: 'kling', label: 'Kling (可灵，云雾中转)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
   { value: 'baidu', label: 'Baidu (百度)', apiUrl: 'https://cloud.baidu.com/' },
 ] as const;
 
