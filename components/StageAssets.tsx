@@ -901,9 +901,10 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
         isOpen={fileUploadModalOpen}
         onClose={() => setFileUploadModalOpen(false)}
         onUploadSuccess={handleFileUploadSuccess}
-        fileType={uploadingItem?.type === 'scene' ? 'scene' : 'yunwu_image'}
+        fileType={uploadingItem?.type === 'scene' ? 'scene' : 'character'}
         acceptTypes="image/png,image/jpeg,image/jpg"
         title={uploadingItem?.type === 'scene' ? '上传场景图片' : '上传角色图片'}
+        projectid={project.id}
       />
 
       {/* Fullscreen Image Preview Modal */}

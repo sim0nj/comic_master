@@ -1734,9 +1734,10 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
         isOpen={fileUploadModalOpen}
         onClose={() => setFileUploadModalOpen(false)}
         onUploadSuccess={handleFileUploadSuccess}
-        fileType={uploadingKeyframe?.type === 'full' ? 'scene' : 'kf'}
+        fileType={uploadingKeyframe?.type === 'full' ? 'full' : 'start_end'}
         acceptTypes="image/png,image/jpeg,image/jpg"
         title={uploadingKeyframe?.type === 'full' ? '上传宫格图' : uploadingKeyframe?.type === 'start' ? '上传起始帧' : '上传尾帧'}
+        projectid={project.id}
       />
     </div>
     </div>

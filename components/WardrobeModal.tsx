@@ -1,8 +1,9 @@
-import { Loader2, Plus, RefreshCw, Shirt, User, X } from 'lucide-react';
+import { Download, Loader2, Plus, RefreshCw, Shirt, Upload, User, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { ModelService } from '../services/modelService';
 import { PROMPT_TEMPLATES } from '../services/promptTemplates';
 import { Character, CharacterVariation, ProjectState } from '../types';
+import FileUploadModal from './FileUploadModal';
 import { useDialog } from './dialog';
 
 interface Props {
@@ -33,6 +34,8 @@ const WardrobeModal: React.FC<Props> = ({
   const [newVarName, setNewVarName] = useState("");
   const [newVarPrompt, setNewVarPrompt] = useState("");
   const [editingVisualPrompt, setEditingVisualPrompt] = useState("");
+  const [fileUploadModalOpen, setFileUploadModalOpen] = useState(false);
+  const [uploadingVariationId, setUploadingVariationId] = useState<string | null>(null);
 
   // Sync visual prompt when character is selected
   useEffect(() => {
@@ -119,6 +122,46 @@ const WardrobeModal: React.FC<Props> = ({
     }
   };
 
+  const handleDownloadImage = async (imageUrl: string, name: string) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${name}.png`;
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      await dialog.alert({ title: '错误', message: '下载失败，请重试', type: 'error' });
+    }
+  };
+
+  const handleFileUploadClick = (varId: string) => {
+    setUploadingVariationId(varId);
+    setFileUploadModalOpen(true);
+  };
+
+  const handleFileUploadSuccess = (fileUrl: string) => {
+    if (!project.scriptData || !character || !uploadingVariationId) return;
+
+    const newData = { ...project.scriptData };
+    const char = newData.characters.find(c => c.id === character.id);
+    if (char) {
+      const variation = char.variations?.find(v => v.id === uploadingVariationId);
+      if (variation) {
+        variation.referenceImage = fileUrl;
+        updateProject({ scriptData: newData });
+      }
+    }
+    setUploadingVariationId(null);
+  };
+
   if (!character) return null;
 
   return (
@@ -142,7 +185,7 @@ const WardrobeModal: React.FC<Props> = ({
             
             {/* Modal Body */}
             <div className="flex-1 overflow-y-auto p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-8">
                     {/* Base Look */}
                     <div>
                         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
@@ -187,7 +230,7 @@ const WardrobeModal: React.FC<Props> = ({
                             {/* List */}
                             {(character.variations || []).map((variation) => (
                                 <div key={variation.id} className="flex gap-4 p-4 bg-slate-800 border border-slate-600 rounded-xl group hover:border-slate-300 transition-colors">
-                                    <div className={`w-20 h-24 bg-slate-900 rounded-lg flex-shrink-0 overflow-hidden relative border border-slate-600 ${variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? 'cursor-pointer' : ''}`} onClick={variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? () => setPreviewImage(variation.referenceImage) : undefined}>
+                                    <div className={`w-24 h-32 bg-slate-900 rounded-lg flex-shrink-0 overflow-hidden relative border border-slate-600 ${variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? 'cursor-pointer' : ''}`} onClick={variation.referenceImage && !(processingState?.type === 'character' && processingState?.id === variation.id) ? () => setPreviewImage(variation.referenceImage) : undefined}>
                                         {variation.referenceImage ? (
                                             <img src={variation.referenceImage} className="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
                                         ) : (
@@ -205,6 +248,25 @@ const WardrobeModal: React.FC<Props> = ({
                                                 <Loader2 className="w-4 h-4 text-slate-50 animate-spin" />
                                             </div>
                                         )}
+<div className="absolute bottom-0 right-0 flex items-center justify-center gap-1 p-1">
+                                        {variation.referenceImage && (
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); handleDownloadImage(variation.referenceImage!, variation.name); }}
+                                            className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-slate-50 transition-colors border border-white/10 backdrop-blur"
+                                            title="下载图片"
+                                        >
+                                            <Download className="w-3 h-3" />
+                                        </button>
+                                        )}
+                                        <button
+                                            onClick={(e) => { e.stopPropagation(); handleFileUploadClick(variation.id); }}
+                                            disabled={!!processingState}
+                                            className="p-2 bg-slate-700/50 text-slate-50 rounded-full hover:bg-slate-800 hover:text-slate-50 transition-colors border border-white/10 backdrop-blur disabled:opacity-50 disabled:cursor-not-allowed"
+                                            title="上传图片"
+                                        >
+                                            <Upload className="w-3 h-3" />
+                                        </button>
+</div>
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-start mb-2">
@@ -254,6 +316,17 @@ const WardrobeModal: React.FC<Props> = ({
                 </div>
             </div>
         </div>
+
+        {/* File Upload Modal */}
+        <FileUploadModal
+          isOpen={fileUploadModalOpen}
+          onClose={() => setFileUploadModalOpen(false)}
+          onUploadSuccess={handleFileUploadSuccess}
+          fileType="wardrobe"
+          acceptTypes="image/png,image/jpeg,image/jpg"
+          title="上传造型图片"
+          projectid={project.id}
+        />
     </div>
   );
 };

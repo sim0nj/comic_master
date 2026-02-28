@@ -10,6 +10,7 @@ interface Props {
   fileType?: string;
   acceptTypes?: string;
   title?: string;
+  projectid?: string;
 }
 
 const FileUploadModal: React.FC<Props> = ({
@@ -18,7 +19,8 @@ const FileUploadModal: React.FC<Props> = ({
   onUploadSuccess,
   fileType = 'image',
   acceptTypes = 'image/png,image/jpeg,image/jpg',
-  title = '上传图片'
+  title = '上传图片',
+  projectid
 }) => {
   const dialog = useDialog();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -69,7 +71,7 @@ const FileUploadModal: React.FC<Props> = ({
 
     setUploading(true);
     try {
-      const result = await uploadBase64File(previewUrl, fileType);
+      const result = await uploadBase64File(previewUrl, projectid?projectid+'/'+fileType:fileType);
 
       if (result.success && result.data?.url) {
         setUploadSuccess(true);
