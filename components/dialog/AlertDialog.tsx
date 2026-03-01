@@ -39,7 +39,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
             <Icon className={`w-8 h-8 ${config.iconColor}`} />
           </div>
           {title && <h3 className="text-lg font-semibold text-slate-50 mb-2">{title}</h3>}
-          <p className="text-slate-300 mb-6">{message}</p>
+          <p className="text-slate-300 mb-6 whitespace-wrap line-clamp-6 tracking-wide">{message}</p>
           <button
             onClick={onClose}
             className="w-full px-4 py-2.5 bg-slate-600 hover:bg-slate-700 text-slate-50 font-medium rounded-lg transition-colors"
