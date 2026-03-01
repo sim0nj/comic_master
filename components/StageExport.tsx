@@ -207,7 +207,7 @@ const StageExport: React.FC<Props> = ({ project, updateProject }) => {
 
       try {
         const uploadResponse = await uploadFileToService({
-          fileType: project.id+'_video',
+          fileType: project.id+'/video',
           fileUrl: mergedUrl
         });
 

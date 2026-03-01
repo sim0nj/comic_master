@@ -120,7 +120,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       }
 
       // Real API Call
-      imageUrl = await ModelService.generateImage(prompt, [], type, localStyle, imagesize,1,null,project.id);
+      imageUrl = await ModelService.generateImage(prompt, [], type, localStyle, imagesize,1,null,project.id,id);
 
     } catch (e) {
       console.error(e);

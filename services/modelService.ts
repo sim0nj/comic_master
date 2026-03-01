@@ -751,7 +751,7 @@ export class ModelService {
       //console.log('audioDataUrl:', audioDataUrl);
       // 上传到文件服务器
       const uploadResponse = await uploadFileToService({
-        fileType: projectId + '/audio_tts',
+        fileType: projectId + '/audio/tts',
         base64Data: audioBase64,
         fileName: 's.mp3'
       });
@@ -800,6 +800,7 @@ export class ModelService {
     imageCount: number = 1,
     shotprovider: any = null,
     projectid: string = "",
+    shotid: string = "0",
   ): Promise<string> {
     const provider = await this.getEnabledImageProvider(shotprovider || this.currentProjectModelProviders);
     //console.log(`使用 ${provider} 生成图片`);
@@ -863,7 +864,7 @@ export class ModelService {
       const isBase64 = imageUrlOrBase64.startsWith('data:');
 
       const uploadResponse = await uploadFileToService({
-        fileType: projectid+'/image_'+imageType,
+        fileType: projectid+'/image/'+imageType+'/'+shotid,
         fileUrl: isBase64 ? undefined : imageUrlOrBase64,
         base64Data: isBase64 ? imageUrlOrBase64 : undefined
       });
@@ -900,6 +901,7 @@ export class ModelService {
     projectid: string = "",
     imageSize: string = "2560x1440",
     visualStyle: string = "真人写实",
+    shotid: string = "0",
   ): Promise<string> {
     const provider = await this.getEnabledVideoProvider(shotprovider || this.currentProjectModelProviders);
     //console.log(`使用 ${provider} 生成视频`);
@@ -965,7 +967,7 @@ export class ModelService {
     // 将模型返回的视频 URL 转换成本地服务器文件
     try {
       const uploadResponse = await uploadFileToService({
-        fileType: projectid+'/video',
+        fileType: projectid+'/video/'+shotid,
         fileUrl: videoUrl
       });
 

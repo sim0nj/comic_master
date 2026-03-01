@@ -248,7 +248,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
     try {
       const referenceImages = getRefImagesForShot(shot);
       const referencePrompt = getRefImagesDescForShot(shot);
-      const url = await ModelService.generateImage(prompt + (referencePrompt?referencePrompt:""), referenceImages, type, localStyle, imageSize,type === 'full'?imageCount:1, shot.modelProviders,project.id);
+      const url = await ModelService.generateImage(prompt + (referencePrompt?referencePrompt:""), referenceImages, type, localStyle, imageSize,type === 'full'?imageCount:1, shot.modelProviders,project.id,shot.id);
       existingKf.imageUrl = url;
       updateProject({ 
         shots: project.shots.map(s => {
@@ -326,7 +326,8 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
           imageCount>1,
           shot.modelProviders,
           project.id,
-          project.imageSize
+          project.imageSize,
+          shot.id
       );
 
       updateShot(shot.id, (s) => ({
@@ -482,7 +483,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                 }
                 const existingFf = shot.keyframes?.find(k => k.type === 'full');
                 const ffId = existingFf?.id || `kf-${shot.id}-full-${Date.now()}`;
-                const full_url = await ModelService.generateImage(full_prompt + (referencePrompt?referencePrompt:""), referenceImages, "full", localStyle, imageSize, 1, shot.modelProviders,project.id);
+                const full_url = await ModelService.generateImage(full_prompt + (referencePrompt?referencePrompt:""), referenceImages, "full", localStyle, imageSize, 1, shot.modelProviders,project.id,shot.id);
                 currentShots = currentShots.map(s => {
                     if (s.id !== shot.id) return s;
                     const newKeyframes = [...(s.keyframes || [])];
@@ -502,7 +503,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                 const existingKf = shot.keyframes?.find(k => k.type === 'start');
                 let prompt = existingKf?.visualPrompt || shot.actionSummary;
                 const kfId = existingKf?.id || `kf-${shot.id}-start-${Date.now()}`;
-                const url = await ModelService.generateImage(prompt + (referencePrompt?referencePrompt:""), referenceImages, "start", localStyle, imageSize, 1, shot.modelProviders,project.id);
+                const url = await ModelService.generateImage(prompt + (referencePrompt?referencePrompt:""), referenceImages, "start", localStyle, imageSize, 1, shot.modelProviders,project.id,shot.id);
                 currentShots = currentShots.map(s => {
                     if (s.id !== shot.id) return s;
                     const newKeyframes = [...(s.keyframes || [])];
@@ -522,7 +523,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                 const existingEf = shot.keyframes?.find(k => k.type === 'end');
                 let end_prompt = existingEf?.visualPrompt || shot.actionSummary;
                 const efId = existingEf?.id || `kf-${shot.id}-end-${Date.now()}`;
-                const end_url = await ModelService.generateImage(end_prompt + (referencePrompt?referencePrompt:""), referenceImages, "end", localStyle, imageSize, 1, shot.modelProviders,project.id);
+                const end_url = await ModelService.generateImage(end_prompt + (referencePrompt?referencePrompt:""), referenceImages, "end", localStyle, imageSize, 1, shot.modelProviders,project.id,shot.id);
                 currentShots = currentShots.map(s => {
                     if (s.id !== shot.id) return s;
                     const newKeyframes = [...(s.keyframes || [])];
@@ -752,7 +753,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                   const existingFf = shot.keyframes?.find(k => k.type === 'full');
                   let full_prompt = existingFf?.visualPrompt || shot.actionSummary;
                   const ffId = existingFf?.id || `kf-${shot.id}-full-${Date.now()}`;
-                  const full_url = await ModelService.generateImage(full_prompt + (referencePrompt?referencePrompt:""), referenceImages, "full", localStyle, imageSize, 1, shot.modelProviders,project.id);
+                  const full_url = await ModelService.generateImage(full_prompt + (referencePrompt?referencePrompt:""), referenceImages, "full", localStyle, imageSize, 1, shot.modelProviders,project.id,shot.id);
                   currentShots = currentShots.map(s => {
                       if (s.id !== shot.id) return s;
                       const newKeyframes = [...(s.keyframes || [])];
@@ -772,7 +773,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                   const existingKf = shot.keyframes?.find(k => k.type === 'start');
                   let prompt = existingKf?.visualPrompt || shot.actionSummary;
                   const kfId = existingKf?.id || `kf-${shot.id}-start-${Date.now()}`;
-                  const url = await ModelService.generateImage(prompt + (referencePrompt?referencePrompt:""), referenceImages, "start", localStyle, imageSize, 1, shot.modelProviders,project.id);
+                  const url = await ModelService.generateImage(prompt + (referencePrompt?referencePrompt:""), referenceImages, "start", localStyle, imageSize, 1, shot.modelProviders,project.id,shot.id);
                   currentShots = currentShots.map(s => {
                       if (s.id !== shot.id) return s;
                       const newKeyframes = [...(s.keyframes || [])];
@@ -792,7 +793,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                   const existingEf = shot.keyframes?.find(k => k.type === 'end');
                   let end_prompt = existingEf?.visualPrompt || shot.actionSummary;
                   const efId = existingEf?.id || `kf-${shot.id}-end-${Date.now()}`;
-                  const end_url = await ModelService.generateImage(end_prompt + (referencePrompt?referencePrompt:""), referenceImages, "end", localStyle, imageSize, 1, shot.modelProviders,project.id);
+                  const end_url = await ModelService.generateImage(end_prompt + (referencePrompt?referencePrompt:""), referenceImages, "end", localStyle, imageSize, 1, shot.modelProviders,project.id,shot.id);
                   currentShots = currentShots.map(s => {
                       if (s.id !== shot.id) return s;
                       const newKeyframes = [...(s.keyframes || [])];
