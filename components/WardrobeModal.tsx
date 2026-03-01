@@ -138,7 +138,7 @@ const WardrobeModal: React.FC<Props> = ({
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Download failed:', error);
-      await dialog.alert({ title: '错误', message: '下载失败，请重试', type: 'error' });
+      await dialog.alert({ title: '错误', message: '下载失败，请重试。'+error?.message, type: 'error' });
     }
   };
 

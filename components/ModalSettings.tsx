@@ -20,6 +20,7 @@ const PROVIDER_OPTIONS = [
   { value: 'yunwu', label: 'Yunwu (云雾)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
   { value: 'minimax', label: 'Minimax (海螺，云雾中转)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
   { value: 'kling', label: 'Kling (可灵，云雾中转)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
+  { value: 'sora', label: 'sora (sora，云雾中转)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
   { value: 'baidu', label: 'Baidu (百度)', apiUrl: 'https://cloud.baidu.com/' },
 ] as const;
 
@@ -40,6 +41,7 @@ const PROVIDER_MODEL_TYPES: Record<string, readonly string[]> = {
   yunwu: ['llm', 'text2image', 'image2video'] as const,
   minimax: ['image2video'] as const,
   kling: ['image2video'] as const,
+  sora: ['image2video'] as const,
   baidu: ['tts'] as const,
 };
 

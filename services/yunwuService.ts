@@ -110,7 +110,7 @@ const fetchWithRetry = async (
     if (!response.ok) {
       const error = await response.json();
       throw new Error(
-        `API Error (${response.status}): ${error.error?.message || error.message || response.statusText}`
+        `API Error (${response.status}): ${error.error?.message || error.message || error.error}`
       );
     }
 
@@ -220,7 +220,8 @@ export const generateVideo = async (
   startImageBase64?: string,
   endImageBase64?: string,
   duration: number = 5,
-  full_frame: boolean = false
+  full_frame: boolean = false,
+  imageSize: string = '720x1280',
 ): Promise<string> => {
   const endpoint = `${runtimeApiUrl}/v1/video/create`;
 
@@ -231,19 +232,24 @@ export const generateVideo = async (
     images: [],
   };
 
+  // 根据 imageSize 判断横竖屏
+  const [width, height] = imageSize.split('x').map(Number);
+  const isLandscape = width > height;
+  const size = isLandscape ? '1280x720' : '720x1280';
+
   if(runtimeVideoModel.indexOf("veo") !== -1) {
     requestBody.enhance_prompt=true;
     requestBody.enable_upsample=true;
-    requestBody.aspect_ratio="16:9";
+    requestBody.aspect_ratio=isLandscape?"16:9":"9:16";
   }
   if(runtimeVideoModel.indexOf("sora") !== -1) {
     requestBody.size = "small";
-    requestBody.orientation="portrait";
+    requestBody.orientation=isLandscape?"portrait":"landscape";
     requestBody.watermark=false;
   }
   if(runtimeVideoModel.indexOf("grok") !== -1) {
     requestBody.size = "720P";
-    requestBody.aspect_ratio="3:2";
+    requestBody.aspect_ratio=isLandscape?"3:2":"2:3";
   }
 
   // 处理起始图片

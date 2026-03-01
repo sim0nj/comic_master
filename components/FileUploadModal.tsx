@@ -81,11 +81,11 @@ const FileUploadModal: React.FC<Props> = ({
           onClose();
         }, 800);
       } else {
-        await dialog.alert({ title: '错误', message: result.error || '上传失败，请重试', type: 'error' });
+        await dialog.alert({ title: '错误', message: result.error || '上传失败，请重试。', type: 'error' });
       }
     } catch (error) {
       console.error('Upload error:', error);
-      await dialog.alert({ title: '错误', message: '上传失败，请重试', type: 'error' });
+      await dialog.alert({ title: '错误', message: '上传失败，请重试。'+error?.message, type: 'error' });
     } finally {
       setUploading(false);
     }

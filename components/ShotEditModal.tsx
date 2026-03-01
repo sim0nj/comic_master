@@ -279,7 +279,6 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose, ima
           </div>
 
           {/* Keyframes */}
-          {imageCount > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">关键帧</label>
@@ -337,7 +336,6 @@ const ShotEditModal: React.FC<Props> = ({ shot, characters, onSave, onClose, ima
               </div>
             )}
           </div>
-          )}
 
           {/* Model Providers */}
           <div className="space-y-4 border-t border-slate-600 pt-4">

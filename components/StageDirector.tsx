@@ -278,7 +278,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       if(e.message?.includes("enough")){
         await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
       }else{
-        await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+        await dialog.alert({ title: '错误', message: '生成失败，请重试。'+e?.message, type: 'error' });
       }
     } finally {
       setProcessingState(null);
@@ -325,7 +325,8 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
           shot.interval?.duration||5,
           imageCount>1,
           shot.modelProviders,
-          project.id
+          project.id,
+          project.imageSize
       );
 
       updateShot(shot.id, (s) => ({
@@ -338,7 +339,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
       if(e.message?.includes("enough")){
         await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
       }else{
-        await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+        await dialog.alert({ title: '错误', message: '生成失败，请重试。'+e?.message, type: 'error' });
       }
     } finally {
       setProcessingState(null);
@@ -545,7 +546,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
             if(e.message?.includes("enough")){
               await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
             }else{
-              await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+              await dialog.alert({ title: '错误', message: '生成失败，请重试。'+e?.message, type: 'error' });
             }
             console.error(`Failed to generate for shot ${shot.id}`, e);
           }
@@ -816,7 +817,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
             if(e.message?.includes("enough")){
                 await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
             }else{
-                await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+                await dialog.alert({ title: '错误', message: '生成失败，请重试。'+e?.message, type: 'error' });
             }
             console.error(`Failed to generate for shot ${shot.id}`, e);
         }
@@ -1225,7 +1226,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
 
           {/* Right Workbench - Optimized Interaction */}
           {activeShotId && activeShot && (
-              <div className={`${isMobile ? 'w-full' : 'md:w-[480px] lg:w-[480px] 3xl:w-[640px]'} bg-slate-700/50 flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20`}>
+              <div className={`${isMobile ? 'w-full' : 'md:w-[480px] lg:w-[480px] xl:w-[560px] 2xl:w-[640px] 3xl:w-[720px]'} bg-slate-700/50 flex flex-col h-full shadow-2xl animate-in slide-in-from-right-10 duration-300 relative z-20`}>
                   
                   {/* Workbench Header */}
                   <div className="h-16 md:px-6 px-2 border-b border-slate-600 flex items-center justify-between bg-slate-600/50 shrink-0">
@@ -1417,8 +1418,10 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                )}
                            </div>
 
-                           {imageCount>0 && (imageCount > 1 ? (
+                           {fullKf && (
                                <div className="space-y-2">
+                                   {imageCount > 0 && ( 
+                                    <>
                                    <div className="flex justify-between items-center">
                                        <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">宫格图</span>
                                        <div className="flex items-center gap-2">
@@ -1467,7 +1470,8 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                                 <Loader2 className="w-6 h-6 text-slate-500 animate-spin" />
                                             </div>
                                        )}
-                                   </div>
+                                   </div> </>
+                                   )}
                                    {/* Visual Prompt Editor */}
                                    {fullKf && (
                                        <textarea
@@ -1479,10 +1483,12 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                        />
                                    )}
                                </div>
-                           ) : (
-                               <div className="grid grid-cols-2 gap-4">
-                                   {/* Start Frame */}
+                           )}
+                          {startKf && (
+                          <div className="grid grid-cols-2 gap-4">
                                    <div className="space-y-2">
+                                   {/* Start Frame */}
+                                   {imageCount > 0 && (<>
                                        <div className="flex justify-between items-center">
                                            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">起始帧</span>
                                             <div className="flex items-center gap-2">
@@ -1532,6 +1538,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                                 </div>
                                            )}
                                        </div>
+                                   </>)}
                                        {/* Visual Prompt Editor */}
                                        {startKf && (
                                            <textarea
@@ -1546,6 +1553,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
 
                                    {/* End Frame */}
                                    <div className="space-y-2">
+                                       {imageCount > 0 && (<>
                                        <div className="flex justify-between items-center">
                                            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">结束帧</span>
                                            <div className="flex items-center gap-2">
@@ -1595,6 +1603,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                                 </div>
                                            )}
                                        </div>
+                                       </>)}
                                        {/* Visual Prompt Editor */}
                                        {endKf && (
                                            <textarea
@@ -1607,8 +1616,7 @@ const StageDirector: React.FC<Props> = ({ project, updateProject, isMobile=false
                                        )}
                                    </div>
                                </div>
-                           ))}
-
+                           )}
                            </div>
 
                            {/* Section 4: Video Generation */}

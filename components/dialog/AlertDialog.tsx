@@ -34,7 +34,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
         className="relative bg-slate-800 border border-slate-600/50 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex flex-col items-center text-center">
+        <div className="flex flex-col items-center text-center overflow-y-auto">
           <div className={`p-3 rounded-full ${config.bgColor} mb-4`}>
             <Icon className={`w-8 h-8 ${config.iconColor}`} />
           </div>

@@ -97,7 +97,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
 
     } catch (error) {
       console.error('语音合成失败:', error);
-      await dialog.alert({ title: '错误', message: '语音合成失败，请重试', type: 'error' });
+      await dialog.alert({ title: '错误', message: '语音合成失败，请重试。'+error?.message, type: 'error' });
     } finally {
       setGeneratingAudio(null);
     }
@@ -127,7 +127,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       if(e.message?.includes("enough")){
         await dialog.alert({ title: '错误', message: '余额不足，请充值', type: 'error' });
       }else{
-        await dialog.alert({ title: '错误', message: '生成失败，请重试', type: 'error' });
+        await dialog.alert({ title: '错误', message: '生成失败，请重试。'+e?.message, type: 'error' });
       }
     } finally {
       // Update state
@@ -245,7 +245,7 @@ const StageAssets: React.FC<Props> = ({ project, updateProject }) => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Download failed:', error);
-      await dialog.alert({ title: '错误', message: '下载失败，请重试', type: 'error' });
+      await dialog.alert({ title: '错误', message: '下载失败，请重试。'+error?.message, type: 'error' });
     }
   };
 

@@ -10,91 +10,99 @@ import { getAllModelConfigs } from "./storageService";
 
 // DeepSeek 方法
 import {
-    generateScript as generateScriptDeepseek,
-    generateShotList as generateShotListDeepseek,
-    generateShotListForScene as generateShotListDeepseekForScene,
-    generateVisualPrompts as generateVisualPromptsDeepseek,
-    parseScriptToData as parseScriptToDataDeepseek,
-    setApiKey as setDeepseekApiKey,
-    setApiUrl as setDeepseekApiUrl,
-    setModel as setDeepseekModel
+  generateScript as generateScriptDeepseek,
+  generateShotList as generateShotListDeepseek,
+  generateShotListForScene as generateShotListDeepseekForScene,
+  generateVisualPrompts as generateVisualPromptsDeepseek,
+  parseScriptToData as parseScriptToDataDeepseek,
+  setApiKey as setDeepseekApiKey,
+  setApiUrl as setDeepseekApiUrl,
+  setModel as setDeepseekModel
 } from "./deepseekService";
 
 // Gemini 方法
 import {
-    generateImage as generateImageGemini,
-    generateScript as generateScriptGemini,
-    generateShotListForScene as generateShotListForSceneGemini,
-    generateShotList as generateShotListGemini,
-    generateVideo as generateVideoGemini,
-    generateVisualPrompts as generateVisualPromptsGemini,
-    parseScriptToData as parseScriptToDataGemini,
-    setApiKey as setGeminiApiKey
+  generateImage as generateImageGemini,
+  generateScript as generateScriptGemini,
+  generateShotListForScene as generateShotListForSceneGemini,
+  generateShotList as generateShotListGemini,
+  generateVideo as generateVideoGemini,
+  generateVisualPrompts as generateVisualPromptsGemini,
+  parseScriptToData as parseScriptToDataGemini,
+  setApiKey as setGeminiApiKey
 } from "./geminiService";
 
 // Yunwu 方法
 import {
-    generateImage as generateImageYunwu,
-    generateScript as generateScriptYunwu,
-    generateShotListForScene as generateShotListForSceneYunwu,
-    generateShotList as generateShotListYunwu,
-    generateVideo as generateVideoYunwu,
-    generateVisualPrompts as generateVisualPromptsYunwu,
-    parseScriptToData as parseScriptToDataYunwu,
-    setApiKey as setYunwuApiKey,
-    setApiUrl as setYunwuApiUrl,
-    setModel as setYunwuModel
+  generateImage as generateImageYunwu,
+  generateScript as generateScriptYunwu,
+  generateShotListForScene as generateShotListForSceneYunwu,
+  generateShotList as generateShotListYunwu,
+  generateVideo as generateVideoYunwu,
+  generateVisualPrompts as generateVisualPromptsYunwu,
+  parseScriptToData as parseScriptToDataYunwu,
+  setApiKey as setYunwuApiKey,
+  setApiUrl as setYunwuApiUrl,
+  setModel as setYunwuModel
 } from "./yunwuService";
 
 // OpenAI 方法
 import {
-    generateImage as generateImageOpenai,
-    generateScript as generateScriptOpenai,
-    generateShotListForScene as generateShotListForSceneOpenai,
-    generateShotList as generateShotListOpenai,
-    generateVideo as generateVideoOpenai,
-    generateVisualPrompts as generateVisualPromptsOpenai,
-    parseScriptToData as parseScriptToDataOpenai,
-    setApiKey as setOpenaiApiKey,
-    setModel as setOpenaiModel
+  generateImage as generateImageOpenai,
+  generateScript as generateScriptOpenai,
+  generateShotListForScene as generateShotListForSceneOpenai,
+  generateShotList as generateShotListOpenai,
+  generateVideo as generateVideoOpenai,
+  generateVisualPrompts as generateVisualPromptsOpenai,
+  parseScriptToData as parseScriptToDataOpenai,
+  setApiKey as setOpenaiApiKey,
+  setModel as setOpenaiModel
 } from "./openaiService";
 
 // Doubao 方法
 import {
-    generateImage as generateImageDoubao,
-    generateScript as generateScriptDoubao,
-    generateShotList as generateShotListDoubao,
-    generateShotListForScene as generateShotListDoubaoForScene,
-    generateVideo as generateVideoDoubao,
-    generateVisualPrompts as generateVisualPromptsDoubao,
-    parseScriptToData as parseScriptToDataDoubao,
-    setApiKey as setDoubaoApiKey,
-    setApiUrl as setDoubaoApiUrl,
-    setModel as setDoubaoModel
+  generateImage as generateImageDoubao,
+  generateScript as generateScriptDoubao,
+  generateShotList as generateShotListDoubao,
+  generateShotListForScene as generateShotListDoubaoForScene,
+  generateVideo as generateVideoDoubao,
+  generateVisualPrompts as generateVisualPromptsDoubao,
+  parseScriptToData as parseScriptToDataDoubao,
+  setApiKey as setDoubaoApiKey,
+  setApiUrl as setDoubaoApiUrl,
+  setModel as setDoubaoModel
 } from "./doubaoService";
 
 // MiniMax 方法
 import {
-    generateVideo as generateVideoMinimax,
-    setApiKey as setMinimaxApiKey,
-    setApiUrl as setMinimaxApiUrl,
-    setModel as setMinimaxModel
+  generateVideo as generateVideoMinimax,
+  setApiKey as setMinimaxApiKey,
+  setApiUrl as setMinimaxApiUrl,
+  setModel as setMinimaxModel
 } from "./minimaxService";
 
 // Kling 方法
 import {
-    generateVideo as generateVideoKling,
-    setApiKey as setKlingApiKey,
-    setApiUrl as setKlingApiUrl,
-    setModel as setKlingModel
+  generateVideo as generateVideoKling,
+  setApiKey as setKlingApiKey,
+  setApiUrl as setKlingApiUrl,
+  setModel as setKlingModel
 } from "./klingService";
+
+// Sora 方法
+import {
+  generateVideo as generateVideoSora,
+  setApiKey as setSoraApiKey,
+  setApiUrl as setSoraApiUrl,
+  setModel as setSoraModel
+} from "./soraService";
 
 // Baidu TTS 方法
 import {
-    blobToBase64,
-    setApiKey as setBaiduApiKey,
-    setApiUrl as setBaiduApiUrl,
-    textToSpeech as textToSpeechBaidu
+  blobToBase64,
+  setApiKey as setBaiduApiKey,
+  setApiUrl as setBaiduApiUrl,
+  textToSpeech as textToSpeechBaidu
 } from "./baiduTtsService";
 
 const IMAGE_X = [
@@ -244,6 +252,17 @@ export class ModelService {
             setKlingModel(config.model);
           }
           //console.log(`已更新 Kling ${config.modelType} 配置`);
+          break;
+
+        case 'sora':
+          setSoraApiKey(config.apiKey);
+          if (config.apiUrl) {
+            setSoraApiUrl(config.apiUrl);
+          }
+          if (config.model) {
+            setSoraModel(config.model);
+          }
+          //console.log(`已更新 Sora ${config.modelType} 配置`);
           break;
 
         case 'baidu':
@@ -570,7 +589,7 @@ export class ModelService {
    * @param provider - 提供商
    * @param apiKey - API 密钥
    */
-  static setApiKey(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'baidu', apiKey: string): void {
+  static setApiKey(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'baidu', apiKey: string): void {
     switch (provider) {
       case 'deepseek':
         setDeepseekApiKey(apiKey);
@@ -593,6 +612,9 @@ export class ModelService {
       case 'kling':
         setKlingApiKey(apiKey);
         break;
+      case 'sora':
+        setSoraApiKey(apiKey);
+        break;
       case 'baidu':
         setBaiduApiKey(apiKey);
         break;
@@ -606,7 +628,7 @@ export class ModelService {
    * @param provider - 提供商
    * @param apiUrl - API 端点
    */
-  static setApiUrl(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'baidu', apiUrl: string): void {
+  static setApiUrl(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'baidu', apiUrl: string): void {
     switch (provider) {
       case 'deepseek':
         setDeepseekApiUrl(apiUrl);
@@ -629,6 +651,9 @@ export class ModelService {
         break;
       case 'kling':
         setKlingApiUrl(apiUrl);
+        break;
+      case 'sora':
+        setSoraApiUrl(apiUrl);
         break;
       case 'baidu':
         // baidu 使用固定配置
@@ -698,7 +723,7 @@ export class ModelService {
    * 获取当前使用的提供商信息
    */
   static async getProviderInfo(): Promise<{
-    provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'baidu';
+    provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'baidu';
     enabled: boolean;
   }> {
     const config = await getEnabledConfigByType('llm');
@@ -823,6 +848,8 @@ export class ModelService {
     full_frame: boolean = false,
     shotprovider: any = null,
     projectid: string = "",
+    imageSize: string = "2560x1440",
+    visualStyle: string = "真人写实",
   ): Promise<string> {
     const provider = await this.getEnabledVideoProvider(shotprovider || this.currentProjectModelProviders);
     //console.log(`使用 ${provider} 生成视频`);
@@ -861,13 +888,16 @@ export class ModelService {
         videoUrl = await generateVideoGemini(prompt, processedStartImageBase64, processedEndImageBase64,full_frame);
         break;
       case 'yunwu':
-        videoUrl = await generateVideoYunwu(prompt, processedStartImageBase64, processedEndImageBase64, duration,full_frame);
+        videoUrl = await generateVideoYunwu(prompt, processedStartImageBase64, processedEndImageBase64, duration,full_frame,imageSize);
         break;
       case 'minimax':
         videoUrl = await generateVideoMinimax(prompt, processedStartImageBase64, processedEndImageBase64, duration, full_frame);
         break;
       case 'kling':
         videoUrl = await generateVideoKling(prompt, processedStartImageBase64, processedEndImageBase64, duration, full_frame);
+        break;
+      case 'sora':
+        videoUrl = await generateVideoSora(prompt, processedStartImageBase64, processedEndImageBase64, duration, full_frame,imageSize,visualStyle);
         break;
       case 'openai':
         videoUrl = await generateVideoOpenai(prompt, processedStartImageBase64, processedEndImageBase64, duration, full_frame);
