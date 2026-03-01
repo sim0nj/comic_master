@@ -23,6 +23,7 @@ const PROVIDER_OPTIONS = [
   { value: 'sora', label: 'sora (sora，云雾中转)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
   { value: 'wan', label: '通义万相 (云雾中转)', apiUrl: 'https://yunwu.ai/register?aff=osWa' },
   { value: 'bigmore', label: 'bigmoreai中转', apiUrl: 'https://bigmoreai.com/#/docs/veoo' },
+  { value: 'skyreels', label: 'SkyReels ', apiUrl: 'https://skyreels.ai/' },
   { value: 'baidu', label: 'Baidu (百度)', apiUrl: 'https://cloud.baidu.com/' },
 ] as const;
 
@@ -46,6 +47,7 @@ const PROVIDER_MODEL_TYPES: Record<string, readonly string[]> = {
   sora: ['image2video'] as const,
   wan: ['image2video'] as const,
   bigmore: ['image2video'] as const,
+  skyreels: ['image2video'] as const,
   baidu: ['tts'] as const,
 };
 

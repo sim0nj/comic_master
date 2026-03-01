@@ -113,6 +113,14 @@ import {
   setModel as setBigmoreModel
 } from "./bigmoreService";
 
+// SkyReels 方法
+import {
+  generateVideo as generateVideoSkyreels,
+  setApiKey as setSkyreelsApiKey,
+  setApiUrl as setSkyreelsApiUrl,
+  setModel as setSkyreelsModel
+} from "./skyreelsService";
+
 // Baidu TTS 方法
 import {
   blobToBase64,
@@ -301,6 +309,17 @@ export class ModelService {
           setBigmoreModel(config.model);
         }
         //console.log(`已更新 BigMore ${config.modelType} 配置`);
+        break;
+
+      case 'skyreels':
+        setSkyreelsApiKey(config.apiKey);
+        if (config.apiUrl) {
+          setSkyreelsApiUrl(config.apiUrl);
+        }
+        if (config.model) {
+          setSkyreelsModel(config.model);
+        }
+        //console.log(`已更新 SkyReels ${config.modelType} 配置`);
         break;
 
       case 'baidu':
@@ -627,7 +646,7 @@ export class ModelService {
    * @param provider - 提供商
    * @param apiKey - API 密钥
    */
-  static setApiKey(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'wan' | 'bigmore' | 'baidu', apiKey: string): void {
+  static setApiKey(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'wan' | 'bigmore' | 'baidu' | 'skyreels', apiKey: string): void {
     switch (provider) {
       case 'deepseek':
         setDeepseekApiKey(apiKey);
@@ -659,6 +678,9 @@ export class ModelService {
       case 'bigmore':
         setBigmoreApiKey(apiKey);
         break;
+      case 'skyreels':
+        setSkyreelsApiKey(apiKey);
+        break;
       case 'baidu':
         setBaiduApiKey(apiKey);
         break;
@@ -672,7 +694,7 @@ export class ModelService {
    * @param provider - 提供商
    * @param apiUrl - API 端点
    */
-  static setApiUrl(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'wan' | 'bigmore' | 'baidu', apiUrl: string): void {
+  static setApiUrl(provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'wan' | 'bigmore' | 'baidu' | 'skyreels', apiUrl: string): void {
     switch (provider) {
       case 'deepseek':
         setDeepseekApiUrl(apiUrl);
@@ -704,6 +726,9 @@ export class ModelService {
         break;
       case 'bigmore':
         setBigmoreApiUrl(apiUrl);
+        break;
+      case 'skyreels':
+        setSkyreelsApiUrl(apiUrl);
         break;
       case 'baidu':
         // baidu 使用固定配置
@@ -773,7 +798,7 @@ export class ModelService {
    * 获取当前使用的提供商信息
    */
   static async getProviderInfo(): Promise<{
-    provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'wan' | 'bigmore' | 'baidu';
+    provider: 'doubao' | 'deepseek' | 'openai' | 'gemini' | 'yunwu' | 'minimax' | 'kling' | 'sora' | 'wan' | 'bigmore' | 'baidu' | 'skyreels';
     enabled: boolean;
   }> {
     const config = await getEnabledConfigByType('llm');
@@ -908,24 +933,27 @@ export class ModelService {
 
     // 处理起始图片：如果是HTTP/HTTPS URL则转换为Base64
     let processedStartImageBase64 = startImageBase64;
-    try {
-      processedStartImageBase64 = await imageUrlToBase64(startImageBase64);
-      //console.log('已将起始图片转换为Base64格式');
-    } catch (error) {
-      console.error('转换起始图片为Base64失败:', error);
-      // 转换失败时继续使用原始图片
-      processedStartImageBase64 = startImageBase64;
-    }
 
     // 处理结束图片：如果是HTTP/HTTPS URL则转换为Base64
     let processedEndImageBase64 = endImageBase64;
-    try {
-      processedEndImageBase64 = await imageUrlToBase64(endImageBase64);
-      //console.log('已将结束图片转换为Base64格式');
-    } catch (error) {
-      console.error('转换结束图片为Base64失败:', error);
-      // 转换失败时继续使用原始图片
-      processedEndImageBase64 = endImageBase64;
+    if(provider.provider!='bigmore' && provider.provider!='skyreels'){
+      try {
+        processedStartImageBase64 = await imageUrlToBase64(startImageBase64);
+        //console.log('已将起始图片转换为Base64格式');
+      } catch (error) {
+        console.error('转换起始图片为Base64失败:', error);
+        // 转换失败时继续使用原始图片
+        processedStartImageBase64 = startImageBase64;
+      }
+
+      try {
+        processedEndImageBase64 = await imageUrlToBase64(endImageBase64);
+        //console.log('已将结束图片转换为Base64格式');
+      } catch (error) {
+        console.error('转换结束图片为Base64失败:', error);
+        // 转换失败时继续使用原始图片
+        processedEndImageBase64 = endImageBase64;
+      }
     }
 
     let videoUrl: string;
@@ -956,6 +984,9 @@ export class ModelService {
         break;
       case 'bigmore':
         videoUrl = await generateVideoBigmore(prompt, processedStartImageBase64, processedEndImageBase64, duration, full_frame,imageSize);
+        break;
+      case 'skyreels':
+        videoUrl = await generateVideoSkyreels(prompt, processedStartImageBase64, processedEndImageBase64, duration, full_frame, imageSize);
         break;
       case 'openai':
         videoUrl = await generateVideoOpenai(prompt, processedStartImageBase64, processedEndImageBase64, duration, full_frame);

@@ -46,8 +46,8 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
       localStorage.setItem('cinegen_api_key', inputKey.trim());
       if (inputCozeWorkflowId.trim()) localStorage.setItem('cinegen_coze_workflow_id', inputCozeWorkflowId.trim());
       if (inputCozeApiKey.trim()) localStorage.setItem('cinegen_coze_api_key', inputCozeApiKey.trim());
-      if (inputFileUploadServiceUrl.trim()) localStorage.setItem('cinegen_file_upload_service_url', inputFileUploadServiceUrl.trim());
-      if (inputFileAccessDomain.trim()) localStorage.setItem('cinegen_file_access_domain', inputFileAccessDomain.trim());
+      localStorage.setItem('cinegen_file_upload_service_url', inputFileUploadServiceUrl.trim());
+      localStorage.setItem('cinegen_file_access_domain', inputFileAccessDomain.trim());
 
       // 初始化 Coze 配置
       if (typeof window !== 'undefined' && (window as any).initializeCozeConfig) {
