@@ -1039,7 +1039,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                        </div>
                      </div>
                    ) : (
-                     <p className="text-xs text-slate-300 italic leading-relaxed font-serif cursor-text hover:text-slate-300" onClick={startEditLogline}>"{project.scriptData?.logline}"</p>
+                     <p className="text-sm text-slate-300 leading-relaxed font-serif cursor-text hover:text-slate-300" onClick={startEditLogline}>{project.scriptData?.logline}</p>
                    )}
                  </div>
               </div>
@@ -1160,7 +1160,7 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                     </div>
                     <div className="space-y-1">
                        {uniqueScenesList.map((s) => (
-                         <div key={s!.id} className="flex items-center gap-3 text-xs text-slate-300 group cursor-default p-2 rounded hover:bg-slate-900/100 transition-colors">
+                         <div key={s!.id} className="flex justify-between items-center group cursor-default p-2 rounded hover:bg-slate-900/100 transition-colors">
                            {editingSceneId === s!.id ? (
                              <div className="flex-1 space-y-2">
                                <input
@@ -1191,9 +1191,8 @@ const StageScript: React.FC<Props> = ({ project, updateProject, isMobile=false }
                              </div>
                            ) : (
                              <>
-                               <div className="w-1.5 h-1.5 bg-slate-700 rounded-full group-hover:bg-slate-400 transition-colors"></div>
-                               <span className="truncate group-hover:text-slate-200 flex-1">{s!.location}</span>
-                               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                               <span className="text-sm text-slate-300 font-medium group-hover:text-slate-50">{s!.location}</span>
+                               <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                  <button onClick={() => startEditScene(s!)} className="text-slate-600 hover:text-slate-50"><Edit className="w-3 h-3" /></button>
                                  <button onClick={() => deleteScene(s!.id)} className="text-slate-600 hover:text-red-400"><Trash className="w-3 h-3" /></button>
                                </div>
